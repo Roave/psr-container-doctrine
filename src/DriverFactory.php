@@ -25,7 +25,7 @@ final class DriverFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    protected function createWithConfig(ContainerInterface $container, $configKey)
+    protected function createWithConfig(ContainerInterface $container, string $configKey)
     {
         $config = $this->retrieveConfig($container, $configKey, 'driver');
 
@@ -81,7 +81,7 @@ final class DriverFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    protected function getDefaultConfig($configKey) : array
+    protected function getDefaultConfig(string $configKey) : array
     {
         return [
             'paths' => [],

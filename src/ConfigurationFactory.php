@@ -20,7 +20,7 @@ final class ConfigurationFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    protected function createWithConfig(ContainerInterface $container, $configKey)
+    protected function createWithConfig(ContainerInterface $container, string $configKey)
     {
         $config = $this->retrieveConfig($container, $configKey, 'configuration');
 
@@ -147,7 +147,7 @@ final class ConfigurationFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    protected function getDefaultConfig($configKey) : array
+    protected function getDefaultConfig(string $configKey) : array
     {
         return [
             'metadata_cache' => 'array',

@@ -23,7 +23,7 @@ final class ConnectionFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    protected function createWithConfig(ContainerInterface $container, $configKey)
+    protected function createWithConfig(ContainerInterface $container, string $configKey)
     {
         $this->registerTypes($container);
 
@@ -69,7 +69,7 @@ final class ConnectionFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    protected function getDefaultConfig($configKey) : array
+    protected function getDefaultConfig(string $configKey) : array
     {
         return [
             'driver_class' => PdoMysqlDriver::class,

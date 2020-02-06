@@ -33,7 +33,7 @@ final class CacheFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    protected function createWithConfig(ContainerInterface $container, $configKey)
+    protected function createWithConfig(ContainerInterface $container, string $configKey)
     {
         $config = $this->retrieveConfig($container, $configKey, 'cache');
 
