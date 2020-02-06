@@ -20,7 +20,7 @@ class StubFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    public function retrieveConfig(ContainerInterface $container, $configKey, $section)
+    public function retrieveConfig(ContainerInterface $container, string $configKey, string $section)
     {
         return parent::retrieveConfig($container, $configKey, $section);
     }
