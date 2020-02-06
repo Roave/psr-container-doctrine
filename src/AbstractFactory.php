@@ -21,7 +21,7 @@ abstract class AbstractFactory
     }
 
     /**
-     * @return mixed
+     * @return object
      */
     public function __invoke(ContainerInterface $container)
     {
@@ -68,14 +68,14 @@ abstract class AbstractFactory
     /**
      * Returns the default config.
      *
-     * @return mixed[]
+     * @return array<string, mixed>
      */
     abstract protected function getDefaultConfig(string $configKey) : array;
 
     /**
      * Retrieves the config for a specific section.
      *
-     * @return mixed[]
+     * @return array<string, mixed>
      */
     protected function retrieveConfig(ContainerInterface $container, string $configKey, string $section) : array
     {
