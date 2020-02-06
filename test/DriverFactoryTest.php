@@ -71,7 +71,6 @@ class DriverFactoryTest extends TestCase
         $factory = new DriverFactory();
 
         $driver = $factory($container->reveal());
-        assert($driver instanceof Driver\SimplifiedXmlDriver);
         $this->assertInstanceOf($driverClass, $driver);
         $this->assertSame($extension, $driver->getLocator()->getFileExtension());
     }

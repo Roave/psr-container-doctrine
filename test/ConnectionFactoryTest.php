@@ -53,10 +53,9 @@ class ConnectionFactoryTest extends TestCase
         try {
             $factory($container->reveal());
         } catch (ConnectionException $e) {
-            $this->assertRegExp('#.*Access denied for user \'\'@\'.*\' \(using password: NO\)#', $e->getMessage());
-
             foreach ($e->getTrace() as $entry) {
                 if ($entry['class'] === 'Doctrine\DBAL\Driver\PDOMySql\Driver') {
+                    $this->addToAssertionCount(1);
                     return;
                 }
             }
