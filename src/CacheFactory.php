@@ -10,7 +10,6 @@ use Doctrine\Common\Cache\Cache;
 use Doctrine\Common\Cache\CacheProvider;
 use Doctrine\Common\Cache\ChainCache;
 use Doctrine\Common\Cache\FilesystemCache;
-use Doctrine\Common\Cache\MemcacheCache;
 use Doctrine\Common\Cache\MemcachedCache;
 use Doctrine\Common\Cache\PhpFileCache;
 use Doctrine\Common\Cache\PredisCache;
@@ -53,26 +52,24 @@ final class CacheFactory extends AbstractFactory
                 break;
 
             case PredisCache::class:
-                $cache = new $config['class']($instance);
+                $cache = new PredisCache($instance);
                 break;
 
             case ChainCache::class:
                 $providers = array_map(
-                    function ($provider) use ($container) {
+                    function ($provider) use ($container): Cache {
                         return $this->createWithConfig($container, $provider);
                     },
                     is_array($config['providers']) ? $config['providers'] : []
                 );
-                $cache     = new $config['class']($providers);
+                $cache     = new ChainCache($providers);
                 break;
 
             default:
                 $cache = $container->has($config['class']) ? $container->get($config['class']) : new $config['class']();
         }
 
-        if ($cache instanceof MemcacheCache) {
-            $cache->setMemcache($instance);
-        } elseif ($cache instanceof MemcachedCache) {
+        if ($cache instanceof MemcachedCache) {
             $cache->setMemcached($instance);
         } elseif ($cache instanceof RedisCache) {
             $cache->setRedis($instance);
@@ -105,12 +102,6 @@ final class CacheFactory extends AbstractFactory
                 return [
                     'class' => FilesystemCache::class,
                     'directory' => 'data/cache/DoctrineCache',
-                    'namespace' => 'psr-container-doctrine',
-                ];
-            case 'memcache':
-                return [
-                    'class' => MemcacheCache::class,
-                    'instance' => 'my_memcache_alias',
                     'namespace' => 'psr-container-doctrine',
                 ];
             case 'memcached':
