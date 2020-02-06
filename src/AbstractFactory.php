@@ -21,7 +21,7 @@ abstract class AbstractFactory
     }
 
     /**
-     * @return object
+     * @return mixed
      */
     public function __invoke(ContainerInterface $container)
     {
@@ -95,6 +95,8 @@ abstract class AbstractFactory
      *
      * If the container does not know about the dependency, it is pulled from a fresh factory. This saves the user from
      * registering factories which they are not gonna access themself at all, and thus minimized configuration.
+     *
+     * @param string|class-string $factoryClassName
      *
      * @return mixed
      */
