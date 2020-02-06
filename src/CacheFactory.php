@@ -16,8 +16,8 @@ use Doctrine\Common\Cache\PredisCache;
 use Doctrine\Common\Cache\RedisCache;
 use Doctrine\Common\Cache\WinCacheCache;
 use Doctrine\Common\Cache\ZendDataCache;
-use Doctrine\Common\Proxy\Exception\OutOfBoundsException;
 use Psr\Container\ContainerInterface;
+use Roave\PsrContainerDoctrine\Exception\OutOfBoundsException;
 use function array_key_exists;
 use function array_map;
 use function is_array;
@@ -57,7 +57,7 @@ final class CacheFactory extends AbstractFactory
 
             case ChainCache::class:
                 $providers = array_map(
-                    function ($provider) use ($container): Cache {
+                    function ($provider) use ($container) : Cache {
                         return $this->createWithConfig($container, $provider);
                     },
                     is_array($config['providers']) ? $config['providers'] : []
