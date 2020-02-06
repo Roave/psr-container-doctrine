@@ -10,7 +10,6 @@ use OutOfBoundsException;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\DriverFactory;
-use function assert;
 
 class DriverFactoryTest extends TestCase
 {

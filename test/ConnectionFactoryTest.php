@@ -56,6 +56,7 @@ class ConnectionFactoryTest extends TestCase
             foreach ($e->getTrace() as $entry) {
                 if ($entry['class'] === 'Doctrine\DBAL\Driver\PDOMySql\Driver') {
                     $this->addToAssertionCount(1);
+
                     return;
                 }
             }
