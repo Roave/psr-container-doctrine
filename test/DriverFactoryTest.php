@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace RoaveTest\PsrContainerDoctrine;
 
-use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\ORM\Mapping\Driver;
-use OutOfBoundsException;
+use Doctrine\Persistence\Mapping\Driver\FileDriver;
+use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\DriverFactory;
+use Roave\PsrContainerDoctrine\Exception\OutOfBoundsException;
 
 class DriverFactoryTest extends TestCase
 {
@@ -44,10 +45,13 @@ class DriverFactoryTest extends TestCase
         $factory = new DriverFactory();
 
         $driver = $factory($container->reveal());
+        $this->assertInstanceOf(FileDriver::class, $driver);
         $this->assertSame($globalBasename, $driver->getGlobalBasename());
     }
 
     /**
+     * @param string|class-string $driverClass
+     *
      * @dataProvider simplifiedDriverClassProvider
      */
     public function testItSupportsSettingExtensionInDriversUsingSymfonyFileLocator(string $driverClass) : void
@@ -67,10 +71,8 @@ class DriverFactoryTest extends TestCase
             ],
         ]);
 
-        $factory = new DriverFactory();
-
-        $driver = $factory($container->reveal());
-        $this->assertInstanceOf($driverClass, $driver);
+        $driver = (new DriverFactory())->__invoke($container->reveal());
+        $this->assertInstanceOf(FileDriver::class, $driver);
         $this->assertSame($extension, $driver->getLocator()->getFileExtension());
     }
 
@@ -104,6 +106,7 @@ class DriverFactoryTest extends TestCase
         $factory = new DriverFactory();
 
         $driver = $factory($container->reveal());
+        $this->assertInstanceOf(MappingDriverChain::class, $driver);
         $this->assertInstanceOf(TestAsset\StubFileDriver::class, $driver->getDefaultDriver());
     }
 }
