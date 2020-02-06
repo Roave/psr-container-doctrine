@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Roave\PsrContainerDoctrine;
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\CachedReader;
 use Doctrine\Common\Persistence\Mapping\Driver\AnnotationDriver;
 use Doctrine\Common\Persistence\Mapping\Driver\FileDriver;
@@ -23,9 +22,6 @@ use function is_subclass_of;
  */
 final class DriverFactory extends AbstractFactory
 {
-    /** @var bool */
-    private static $isAnnotationLoaderRegistered = false;
-
     /**
      * {@inheritdoc}
      */
@@ -42,8 +38,6 @@ final class DriverFactory extends AbstractFactory
         }
 
         if ($config['class'] === AnnotationDriver::class || is_subclass_of($config['class'], AnnotationDriver::class)) {
-            $this->registerAnnotationLoader();
-
             $driver = new $config['class'](
                 new CachedReader(
                     new AnnotationReader(),
@@ -94,23 +88,5 @@ final class DriverFactory extends AbstractFactory
             'extension' => null,
             'drivers' => [],
         ];
-    }
-
-    /**
-     * Registers the annotation loader
-     */
-    private function registerAnnotationLoader() : void
-    {
-        if (self::$isAnnotationLoaderRegistered) {
-            return;
-        }
-
-        AnnotationRegistry::registerLoader(
-            static function ($className) {
-                return class_exists($className);
-            }
-        );
-
-        self::$isAnnotationLoaderRegistered = true;
     }
 }
