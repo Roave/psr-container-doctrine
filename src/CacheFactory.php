@@ -16,7 +16,6 @@ use Doctrine\Common\Cache\PhpFileCache;
 use Doctrine\Common\Cache\PredisCache;
 use Doctrine\Common\Cache\RedisCache;
 use Doctrine\Common\Cache\WinCacheCache;
-use Doctrine\Common\Cache\XcacheCache;
 use Doctrine\Common\Cache\ZendDataCache;
 use Doctrine\Common\Proxy\Exception\OutOfBoundsException;
 use Psr\Container\ContainerInterface;
@@ -141,11 +140,6 @@ final class CacheFactory extends AbstractFactory
             case 'wincache':
                 return [
                     'class' => WinCacheCache::class,
-                    'namespace' => 'psr-container-doctrine',
-                ];
-            case 'xcache':
-                return [
-                    'class' => XcacheCache::class,
                     'namespace' => 'psr-container-doctrine',
                 ];
             case 'zenddata':
