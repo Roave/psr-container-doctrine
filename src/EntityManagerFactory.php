@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Roave\PsrContainerDoctrine;
@@ -37,7 +38,7 @@ class EntityManagerFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    protected function getDefaultConfig($configKey)
+    protected function getDefaultConfig($configKey) : array
     {
         return [
             'connection' => $configKey,

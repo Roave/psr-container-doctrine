@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace RoaveTest\PsrContainerDoctrine;
@@ -11,6 +12,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\AbstractFactory;
 use Roave\PsrContainerDoctrine\EntityManagerFactory;
+use function sys_get_temp_dir;
 
 class EntityManagerFactoryTest extends TestCase
 {
@@ -21,7 +23,7 @@ class EntityManagerFactoryTest extends TestCase
 
     public function testDefaults() : void
     {
-        $connection = $this->buildConnection();
+        $connection    = $this->buildConnection();
         $configuration = $this->buildConfiguration();
 
         $container = $this->prophesize(ContainerInterface::class);
@@ -31,7 +33,7 @@ class EntityManagerFactoryTest extends TestCase
         $container->has('doctrine.configuration.orm_default')->willReturn(true);
         $container->get('doctrine.configuration.orm_default')->willReturn($configuration);
 
-        $factory = new EntityManagerFactory();
+        $factory       = new EntityManagerFactory();
         $entityManager = $factory($container->reveal());
 
         $this->assertSame($connection, $entityManager->getConnection());
@@ -40,7 +42,7 @@ class EntityManagerFactoryTest extends TestCase
 
     public function testConfigKeyTakenFromSelf() : void
     {
-        $connection = $this->buildConnection();
+        $connection    = $this->buildConnection();
         $configuration = $this->buildConfiguration();
 
         $container = $this->prophesize(ContainerInterface::class);
@@ -50,7 +52,7 @@ class EntityManagerFactoryTest extends TestCase
         $container->has('doctrine.configuration.orm_other')->willReturn(true);
         $container->get('doctrine.configuration.orm_other')->willReturn($configuration);
 
-        $factory = new EntityManagerFactory('orm_other');
+        $factory       = new EntityManagerFactory('orm_other');
         $entityManager = $factory($container->reveal());
 
         $this->assertSame($connection, $entityManager->getConnection());
@@ -59,7 +61,7 @@ class EntityManagerFactoryTest extends TestCase
 
     public function testConfigKeyTakenFromConfig() : void
     {
-        $connection = $this->buildConnection();
+        $connection    = $this->buildConnection();
         $configuration = $this->buildConfiguration();
 
         $container = $this->prophesize(ContainerInterface::class);
@@ -79,17 +81,14 @@ class EntityManagerFactoryTest extends TestCase
         $container->has('doctrine.configuration.orm_bar')->willReturn(true);
         $container->get('doctrine.configuration.orm_bar')->willReturn($configuration);
 
-        $factory = new EntityManagerFactory();
+        $factory       = new EntityManagerFactory();
         $entityManager = $factory($container->reveal());
 
         $this->assertSame($connection, $entityManager->getConnection());
         $this->assertSame($configuration, $entityManager->getConfiguration());
     }
 
-    /**
-     * @return Connection
-     */
-    private function buildConnection()
+    private function buildConnection() : Connection
     {
         $connection = $this->prophesize(Connection::class);
         $connection->getEventManager()->willReturn($this->prophesize(EventManager::class)->reveal());
@@ -97,10 +96,7 @@ class EntityManagerFactoryTest extends TestCase
         return $connection->reveal();
     }
 
-    /**
-     * @return Configuration
-     */
-    private function buildConfiguration()
+    private function buildConfiguration() : Configuration
     {
         $configuration = new Configuration();
         $configuration->setMetadataDriverImpl(new MappingDriverChain());

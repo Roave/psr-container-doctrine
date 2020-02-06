@@ -1,4 +1,22 @@
 <?php
+
+declare(strict_types=1);
+
+use App\Doctrine\CustomCacheProvider;
+use Doctrine\Common\Cache\ApcuCache;
+use Doctrine\Common\Cache\ArrayCache;
+use Doctrine\Common\Cache\ChainCache;
+use Doctrine\Common\Cache\FilesystemCache;
+use Doctrine\Common\Cache\MemcacheCache;
+use Doctrine\Common\Cache\MemcachedCache;
+use Doctrine\Common\Cache\PhpFileCache;
+use Doctrine\Common\Cache\PredisCache;
+use Doctrine\Common\Cache\RedisCache;
+use Doctrine\Common\Cache\WinCacheCache;
+use Doctrine\Common\Cache\XcacheCache;
+use Doctrine\Common\Cache\ZendDataCache;
+use Doctrine\DBAL\Driver\PDOMySql\Driver;
+
 return [
     'doctrine' => [
         'configuration' => [
@@ -37,7 +55,7 @@ return [
         ],
         'connection' => [
             'orm_default' => [
-                'driver_class' => \Doctrine\DBAL\Driver\PDOMySql\Driver::class,
+                'driver_class' => Driver::class,
                 'wrapper_class' => null,
                 'pdo' => null,
                 'configuration' => 'orm_default', // Actually defaults to the connection config key, not hard-coded
@@ -66,67 +84,67 @@ return [
                 'extension' => null,
                 'drivers' => [],
                 'global_basename' => null,
-            ]
+            ],
         ],
         'cache' => [
             'apcu' => [
-                'class' => \Doctrine\Common\Cache\ApcuCache::class,
+                'class' => ApcuCache::class,
                 'namespace' => 'psr-container-doctrine',
             ],
             'array' => [
-                'class' => \Doctrine\Common\Cache\ArrayCache::class,
+                'class' => ArrayCache::class,
                 'namespace' => 'psr-container-doctrine',
             ],
             'filesystem' => [
-                'class' => \Doctrine\Common\Cache\FilesystemCache::class,
+                'class' => FilesystemCache::class,
                 'directory' => 'data/cache/DoctrineCache',
                 'namespace' => 'psr-container-doctrine',
             ],
             'memcache' => [
-                'class' => \Doctrine\Common\Cache\MemcacheCache::class,
+                'class' => MemcacheCache::class,
                 'instance' => 'my_memcache_alias',
                 'namespace' => 'psr-container-doctrine',
             ],
             'memcached' => [
-                'class' => \Doctrine\Common\Cache\MemcachedCache::class,
+                'class' => MemcachedCache::class,
                 'instance' => 'my_memcached_alias',
                 'namespace' => 'psr-container-doctrine',
             ],
             'phpfile' => [
-                'class' => \Doctrine\Common\Cache\PhpFileCache::class,
+                'class' => PhpFileCache::class,
                 'directory' => 'data/cache/DoctrineCache',
                 'namespace' => 'psr-container-doctrine',
             ],
             'predis' => [
-                'class' => \Doctrine\Common\Cache\PredisCache::class,
+                'class' => PredisCache::class,
                 'instance' => 'my_predis_alias',
                 'namespace' => 'psr-container-doctrine',
             ],
             'redis' => [
-                'class' => \Doctrine\Common\Cache\RedisCache::class,
+                'class' => RedisCache::class,
                 'instance' => 'my_redis_alias',
                 'namespace' => 'psr-container-doctrine',
             ],
             'wincache' => [
-                'class' => \Doctrine\Common\Cache\WinCacheCache::class,
+                'class' => WinCacheCache::class,
                 'namespace' => 'psr-container-doctrine',
             ],
             'xcache' => [
-                'class' => \Doctrine\Common\Cache\XcacheCache::class,
+                'class' => XcacheCache::class,
                 'namespace' => 'psr-container-doctrine',
             ],
             'zenddata' => [
-                'class' => \Doctrine\Common\Cache\ZendDataCache::class,
+                'class' => ZendDataCache::class,
                 'namespace' => 'psr-container-doctrine',
             ],
             'my_cache_provider' => [
-                'class' => \App\Doctrine\CustomCacheProvider::class, //The class is looked up in the container
+                'class' => CustomCacheProvider::class, //The class is looked up in the container
             ],
             'chain' => [
-                'class' => \Doctrine\Common\Cache\ChainCache::class,
+                'class' => ChainCache::class,
                 'providers' => ['array', 'redis'], // you can use any provider listed above
                 'namespace' => 'psr-container-doctrine', // will be applied to all providers in the chain
-            ]
+            ],
         ],
         'types' => [],
     ],

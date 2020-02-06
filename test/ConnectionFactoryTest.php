@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace RoaveTest\PsrContainerDoctrine;
@@ -13,24 +14,23 @@ use Doctrine\ORM\Configuration;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Container\ContainerInterface;
+use ReflectionObject;
 use Roave\PsrContainerDoctrine\ConnectionFactory;
+use function defined;
+use function sprintf;
 
 class ConnectionFactoryTest extends TestCase
 {
-    /**
-     * @var Configuration
-     */
+    /** @var Configuration */
     private $configuration;
 
-    /**
-     * @var EventManager
-     */
+    /** @var EventManager */
     private $eventManger;
 
     public function setUp() : void
     {
         $this->configuration = $this->prophesize(Configuration::class)->reveal();
-        $this->eventManger = $this->prophesize(EventManager::class)->reveal();
+        $this->eventManger   = $this->prophesize(EventManager::class)->reveal();
     }
 
     public function testDefaultsThroughException() : void
@@ -39,7 +39,7 @@ class ConnectionFactoryTest extends TestCase
             $this->markTestSkipped('HHVM is somewhat funky here');
         }
 
-        $factory = new ConnectionFactory();
+        $factory   = new ConnectionFactory();
         $container = $this->prophesize(ContainerInterface::class);
         $container->has('config')->willReturn(false);
         $container->has('doctrine.configuration.orm_default')->willReturn(true);
@@ -56,12 +56,13 @@ class ConnectionFactoryTest extends TestCase
             $this->assertRegExp('#.*Access denied for user \'\'@\'.*\' \(using password: NO\)#', $e->getMessage());
 
             foreach ($e->getTrace() as $entry) {
-                if ('Doctrine\DBAL\Driver\PDOMySql\Driver' === $entry['class']) {
+                if ($entry['class'] === 'Doctrine\DBAL\Driver\PDOMySql\Driver') {
                     return;
                 }
             }
 
             $this->fail('Exception was not raised by PDOMySql');
+
             return;
         }
 
@@ -70,7 +71,7 @@ class ConnectionFactoryTest extends TestCase
 
     public function testDefaults() : void
     {
-        $factory = new ConnectionFactory();
+        $factory    = new ConnectionFactory();
         $connection = $factory($this->buildContainer()->reveal());
 
         $this->assertSame($this->configuration, $connection->getConfiguration());
@@ -84,7 +85,7 @@ class ConnectionFactoryTest extends TestCase
 
     public function testConfigKeysTakenFromSelf() : void
     {
-        $factory = new ConnectionFactory('orm_other');
+        $factory    = new ConnectionFactory('orm_other');
         $connection = $factory($this->buildContainer('orm_other', 'orm_other', 'orm_other')->reveal());
 
         $this->assertSame($this->configuration, $connection->getConfiguration());
@@ -93,7 +94,7 @@ class ConnectionFactoryTest extends TestCase
 
     public function testConfigKeysTakenFromConfig() : void
     {
-        $factory = new ConnectionFactory('orm_other');
+        $factory    = new ConnectionFactory('orm_other');
         $connection = $factory($this->buildContainer('orm_other', 'orm_foo', 'orm_bar', [
             'configuration' => 'orm_foo',
             'event_manager' => 'orm_bar',
@@ -105,7 +106,7 @@ class ConnectionFactoryTest extends TestCase
 
     public function testParamsInjection() : void
     {
-        $factory = new ConnectionFactory();
+        $factory    = new ConnectionFactory();
         $connection = $factory($this->buildContainer('orm_default', 'orm_default', 'orm_default', [
             'params' => ['username' => 'foo'],
         ])->reveal());
@@ -120,7 +121,7 @@ class ConnectionFactoryTest extends TestCase
 
     public function testDoctrineMappingTypesInjection() : void
     {
-        $factory = new ConnectionFactory();
+        $factory    = new ConnectionFactory();
         $connection = $factory($this->buildContainer('orm_default', 'orm_default', 'orm_default', [
             'doctrine_mapping_types' => ['foo' => 'boolean'],
         ])->reveal());
@@ -132,7 +133,7 @@ class ConnectionFactoryTest extends TestCase
     {
         $type = Type::getType('boolean');
 
-        $factory = new ConnectionFactory();
+        $factory    = new ConnectionFactory();
         $connection = $factory($this->buildContainer('orm_default', 'orm_default', 'orm_default', [
             'doctrine_commented_types' => [$type],
         ])->reveal());
@@ -142,8 +143,8 @@ class ConnectionFactoryTest extends TestCase
 
     public function testCustomTypeDoctrineMappingTypesInjection() : void
     {
-        $factory = new ConnectionFactory();
-        $property = (new \ReflectionObject($factory))->getProperty('areTypesRegistered');
+        $factory  = new ConnectionFactory();
+        $property = (new ReflectionObject($factory))->getProperty('areTypesRegistered');
         $property->setAccessible(true);
         $property->setValue($factory, false);
 
@@ -159,9 +160,7 @@ class ConnectionFactoryTest extends TestCase
         $factory = new ConnectionFactory();
 
         $config = [
-            'params' => [
-                'platform' => 'custom.platform',
-            ]
+            'params' => ['platform' => 'custom.platform'],
         ];
 
         $container = $this->buildContainer('orm_default', 'orm_default', 'orm_default', $config);
@@ -176,16 +175,14 @@ class ConnectionFactoryTest extends TestCase
     }
 
     /**
-     * @param string $ownKey
-     * @param string $configurationKey
-     * @param string $eventManagerKey
      * @param array $config
+     *
      * @return ContainerInterface|ObjectProphecy
      */
     private function buildContainer(
-        $ownKey = 'orm_default',
-        $configurationKey = 'orm_default',
-        $eventManagerKey = 'orm_default',
+        string $ownKey = 'orm_default',
+        string $configurationKey = 'orm_default',
+        string $eventManagerKey = 'orm_default',
         array $config = []
     ) {
         $container = $this->prophesize(ContainerInterface::class);
@@ -198,8 +195,8 @@ class ConnectionFactoryTest extends TestCase
                     ],
                 ],
                 'types' => [
-                    'custom_type' => BooleanType::class
-                ]
+                    'custom_type' => BooleanType::class,
+                ],
             ],
         ]);
 

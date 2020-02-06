@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace RoaveTest\PsrContainerDoctrine\TestAsset;
@@ -13,7 +14,7 @@ class StubFileDriver extends FileDriver
         return [];
     }
 
-    public function loadMetadataForClass($className, ClassMetadata $metadata)
+    public function loadMetadataForClass($className, ClassMetadata $metadata) : void
     {
     }
 }

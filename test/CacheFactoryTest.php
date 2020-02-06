@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace RoaveTest\PsrContainerDoctrine;
@@ -44,7 +45,7 @@ class CacheFactoryTest extends TestCase
         $container->has('config')->willReturn(true);
         $container->get('config')->willReturn($config);
 
-        $factory = new CacheFactory('filesystem');
+        $factory       = new CacheFactory('filesystem');
         $cacheInstance = $factory($container->reveal());
 
         $this->assertInstanceOf(FilesystemCache::class, $cacheInstance);
@@ -68,7 +69,7 @@ class CacheFactoryTest extends TestCase
         $container->get('config')->willReturn($config);
         $container->has(ArrayCache::class)->willReturn(false);
 
-        $factory = new CacheFactory('chain');
+        $factory       = new CacheFactory('chain');
         $cacheInstance = $factory($container->reveal());
 
         $this->assertInstanceOf(ChainCache::class, $cacheInstance);

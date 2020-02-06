@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace RoaveTest\PsrContainerDoctrine;
@@ -13,12 +14,15 @@ use Roave\PsrContainerDoctrine\Exception\InvalidArgumentException;
 use RoaveTest\PsrContainerDoctrine\TestAsset\StubEventListener;
 use RoaveTest\PsrContainerDoctrine\TestAsset\StubEventSubscriber;
 use stdClass;
+use function array_pop;
+use function count;
+use function sprintf;
 
 class EventManagerFactoryTest extends TestCase
 {
     public function testDefaults() : void
     {
-        $factory = new EventManagerFactory();
+        $factory      = new EventManagerFactory();
         $eventManager = $factory($this->prophesize(ContainerInterface::class)->reveal());
 
         $this->assertSame(0, count($eventManager->getListeners()));
@@ -53,7 +57,7 @@ class EventManagerFactoryTest extends TestCase
 
     public function testInstanceSubscriber() : void
     {
-        $factory = new EventManagerFactory();
+        $factory      = new EventManagerFactory();
         $eventManager = $factory($this->buildContainer(new StubEventSubscriber())->reveal());
 
         $this->assertSame(1, count($eventManager->getListeners('foo')));
@@ -64,7 +68,7 @@ class EventManagerFactoryTest extends TestCase
         $container = $this->buildContainer(StubEventSubscriber::class);
         $container->has(StubEventSubscriber::class)->willReturn(false);
 
-        $factory = new EventManagerFactory();
+        $factory      = new EventManagerFactory();
         $eventManager = $factory($container->reveal());
 
         $this->assertSame(1, count($eventManager->getListeners('foo')));
@@ -78,9 +82,9 @@ class EventManagerFactoryTest extends TestCase
         $container->has(StubEventSubscriber::class)->willReturn(true);
         $container->get(StubEventSubscriber::class)->willReturn($eventSubscriber);
 
-        $factory = new EventManagerFactory();
+        $factory      = new EventManagerFactory();
         $eventManager = $factory($container->reveal());
-        $listeners = $eventManager->getListeners('foo');
+        $listeners    = $eventManager->getListeners('foo');
 
         $this->assertSame($eventSubscriber, array_pop($listeners));
     }
@@ -108,7 +112,7 @@ class EventManagerFactoryTest extends TestCase
     {
         $container = $this->buildContainerWithListener([
             'events' => [Events::onFlush, 'foo'],
-            'listener' => new StubEventListener()
+            'listener' => new StubEventListener(),
         ]);
 
         $factory = new EventManagerFactory();
@@ -122,10 +126,10 @@ class EventManagerFactoryTest extends TestCase
 
     public function testInstanceListener() : void
     {
-        $factory = new EventManagerFactory();
+        $factory      = new EventManagerFactory();
         $eventManager = $factory($this->buildContainerWithListener([
             'events' => Events::onFlush,
-            'listener' => new StubEventListener()
+            'listener' => new StubEventListener(),
         ])->reveal());
 
         $this->assertSame(1, count($eventManager->getListeners(Events::onFlush)));
@@ -135,11 +139,11 @@ class EventManagerFactoryTest extends TestCase
     {
         $container = $this->buildContainerWithListener([
             'events' => Events::onFlush,
-            'listener' => StubEventListener::class
+            'listener' => StubEventListener::class,
         ]);
         $container->has(StubEventListener::class)->willReturn(false);
 
-        $factory = new EventManagerFactory();
+        $factory      = new EventManagerFactory();
         $eventManager = $factory($container->reveal());
 
         $this->assertSame(1, count($eventManager->getListeners(Events::onFlush)));
@@ -151,20 +155,21 @@ class EventManagerFactoryTest extends TestCase
 
         $container = $this->buildContainerWithListener([
             'events' => Events::onFlush,
-            'listener' => StubEventListener::class
+            'listener' => StubEventListener::class,
         ]);
         $container->has(StubEventListener::class)->willReturn(true);
         $container->get(StubEventListener::class)->willReturn($eventListener);
 
-        $factory = new EventManagerFactory();
+        $factory      = new EventManagerFactory();
         $eventManager = $factory($container->reveal());
-        $listeners = $eventManager->getListeners(Events::onFlush);
+        $listeners    = $eventManager->getListeners(Events::onFlush);
 
         $this->assertSame($eventListener, array_pop($listeners));
     }
 
     /**
      * @param mixed $subscriber
+     *
      * @return ContainerInterface|ObjectProphecy
      */
     private function buildContainer($subscriber)
@@ -175,9 +180,7 @@ class EventManagerFactoryTest extends TestCase
             'doctrine' => [
                 'event_manager' => [
                     'orm_default' => [
-                        'subscribers' => [
-                            $subscriber
-                        ],
+                        'subscribers' => [$subscriber],
                     ],
                 ],
             ],
@@ -188,6 +191,7 @@ class EventManagerFactoryTest extends TestCase
 
     /**
      * @param mixed $listener
+     *
      * @return ContainerInterface|ObjectProphecy
      */
     private function buildContainerWithListener($listener)
@@ -198,9 +202,7 @@ class EventManagerFactoryTest extends TestCase
             'doctrine' => [
                 'event_manager' => [
                     'orm_default' => [
-                        'listeners' => [
-                            $listener
-                        ],
+                        'listeners' => [$listener],
                     ],
                 ],
             ],

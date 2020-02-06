@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace RoaveTest\PsrContainerDoctrine;
@@ -13,14 +14,14 @@ class AbstractFactoryTest extends TestCase
     public function testDefaultConfigKey() : void
     {
         $container = $this->prophesize(ContainerInterface::class)->reveal();
-        $factory = new StubFactory();
+        $factory   = new StubFactory();
         $this->assertSame('orm_default', $factory($container));
     }
 
     public function testCustomConfigKey() : void
     {
         $container = $this->prophesize(ContainerInterface::class)->reveal();
-        $factory = new StubFactory('orm_other');
+        $factory   = new StubFactory('orm_other');
         $this->assertSame('orm_other', $factory($container));
     }
 
@@ -38,17 +39,16 @@ class AbstractFactoryTest extends TestCase
     }
 
     /**
-     * @dataProvider configProvider
-     * @param string $configKey
-     * @param string $section
-     * @param array $expectedResult
+     * @param array      $expectedResult
      * @param array|null $config
+     *
+     * @dataProvider configProvider
      */
-    public function testRetrieveConfig($configKey, $section, array $expectedResult, array $config = null) : void
+    public function testRetrieveConfig(string $configKey, string $section, array $expectedResult, ?array $config = null) : void
     {
         $container = $this->prophesize(ContainerInterface::class);
 
-        if (null === $config) {
+        if ($config === null) {
             $container->has('config')->willReturn(false);
         } else {
             $container->has('config')->willReturn(true);
@@ -56,7 +56,7 @@ class AbstractFactoryTest extends TestCase
         }
 
         $factory = new StubFactory();
-        $result = $factory->retrieveConfig($container->reveal(), $configKey, $section);
+        $result  = $factory->retrieveConfig($container->reveal(), $configKey, $section);
 
         $this->assertSame($expectedResult, $result);
     }

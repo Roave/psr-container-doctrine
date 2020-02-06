@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace RoaveTest\PsrContainerDoctrine;
@@ -9,13 +10,14 @@ use OutOfBoundsException;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\DriverFactory;
+use function assert;
 
 class DriverFactoryTest extends TestCase
 {
     public function testMissingClassKeyWillReturnOutOfBoundException() : void
     {
         $container = $this->prophesize(ContainerInterface::class);
-        $factory = new DriverFactory();
+        $factory   = new DriverFactory();
 
         $this->expectException(OutOfBoundsException::class);
         $this->expectExceptionMessage('Missing "class" config key');
@@ -34,7 +36,7 @@ class DriverFactoryTest extends TestCase
                 'driver' => [
                     'orm_default' => [
                         'class' => TestAsset\StubFileDriver::class,
-                        'global_basename' => $globalBasename
+                        'global_basename' => $globalBasename,
                     ],
                 ],
             ],
@@ -47,11 +49,9 @@ class DriverFactoryTest extends TestCase
     }
 
     /**
-     * @param string $driverClass
-     *
      * @dataProvider simplifiedDriverClassProvider
      */
-    public function testItSupportsSettingExtensionInDriversUsingSymfonyFileLocator($driverClass) : void
+    public function testItSupportsSettingExtensionInDriversUsingSymfonyFileLocator(string $driverClass) : void
     {
         $extension = '.foo.bar';
 
@@ -70,8 +70,8 @@ class DriverFactoryTest extends TestCase
 
         $factory = new DriverFactory();
 
-        /** @var Driver\SimplifiedXmlDriver $driver */
         $driver = $factory($container->reveal());
+        assert($driver instanceof Driver\SimplifiedXmlDriver);
         $this->assertInstanceOf($driverClass, $driver);
         $this->assertSame($extension, $driver->getLocator()->getFileExtension());
     }
@@ -86,7 +86,6 @@ class DriverFactoryTest extends TestCase
 
     public function testItSupportsSettingDefaultDriverUsingMappingDriverChain() : void
     {
-
         $container = $this->prophesize(ContainerInterface::class);
         $container->has('config')->willReturn(true);
         $container->get('config')->willReturn([
@@ -94,7 +93,7 @@ class DriverFactoryTest extends TestCase
                 'driver' => [
                     'orm_default' => [
                         'class' => MappingDriverChain::class,
-                        'default_driver' => 'orm_stub'
+                        'default_driver' => 'orm_stub',
                     ],
                     'orm_stub' => [
                         'class' => TestAsset\StubFileDriver::class,

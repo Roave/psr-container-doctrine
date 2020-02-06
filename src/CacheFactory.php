@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Roave\PsrContainerDoctrine;
@@ -19,6 +20,10 @@ use Doctrine\Common\Cache\XcacheCache;
 use Doctrine\Common\Cache\ZendDataCache;
 use Doctrine\Common\Proxy\Exception\OutOfBoundsException;
 use Psr\Container\ContainerInterface;
+use function array_key_exists;
+use function array_map;
+use function is_array;
+use function is_string;
 
 /**
  * @method Cache __invoke(ContainerInterface $container)
@@ -32,7 +37,7 @@ class CacheFactory extends AbstractFactory
     {
         $config = $this->retrieveConfig($container, $configKey, 'cache');
 
-        if (!array_key_exists('class', $config)) {
+        if (! array_key_exists('class', $config)) {
             throw new OutOfBoundsException('Missing "class" config key');
         }
 
@@ -59,7 +64,7 @@ class CacheFactory extends AbstractFactory
                     },
                     is_array($config['providers']) ? $config['providers'] : []
                 );
-                $cache = new $config['class']($providers);
+                $cache     = new $config['class']($providers);
                 break;
 
             default:
@@ -84,7 +89,7 @@ class CacheFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    protected function getDefaultConfig($configKey)
+    protected function getDefaultConfig(string $configKey) : array
     {
         switch ($configKey) {
             case 'apcu':
@@ -92,73 +97,62 @@ class CacheFactory extends AbstractFactory
                     'class' => ApcuCache::class,
                     'namespace' => 'psr-container-doctrine',
                 ];
-
             case 'array':
                 return [
                     'class' => ArrayCache::class,
                     'namespace' => 'psr-container-doctrine',
                 ];
-
             case 'filesystem':
                 return [
                     'class' => FilesystemCache::class,
                     'directory' => 'data/cache/DoctrineCache',
                     'namespace' => 'psr-container-doctrine',
                 ];
-
             case 'memcache':
                 return [
                     'class' => MemcacheCache::class,
                     'instance' => 'my_memcache_alias',
                     'namespace' => 'psr-container-doctrine',
                 ];
-
             case 'memcached':
                 return [
                     'class' => MemcachedCache::class,
                     'instance' => 'my_memcached_alias',
                     'namespace' => 'psr-container-doctrine',
                 ];
-
             case 'phpfile':
                 return [
                     'class' => PhpFileCache::class,
                     'directory' => 'data/cache/DoctrineCache',
                     'namespace' => 'psr-container-doctrine',
                 ];
-
             case 'predis':
                 return [
                     'class' => PredisCache::class,
                     'instance' => 'my_predis_alias',
                     'namespace' => 'psr-container-doctrine',
                 ];
-
             case 'redis':
                 return [
                     'class' => RedisCache::class,
                     'instance' => 'my_redis_alias',
                     'namespace' => 'psr-container-doctrine',
                 ];
-
             case 'wincache':
                 return [
                     'class' => WinCacheCache::class,
                     'namespace' => 'psr-container-doctrine',
                 ];
-
             case 'xcache':
                 return [
                     'class' => XcacheCache::class,
                     'namespace' => 'psr-container-doctrine',
                 ];
-
             case 'zenddata':
                 return [
                     'class' => ZendDataCache::class,
                     'namespace' => 'psr-container-doctrine',
                 ];
-
             case 'chain':
                 return [
                     'class' => ChainCache::class,

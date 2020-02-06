@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Roave\PsrContainerDoctrine;
@@ -12,15 +13,17 @@ use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\Common\Proxy\Exception\OutOfBoundsException;
 use Psr\Container\ContainerInterface;
+use function array_key_exists;
+use function class_exists;
+use function is_array;
+use function is_subclass_of;
 
 /**
  * @method MappingDriver __invoke(ContainerInterface $container)
  */
 class DriverFactory extends AbstractFactory
 {
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private static $isAnnotationLoaderRegistered = false;
 
     /**
@@ -30,15 +33,15 @@ class DriverFactory extends AbstractFactory
     {
         $config = $this->retrieveConfig($container, $configKey, 'driver');
 
-        if (!array_key_exists('class', $config)) {
+        if (! array_key_exists('class', $config)) {
             throw new OutOfBoundsException('Missing "class" config key');
         }
 
-        if (!is_array($config['paths'])) {
+        if (! is_array($config['paths'])) {
             $config['paths'] = [$config['paths']];
         }
 
-        if (AnnotationDriver::class === $config['class'] || is_subclass_of($config['class'], AnnotationDriver::class)) {
+        if ($config['class'] === AnnotationDriver::class || is_subclass_of($config['class'], AnnotationDriver::class)) {
             $this->registerAnnotationLoader();
 
             $driver = new $config['class'](
@@ -50,8 +53,8 @@ class DriverFactory extends AbstractFactory
             );
         }
 
-        if (null !== $config['extension']
-            && (FileDriver::class === $config['class'] || is_subclass_of($config['class'], FileDriver::class))
+        if ($config['extension'] !== null
+            && ($config['class'] === FileDriver::class || is_subclass_of($config['class'], FileDriver::class))
         ) {
             $driver = new $config['class']($config['paths'], $config['extension']);
         }
@@ -65,12 +68,12 @@ class DriverFactory extends AbstractFactory
         }
 
         if ($driver instanceof MappingDriverChain) {
-            if (null !== $config['default_driver']) {
+            if ($config['default_driver'] !== null) {
                 $driver->setDefaultDriver($this->createWithConfig($container, $config['default_driver']));
             }
 
             foreach ($config['drivers'] as $namespace => $driverName) {
-                if (null === $driverName) {
+                if ($driverName === null) {
                     continue;
                 }
 
@@ -84,7 +87,7 @@ class DriverFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    protected function getDefaultConfig($configKey)
+    protected function getDefaultConfig($configKey) : array
     {
         return [
             'paths' => [],
@@ -96,14 +99,14 @@ class DriverFactory extends AbstractFactory
     /**
      * Registers the annotation loader
      */
-    private function registerAnnotationLoader()
+    private function registerAnnotationLoader() : void
     {
         if (self::$isAnnotationLoaderRegistered) {
             return;
         }
 
         AnnotationRegistry::registerLoader(
-            function ($className) {
+            static function ($className) {
                 return class_exists($className);
             }
         );
