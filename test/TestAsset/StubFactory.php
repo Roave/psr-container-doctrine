@@ -20,15 +20,18 @@ class StubFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    public function retrieveConfig(ContainerInterface $container, string $configKey, string $section)
+    // phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod.Found
+    public function retrieveConfig(ContainerInterface $container, string $configKey, string $section) : array
     {
         return parent::retrieveConfig($container, $configKey, $section);
     }
 
+    // phpcs:enable
+
     /**
      * {@inheritdoc}
      */
-    protected function getDefaultConfig($configKey)
+    protected function getDefaultConfig($configKey) : array
     {
         return [];
     }

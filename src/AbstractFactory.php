@@ -38,7 +38,7 @@ abstract class AbstractFactory
      * ];
      * </code>
      *
-     * @param array $arguments
+     * @param mixed[] $arguments
      *
      * @return mixed
      *
@@ -66,14 +66,14 @@ abstract class AbstractFactory
     /**
      * Returns the default config.
      *
-     * @return array
+     * @return mixed[]
      */
     abstract protected function getDefaultConfig(string $configKey) : array;
 
     /**
      * Retrieves the config for a specific section.
      *
-     * @return array
+     * @return mixed[]
      */
     protected function retrieveConfig(ContainerInterface $container, string $configKey, string $section) : array
     {

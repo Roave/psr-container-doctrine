@@ -175,7 +175,7 @@ class ConnectionFactoryTest extends TestCase
     }
 
     /**
-     * @param array $config
+     * @param mixed[] $config
      *
      * @return ContainerInterface|ObjectProphecy
      */

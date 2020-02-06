@@ -76,6 +76,7 @@ class DriverFactoryTest extends TestCase
         $this->assertSame($extension, $driver->getLocator()->getFileExtension());
     }
 
+    /** @return string[][] */
     public function simplifiedDriverClassProvider() : array
     {
         return [

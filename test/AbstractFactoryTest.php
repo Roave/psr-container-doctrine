@@ -39,8 +39,8 @@ class AbstractFactoryTest extends TestCase
     }
 
     /**
-     * @param array      $expectedResult
-     * @param array|null $config
+     * @param int[]          $expectedResult
+     * @param int[][][]|null $config
      *
      * @dataProvider configProvider
      */
@@ -61,6 +61,9 @@ class AbstractFactoryTest extends TestCase
         $this->assertSame($expectedResult, $result);
     }
 
+    /**
+     * @return mixed[]
+     */
     public function configProvider() : array
     {
         return [

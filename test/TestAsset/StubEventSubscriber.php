@@ -9,9 +9,9 @@ use Doctrine\Common\EventSubscriber;
 class StubEventSubscriber implements EventSubscriber
 {
     /**
-     * {q@nheritdoc}
+     * {@inheritdoc}
      */
-    public function getSubscribedEvents()
+    public function getSubscribedEvents() : array
     {
         return ['foo'];
     }
