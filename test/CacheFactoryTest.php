@@ -6,7 +6,7 @@ namespace RoaveTest\PsrContainerDoctrine;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\ChainCache;
 use Doctrine\Common\Cache\FilesystemCache;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\AbstractFactory;
 use Roave\PsrContainerDoctrine\CacheFactory;
@@ -14,12 +14,12 @@ use Roave\PsrContainerDoctrine\CacheFactory;
 /**
  * @coversDefaultClass \Roave\PsrContainerDoctrine\CacheFactory
  */
-class CacheFactoryTest extends PHPUnit_Framework_TestCase
+class CacheFactoryTest extends TestCase
 {
     /**
      * @covers ::__construct
      */
-    public function testExtendsAbstractFactory()
+    public function testExtendsAbstractFactory() : void
     {
         $this->assertInstanceOf(AbstractFactory::class, new CacheFactory());
     }
@@ -27,7 +27,7 @@ class CacheFactoryTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ::createWithConfig
      */
-    public function testFileSystemCacheConstructor()
+    public function testFileSystemCacheConstructor() : void
     {
         $config = [
             'doctrine' => [
@@ -50,7 +50,7 @@ class CacheFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf(FilesystemCache::class, $cacheInstance);
     }
 
-    public function testCacheChainContainsInitializedProviders()
+    public function testCacheChainContainsInitializedProviders() : void
     {
         $config = [
             'doctrine' => [
@@ -72,6 +72,5 @@ class CacheFactoryTest extends PHPUnit_Framework_TestCase
         $cacheInstance = $factory($container->reveal());
 
         $this->assertInstanceOf(ChainCache::class, $cacheInstance);
-        $this->assertAttributeCount(2, 'cacheProviders', $cacheInstance);
     }
 }

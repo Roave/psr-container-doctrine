@@ -10,12 +10,12 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\BooleanType;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\ConnectionFactory;
 
-class ConnectionFactoryTest extends PHPUnit_Framework_TestCase
+class ConnectionFactoryTest extends TestCase
 {
     /**
      * @var Configuration
@@ -27,13 +27,13 @@ class ConnectionFactoryTest extends PHPUnit_Framework_TestCase
      */
     private $eventManger;
 
-    public function setUp()
+    public function setUp() : void
     {
         $this->configuration = $this->prophesize(Configuration::class)->reveal();
         $this->eventManger = $this->prophesize(EventManager::class)->reveal();
     }
 
-    public function testDefaultsThroughException()
+    public function testDefaultsThroughException() : void
     {
         if (defined('HHVM_VERSION')) {
             $this->markTestSkipped('HHVM is somewhat funky here');
@@ -68,7 +68,7 @@ class ConnectionFactoryTest extends PHPUnit_Framework_TestCase
         $this->fail('An expected exception was not raised');
     }
 
-    public function testDefaults()
+    public function testDefaults() : void
     {
         $factory = new ConnectionFactory();
         $connection = $factory($this->buildContainer()->reveal());
@@ -82,7 +82,7 @@ class ConnectionFactoryTest extends PHPUnit_Framework_TestCase
         ], $connection->getParams());
     }
 
-    public function testConfigKeysTakenFromSelf()
+    public function testConfigKeysTakenFromSelf() : void
     {
         $factory = new ConnectionFactory('orm_other');
         $connection = $factory($this->buildContainer('orm_other', 'orm_other', 'orm_other')->reveal());
@@ -91,7 +91,7 @@ class ConnectionFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertSame($this->eventManger, $connection->getEventManager());
     }
 
-    public function testConfigKeysTakenFromConfig()
+    public function testConfigKeysTakenFromConfig() : void
     {
         $factory = new ConnectionFactory('orm_other');
         $connection = $factory($this->buildContainer('orm_other', 'orm_foo', 'orm_bar', [
@@ -103,7 +103,7 @@ class ConnectionFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertSame($this->eventManger, $connection->getEventManager());
     }
 
-    public function testParamsInjection()
+    public function testParamsInjection() : void
     {
         $factory = new ConnectionFactory();
         $connection = $factory($this->buildContainer('orm_default', 'orm_default', 'orm_default', [
@@ -118,7 +118,7 @@ class ConnectionFactoryTest extends PHPUnit_Framework_TestCase
         ], $connection->getParams());
     }
 
-    public function testDoctrineMappingTypesInjection()
+    public function testDoctrineMappingTypesInjection() : void
     {
         $factory = new ConnectionFactory();
         $connection = $factory($this->buildContainer('orm_default', 'orm_default', 'orm_default', [
@@ -128,7 +128,7 @@ class ConnectionFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($connection->getDatabasePlatform()->hasDoctrineTypeMappingFor('foo'));
     }
 
-    public function testDoctrineCommentedTypesInjection()
+    public function testDoctrineCommentedTypesInjection() : void
     {
         $type = Type::getType('boolean');
 
@@ -140,7 +140,7 @@ class ConnectionFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($connection->getDatabasePlatform()->isCommentedDoctrineType($type));
     }
 
-    public function testCustomTypeDoctrineMappingTypesInjection()
+    public function testCustomTypeDoctrineMappingTypesInjection() : void
     {
         $factory = new ConnectionFactory();
         $property = (new \ReflectionObject($factory))->getProperty('areTypesRegistered');
@@ -154,7 +154,7 @@ class ConnectionFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($connection->getDatabasePlatform()->hasDoctrineTypeMappingFor('foo'));
     }
 
-    public function testCustomPlatform()
+    public function testCustomPlatform() : void
     {
         $factory = new ConnectionFactory();
 

@@ -23,8 +23,8 @@
         "doctrine/common": "^2.6"
     },
     "require-dev": {
-        "phpunit/phpunit": "^4.8",
-        "squizlabs/php_codesniffer": "^2.5"
+        "doctrine/coding-standard": "^7.0",
+        "phpunit/phpunit": "^8.5"
     },
     "autoload": {
         "psr-4": {
@@ -36,7 +36,11 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "RoaveTest\\PsrContainerDoctrine\\": "src/"
+            "RoaveTest\\PsrContainerDoctrine\\": "test/"
         }
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true
     }
 }

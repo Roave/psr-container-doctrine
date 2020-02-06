@@ -3,6 +3,8 @@
     <file>./example</file>
     <file>./src</file>
     <file>./test</file>
-    <rule ref="PSR2"/>
+    <rule ref="Doctrine">
+        <exclude name="Generic.Files.LineLength.TooLong"/>
+    </rule>
 </ruleset>
 

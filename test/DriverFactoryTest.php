@@ -6,23 +6,24 @@ namespace RoaveTest\PsrContainerDoctrine;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\ORM\Mapping\Driver;
 use OutOfBoundsException;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\DriverFactory;
 
 class DriverFactoryTest extends TestCase
 {
-    public function testMissingClassKeyWillReturnOutOfBoundException()
+    public function testMissingClassKeyWillReturnOutOfBoundException() : void
     {
         $container = $this->prophesize(ContainerInterface::class);
         $factory = new DriverFactory();
 
-        $this->setExpectedException(OutOfBoundsException::class, 'Missing "class" config key');
+        $this->expectException(OutOfBoundsException::class);
+        $this->expectExceptionMessage('Missing "class" config key');
 
         $factory($container->reveal());
     }
 
-    public function testItSupportsGlobalBasenameOptionOnFileDrivers()
+    public function testItSupportsGlobalBasenameOptionOnFileDrivers() : void
     {
         $globalBasename = 'foobar';
 
@@ -50,7 +51,7 @@ class DriverFactoryTest extends TestCase
      *
      * @dataProvider simplifiedDriverClassProvider
      */
-    public function testItSupportsSettingExtensionInDriversUsingSymfonyFileLocator($driverClass)
+    public function testItSupportsSettingExtensionInDriversUsingSymfonyFileLocator($driverClass) : void
     {
         $extension = '.foo.bar';
 
@@ -75,7 +76,7 @@ class DriverFactoryTest extends TestCase
         $this->assertSame($extension, $driver->getLocator()->getFileExtension());
     }
 
-    public function simplifiedDriverClassProvider()
+    public function simplifiedDriverClassProvider() : array
     {
         return [
             [ Driver\SimplifiedXmlDriver::class ],
@@ -83,7 +84,7 @@ class DriverFactoryTest extends TestCase
         ];
     }
 
-    public function testItSupportsSettingDefaultDriverUsingMappingDriverChain()
+    public function testItSupportsSettingDefaultDriverUsingMappingDriverChain() : void
     {
 
         $container = $this->prophesize(ContainerInterface::class);

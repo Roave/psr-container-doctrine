@@ -3,39 +3,37 @@ declare(strict_types=1);
 
 namespace RoaveTest\PsrContainerDoctrine;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\Exception\DomainException;
 use RoaveTest\PsrContainerDoctrine\TestAsset\StubFactory;
 
-class AbstractFactoryTest extends PHPUnit_Framework_TestCase
+class AbstractFactoryTest extends TestCase
 {
-    public function testDefaultConfigKey()
+    public function testDefaultConfigKey() : void
     {
         $container = $this->prophesize(ContainerInterface::class)->reveal();
         $factory = new StubFactory();
         $this->assertSame('orm_default', $factory($container));
     }
 
-    public function testCustomConfigKey()
+    public function testCustomConfigKey() : void
     {
         $container = $this->prophesize(ContainerInterface::class)->reveal();
         $factory = new StubFactory('orm_other');
         $this->assertSame('orm_other', $factory($container));
     }
 
-    public function testStaticCall()
+    public function testStaticCall() : void
     {
         $container = $this->prophesize(ContainerInterface::class)->reveal();
         $this->assertSame('orm_other', StubFactory::orm_other($container));
     }
 
-    public function testStaticCallWithoutContainer()
+    public function testStaticCallWithoutContainer() : void
     {
-        $this->setExpectedException(
-            DomainException::class,
-            'The first argument must be of type Psr\Container\ContainerInterface'
-        );
+        $this->expectException(DomainException::class);
+        $this->expectExceptionMessage('The first argument must be of type Psr\Container\ContainerInterface');
         StubFactory::orm_other();
     }
 
@@ -46,7 +44,7 @@ class AbstractFactoryTest extends PHPUnit_Framework_TestCase
      * @param array $expectedResult
      * @param array|null $config
      */
-    public function testRetrieveConfig($configKey, $section, array $expectedResult, array $config = null)
+    public function testRetrieveConfig($configKey, $section, array $expectedResult, array $config = null) : void
     {
         $container = $this->prophesize(ContainerInterface::class);
 
@@ -63,7 +61,7 @@ class AbstractFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertSame($expectedResult, $result);
     }
 
-    public function configProvider()
+    public function configProvider() : array
     {
         return [
             'no-config' => ['foo', 'bar', [], null],

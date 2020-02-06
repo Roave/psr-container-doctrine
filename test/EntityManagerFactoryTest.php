@@ -7,19 +7,19 @@ use Doctrine\Common\EventManager;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Configuration;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\AbstractFactory;
 use Roave\PsrContainerDoctrine\EntityManagerFactory;
 
-class EntityManagerFactoryTest extends PHPUnit_Framework_TestCase
+class EntityManagerFactoryTest extends TestCase
 {
-    public function testExtendsAbstractFactory()
+    public function testExtendsAbstractFactory() : void
     {
         $this->assertInstanceOf(AbstractFactory::class, new EntityManagerFactory());
     }
 
-    public function testDefaults()
+    public function testDefaults() : void
     {
         $connection = $this->buildConnection();
         $configuration = $this->buildConfiguration();
@@ -38,7 +38,7 @@ class EntityManagerFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertSame($configuration, $entityManager->getConfiguration());
     }
 
-    public function testConfigKeyTakenFromSelf()
+    public function testConfigKeyTakenFromSelf() : void
     {
         $connection = $this->buildConnection();
         $configuration = $this->buildConfiguration();
@@ -57,7 +57,7 @@ class EntityManagerFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertSame($configuration, $entityManager->getConfiguration());
     }
 
-    public function testConfigKeyTakenFromConfig()
+    public function testConfigKeyTakenFromConfig() : void
     {
         $connection = $this->buildConnection();
         $configuration = $this->buildConfiguration();
