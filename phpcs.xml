@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ruleset name="container-interop-doctrine">
+<ruleset name="psr-container-doctrine">
     <file>./example</file>
     <file>./src</file>
     <file>./test</file>

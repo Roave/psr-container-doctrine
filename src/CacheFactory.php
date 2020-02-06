@@ -90,79 +90,79 @@ class CacheFactory extends AbstractFactory
             case 'apcu':
                 return [
                     'class' => ApcuCache::class,
-                    'namespace' => 'container-interop-doctrine',
+                    'namespace' => 'psr-container-doctrine',
                 ];
 
             case 'array':
                 return [
                     'class' => ArrayCache::class,
-                    'namespace' => 'container-interop-doctrine',
+                    'namespace' => 'psr-container-doctrine',
                 ];
 
             case 'filesystem':
                 return [
                     'class' => FilesystemCache::class,
                     'directory' => 'data/cache/DoctrineCache',
-                    'namespace' => 'container-interop-doctrine',
+                    'namespace' => 'psr-container-doctrine',
                 ];
 
             case 'memcache':
                 return [
                     'class' => MemcacheCache::class,
                     'instance' => 'my_memcache_alias',
-                    'namespace' => 'container-interop-doctrine',
+                    'namespace' => 'psr-container-doctrine',
                 ];
 
             case 'memcached':
                 return [
                     'class' => MemcachedCache::class,
                     'instance' => 'my_memcached_alias',
-                    'namespace' => 'container-interop-doctrine',
+                    'namespace' => 'psr-container-doctrine',
                 ];
 
             case 'phpfile':
                 return [
                     'class' => PhpFileCache::class,
                     'directory' => 'data/cache/DoctrineCache',
-                    'namespace' => 'container-interop-doctrine',
+                    'namespace' => 'psr-container-doctrine',
                 ];
 
             case 'predis':
                 return [
                     'class' => PredisCache::class,
                     'instance' => 'my_predis_alias',
-                    'namespace' => 'container-interop-doctrine',
+                    'namespace' => 'psr-container-doctrine',
                 ];
 
             case 'redis':
                 return [
                     'class' => RedisCache::class,
                     'instance' => 'my_redis_alias',
-                    'namespace' => 'container-interop-doctrine',
+                    'namespace' => 'psr-container-doctrine',
                 ];
 
             case 'wincache':
                 return [
                     'class' => WinCacheCache::class,
-                    'namespace' => 'container-interop-doctrine',
+                    'namespace' => 'psr-container-doctrine',
                 ];
 
             case 'xcache':
                 return [
                     'class' => XcacheCache::class,
-                    'namespace' => 'container-interop-doctrine',
+                    'namespace' => 'psr-container-doctrine',
                 ];
 
             case 'zenddata':
                 return [
                     'class' => ZendDataCache::class,
-                    'namespace' => 'container-interop-doctrine',
+                    'namespace' => 'psr-container-doctrine',
                 ];
 
             case 'chain':
                 return [
                     'class' => ChainCache::class,
-                    'namespace' => 'container-interop-doctrine',
+                    'namespace' => 'psr-container-doctrine',
                     'providers' => [],
                 ];
         }

@@ -2,7 +2,7 @@
     "name": "roave/psr-container-doctrine",
     "type": "library",
     "description": "Doctrine Factories for PSR-11 Containers",
-    "homepage": "https://github.com/DASPRiD/container-interop-doctrine",
+    "homepage": "https://github.com/Roave/psr-container-doctrine",
     "license" : "BSD-2-Clause",
     "authors": [
         {
@@ -28,8 +28,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Roave\\PsrContainerDoctrine\\": "src/",
-            "ContainerInteropDoctrine\\": "src/"
+            "Roave\\PsrContainerDoctrine\\": "src/"
         },
         "files": [
             "bc-namespace-shim.php"
@@ -37,8 +36,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "RoaveTest\\PsrContainerDoctrine\\": "src/",
-            "ContainerInteropDoctrineTest\\": "test/"
+            "RoaveTest\\PsrContainerDoctrine\\": "src/"
         }
     }
 }

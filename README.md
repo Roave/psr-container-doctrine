@@ -52,11 +52,11 @@ one, it will automatically pull its dependencies from on-the-fly created factori
 registering factories in your container which you may not need at all. Of course, you can always register those
 factories when required. The following additional factories are available:
 
-- ```\ContainerInteropDoctrine\CacheFactory``` (doctrine.cache.*)
-- ```\ContainerInteropDoctrine\ConnectionFactory``` (doctrine.connection.*)
-- ```\ContainerInteropDoctrine\ConfigurationFactory``` (doctrine.configuration.*)
-- ```\ContainerInteropDoctrine\DriverFactory``` (doctrine.driver.*)
-- ```\ContainerInteropDoctrine\EventManagerFactory``` (doctrine.event_manager.*)
+- ```\Roave\PsrContainerDoctrine\CacheFactory``` (doctrine.cache.*)
+- ```\Roave\PsrContainerDoctrine\ConnectionFactory``` (doctrine.connection.*)
+- ```\Roave\PsrContainerDoctrine\ConfigurationFactory``` (doctrine.configuration.*)
+- ```\Roave\PsrContainerDoctrine\DriverFactory``` (doctrine.driver.*)
+- ```\Roave\PsrContainerDoctrine\EventManagerFactory``` (doctrine.event_manager.*)
 
 Each of those factories supports the same static behavior as the entity manager factory. For container specific
 configurations, there are a few examples provided in the example directory:

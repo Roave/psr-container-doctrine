@@ -71,53 +71,53 @@ return [
         'cache' => [
             'apcu' => [
                 'class' => \Doctrine\Common\Cache\ApcuCache::class,
-                'namespace' => 'container-interop-doctrine',
+                'namespace' => 'psr-container-doctrine',
             ],
             'array' => [
                 'class' => \Doctrine\Common\Cache\ArrayCache::class,
-                'namespace' => 'container-interop-doctrine',
+                'namespace' => 'psr-container-doctrine',
             ],
             'filesystem' => [
                 'class' => \Doctrine\Common\Cache\FilesystemCache::class,
                 'directory' => 'data/cache/DoctrineCache',
-                'namespace' => 'container-interop-doctrine',
+                'namespace' => 'psr-container-doctrine',
             ],
             'memcache' => [
                 'class' => \Doctrine\Common\Cache\MemcacheCache::class,
                 'instance' => 'my_memcache_alias',
-                'namespace' => 'container-interop-doctrine',
+                'namespace' => 'psr-container-doctrine',
             ],
             'memcached' => [
                 'class' => \Doctrine\Common\Cache\MemcachedCache::class,
                 'instance' => 'my_memcached_alias',
-                'namespace' => 'container-interop-doctrine',
+                'namespace' => 'psr-container-doctrine',
             ],
             'phpfile' => [
                 'class' => \Doctrine\Common\Cache\PhpFileCache::class,
                 'directory' => 'data/cache/DoctrineCache',
-                'namespace' => 'container-interop-doctrine',
+                'namespace' => 'psr-container-doctrine',
             ],
             'predis' => [
                 'class' => \Doctrine\Common\Cache\PredisCache::class,
                 'instance' => 'my_predis_alias',
-                'namespace' => 'container-interop-doctrine',
+                'namespace' => 'psr-container-doctrine',
             ],
             'redis' => [
                 'class' => \Doctrine\Common\Cache\RedisCache::class,
                 'instance' => 'my_redis_alias',
-                'namespace' => 'container-interop-doctrine',
+                'namespace' => 'psr-container-doctrine',
             ],
             'wincache' => [
                 'class' => \Doctrine\Common\Cache\WinCacheCache::class,
-                'namespace' => 'container-interop-doctrine',
+                'namespace' => 'psr-container-doctrine',
             ],
             'xcache' => [
                 'class' => \Doctrine\Common\Cache\XcacheCache::class,
-                'namespace' => 'container-interop-doctrine',
+                'namespace' => 'psr-container-doctrine',
             ],
             'zenddata' => [
                 'class' => \Doctrine\Common\Cache\ZendDataCache::class,
-                'namespace' => 'container-interop-doctrine',
+                'namespace' => 'psr-container-doctrine',
             ],
             'my_cache_provider' => [
                 'class' => \App\Doctrine\CustomCacheProvider::class, //The class is looked up in the container
@@ -125,7 +125,7 @@ return [
             'chain' => [
                 'class' => \Doctrine\Common\Cache\ChainCache::class,
                 'providers' => ['array', 'redis'], // you can use any provider listed above
-                'namespace' => 'container-interop-doctrine', // will be applied to all providers in the chain
+                'namespace' => 'psr-container-doctrine', // will be applied to all providers in the chain
             ]
         ],
         'types' => [],

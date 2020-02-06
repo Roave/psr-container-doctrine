@@ -12,14 +12,10 @@ use Roave\PsrContainerDoctrine\AbstractFactory;
 use Roave\PsrContainerDoctrine\CacheFactory;
 
 /**
- * Class CacheFactoryTest
- *
- * @package ContainerInteropDoctrineTest
  * @coversDefaultClass \Roave\PsrContainerDoctrine\CacheFactory
  */
 class CacheFactoryTest extends PHPUnit_Framework_TestCase
 {
-
     /**
      * @covers ::__construct
      */
