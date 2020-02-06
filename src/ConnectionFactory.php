@@ -1,19 +1,13 @@
 <?php
-/**
- * container-interop-doctrine
- *
- * @link      http://github.com/DASPRiD/container-interop-doctrine For the canonical source repository
- * @copyright 2016 Ben Scholzen 'DASPRiD'
- * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
- */
+declare(strict_types=1);
 
-namespace ContainerInteropDoctrine;
+namespace Roave\PsrContainerDoctrine;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\PDOMySql\Driver as PdoMysqlDriver;
 use Doctrine\DBAL\DriverManager;
-use Psr\Container\ContainerInterface;
 use Doctrine\DBAL\Types\Type;
+use Psr\Container\ContainerInterface;
 
 /**
  * @method Connection __invoke(ContainerInterface $container)

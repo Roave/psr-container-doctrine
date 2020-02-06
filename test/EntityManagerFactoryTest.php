@@ -7,16 +7,16 @@
  * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
  */
 
-namespace ContainerInteropDoctrineTest;
+namespace RoaveTest\PsrContainerDoctrine;
 
-use ContainerInteropDoctrine\AbstractFactory;
-use ContainerInteropDoctrine\EntityManagerFactory;
 use Doctrine\Common\EventManager;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Configuration;
-use Psr\Container\ContainerInterface;
 use PHPUnit_Framework_TestCase;
+use Psr\Container\ContainerInterface;
+use Roave\PsrContainerDoctrine\AbstractFactory;
+use Roave\PsrContainerDoctrine\EntityManagerFactory;
 
 class EntityManagerFactoryTest extends PHPUnit_Framework_TestCase
 {

@@ -7,9 +7,8 @@
  * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
  */
 
-namespace ContainerInteropDoctrineTest;
+namespace RoaveTest\PsrContainerDoctrine;
 
-use ContainerInteropDoctrine\ConnectionFactory;
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Driver\PDOSqlite\Driver as PDOSqliteDriver;
 use Doctrine\DBAL\Exception\ConnectionException;
@@ -17,9 +16,10 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\BooleanType;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration;
-use Psr\Container\ContainerInterface;
 use PHPUnit_Framework_TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
+use Psr\Container\ContainerInterface;
+use Roave\PsrContainerDoctrine\ConnectionFactory;
 
 class ConnectionFactoryTest extends PHPUnit_Framework_TestCase
 {

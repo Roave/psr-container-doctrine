@@ -3,15 +3,14 @@
  * @license See the file LICENSE for copying permission
  */
 
-namespace ContainerInteropDoctrineTest;
+namespace RoaveTest\PsrContainerDoctrine;
 
-use ContainerInteropDoctrineTest\TestAsset\StubFileDriver;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\ORM\Mapping\Driver;
 use OutOfBoundsException;
-use ContainerInteropDoctrine\DriverFactory;
-use Psr\Container\ContainerInterface;
 use PHPUnit_Framework_TestCase as TestCase;
+use Psr\Container\ContainerInterface;
+use Roave\PsrContainerDoctrine\DriverFactory;
 
 class DriverFactoryTest extends TestCase
 {

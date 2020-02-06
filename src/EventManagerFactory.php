@@ -1,19 +1,13 @@
 <?php
-/**
- * container-interop-doctrine
- *
- * @link      http://github.com/DASPRiD/container-interop-doctrine For the canonical source repository
- * @copyright 2016 Ben Scholzen 'DASPRiD'
- * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
- */
+declare(strict_types=1);
 
-namespace ContainerInteropDoctrine;
+namespace Roave\PsrContainerDoctrine;
 
-use ContainerInteropDoctrine\Exception\DomainException;
-use ContainerInteropDoctrine\Exception\InvalidArgumentException;
 use Doctrine\Common\EventManager;
 use Doctrine\Common\EventSubscriber;
 use Psr\Container\ContainerInterface;
+use Roave\PsrContainerDoctrine\Exception\DomainException;
+use Roave\PsrContainerDoctrine\Exception\InvalidArgumentException;
 
 /**
  * @method EventManager __invoke(ContainerInterface $container)

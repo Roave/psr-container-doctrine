@@ -7,20 +7,21 @@
  * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
  */
 
-namespace ContainerInteropDoctrineTest;
+namespace RoaveTest\PsrContainerDoctrine;
 
-use ContainerInteropDoctrine\AbstractFactory;
-use ContainerInteropDoctrine\CacheFactory;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\ChainCache;
 use Doctrine\Common\Cache\FilesystemCache;
-use Psr\Container\ContainerInterface;
 use PHPUnit_Framework_TestCase;
+use Psr\Container\ContainerInterface;
+use Roave\PsrContainerDoctrine\AbstractFactory;
+use Roave\PsrContainerDoctrine\CacheFactory;
 
 /**
  * Class CacheFactoryTest
+ *
  * @package ContainerInteropDoctrineTest
- * @coversDefaultClass \ContainerInteropDoctrine\CacheFactory
+ * @coversDefaultClass \Roave\PsrContainerDoctrine\CacheFactory
  */
 class CacheFactoryTest extends PHPUnit_Framework_TestCase
 {

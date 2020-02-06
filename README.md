@@ -23,10 +23,11 @@ $ composer require dasprid/container-interop-doctrine
 In the general case where you are only using a single connection, it's enough to define the entity manager factory:
 
 ```php
+```php
 return [
     'dependencies' => [
         'factories' => [
-            'doctrine.entity_manager.orm_default' => \ContainerInteropDoctrine\EntityManagerFactory::class,
+            'doctrine.entity_manager.orm_default' => \Roave\PsrContainerDoctrine\EntityManagerFactory::class,
         ],
     ],
 ];
@@ -36,10 +37,11 @@ If you want to add a second connection, or use another name than "orm_default", 
 variants of the factories:
 
 ```php
+```php
 return [
     'dependencies' => [
         'factories' => [
-            'doctrine.entity_manager.orm_other' => [\ContainerInteropDoctrine\EntityManagerFactory::class, 'orm_other'],
+            'doctrine.entity_manager.orm_other' => [\Roave\PsrContainerDoctrine\EntityManagerFactory::class, 'orm_other'],
         ],
     ],
 ];

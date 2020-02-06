@@ -7,12 +7,12 @@
  * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
  */
 
-namespace ContainerInteropDoctrineTest;
+namespace RoaveTest\PsrContainerDoctrine;
 
-use ContainerInteropDoctrine\Exception\DomainException;
-use ContainerInteropDoctrineTest\TestAsset\StubFactory;
-use Psr\Container\ContainerInterface;
 use PHPUnit_Framework_TestCase;
+use Psr\Container\ContainerInterface;
+use Roave\PsrContainerDoctrine\Exception\DomainException;
+use RoaveTest\PsrContainerDoctrine\TestAsset\StubFactory;
 
 class AbstractFactoryTest extends PHPUnit_Framework_TestCase
 {

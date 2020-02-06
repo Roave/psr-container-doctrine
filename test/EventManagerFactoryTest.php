@@ -7,17 +7,17 @@
  * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
  */
 
-namespace ContainerInteropDoctrineTest;
+namespace RoaveTest\PsrContainerDoctrine;
 
-use ContainerInteropDoctrine\EventManagerFactory;
-use ContainerInteropDoctrine\Exception\DomainException;
-use ContainerInteropDoctrine\Exception\InvalidArgumentException;
-use ContainerInteropDoctrineTest\TestAsset\StubEventListener;
-use ContainerInteropDoctrineTest\TestAsset\StubEventSubscriber;
 use Doctrine\ORM\Events;
-use Psr\Container\ContainerInterface;
 use PHPUnit_Framework_TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
+use Psr\Container\ContainerInterface;
+use Roave\PsrContainerDoctrine\EventManagerFactory;
+use Roave\PsrContainerDoctrine\Exception\DomainException;
+use Roave\PsrContainerDoctrine\Exception\InvalidArgumentException;
+use RoaveTest\PsrContainerDoctrine\TestAsset\StubEventListener;
+use RoaveTest\PsrContainerDoctrine\TestAsset\StubEventSubscriber;
 use stdClass;
 
 class EventManagerFactoryTest extends PHPUnit_Framework_TestCase

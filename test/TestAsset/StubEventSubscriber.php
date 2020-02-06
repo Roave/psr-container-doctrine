@@ -7,7 +7,7 @@
  * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
  */
 
-namespace ContainerInteropDoctrineTest\TestAsset;
+namespace RoaveTest\PsrContainerDoctrine\TestAsset;
 
 use Doctrine\Common\EventSubscriber;
 

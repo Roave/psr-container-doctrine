@@ -3,7 +3,7 @@
  * @license See the file LICENSE for copying permission
  */
 
-namespace ContainerInteropDoctrineTest\TestAsset;
+namespace RoaveTest\PsrContainerDoctrine\TestAsset;
 
 use Doctrine\ORM\Event\OnFlushEventArgs;
 

@@ -7,10 +7,10 @@
  * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
  */
 
-namespace ContainerInteropDoctrineTest\TestAsset;
+namespace RoaveTest\PsrContainerDoctrine\TestAsset;
 
-use ContainerInteropDoctrine\AbstractFactory;
 use Psr\Container\ContainerInterface;
+use Roave\PsrContainerDoctrine\AbstractFactory;
 
 class StubFactory extends AbstractFactory
 {
