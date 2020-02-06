@@ -1,11 +1,11 @@
-# container-interop-doctrine: Doctrine Factories for PSR-11
+# psr-container-doctrine: Doctrine Factories for PSR-11 Containers
 
-[![Latest Stable Version](https://poser.pugx.org/dasprid/container-interop-doctrine/v/stable)](https://packagist.org/packages/dasprid/container-interop-doctrine)
-[![Total Downloads](https://poser.pugx.org/dasprid/container-interop-doctrine/downloads)](https://packagist.org/packages/dasprid/container-interop-doctrine)
-[![Build Status](https://api.travis-ci.org/DASPRiD/container-interop-doctrine.png?branch=master)](http://travis-ci.org/DASPRiD/container-interop-doctrine)
-[![Coverage Status](https://coveralls.io/repos/DASPRiD/container-interop-doctrine/badge.png?branch=master)](https://coveralls.io/r/DASPRiD/container-interop-doctrine)
+[![Latest Stable Version](https://poser.pugx.org/roave/psr-container-doctrine/v/stable)](https://packagist.org/packages/roave/psr-container-doctrine)
+[![Total Downloads](https://poser.pugx.org/roave/psr-container-doctrine/downloads)](https://packagist.org/packages/roave/psr-container-doctrine)
+[![Build Status](https://api.travis-ci.org/roave/psr-container-doctrine.png?branch=master)](http://travis-ci.org/roave/psr-container-doctrine)
+[![Coverage Status](https://coveralls.io/repos/roave/psr-container-doctrine/badge.png?branch=master)](https://coveralls.io/r/roave/psr-container-doctrine)
 
-[Doctrine](https://github.com/doctrine) factories for [PSR-11](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-11-container.md) (previously known as `container-interop`).
+[Doctrine](https://github.com/doctrine) factories for [PSR-11 containers](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-11-container.md).
 
 This package provides a set of factories to be used with containers using the PSR-11 standard for an easy
 Doctrine integration in a project.
@@ -15,7 +15,7 @@ Doctrine integration in a project.
 The easiest way to install this package is through composer:
 
 ```bash
-$ composer require dasprid/container-interop-doctrine
+$ composer require roave/psr-container-doctrine
 ```
 
 ## Configuration
@@ -23,10 +23,11 @@ $ composer require dasprid/container-interop-doctrine
 In the general case where you are only using a single connection, it's enough to define the entity manager factory:
 
 ```php
+```php
 return [
     'dependencies' => [
         'factories' => [
-            'doctrine.entity_manager.orm_default' => \ContainerInteropDoctrine\EntityManagerFactory::class,
+            'doctrine.entity_manager.orm_default' => \Roave\PsrContainerDoctrine\EntityManagerFactory::class,
         ],
     ],
 ];
@@ -36,10 +37,11 @@ If you want to add a second connection, or use another name than "orm_default", 
 variants of the factories:
 
 ```php
+```php
 return [
     'dependencies' => [
         'factories' => [
-            'doctrine.entity_manager.orm_other' => [\ContainerInteropDoctrine\EntityManagerFactory::class, 'orm_other'],
+            'doctrine.entity_manager.orm_other' => [\Roave\PsrContainerDoctrine\EntityManagerFactory::class, 'orm_other'],
         ],
     ],
 ];
@@ -50,11 +52,11 @@ one, it will automatically pull its dependencies from on-the-fly created factori
 registering factories in your container which you may not need at all. Of course, you can always register those
 factories when required. The following additional factories are available:
 
-- ```\ContainerInteropDoctrine\CacheFactory``` (doctrine.cache.*)
-- ```\ContainerInteropDoctrine\ConnectionFactory``` (doctrine.connection.*)
-- ```\ContainerInteropDoctrine\ConfigurationFactory``` (doctrine.configuration.*)
-- ```\ContainerInteropDoctrine\DriverFactory``` (doctrine.driver.*)
-- ```\ContainerInteropDoctrine\EventManagerFactory``` (doctrine.event_manager.*)
+- ```\Roave\PsrContainerDoctrine\CacheFactory``` (doctrine.cache.*)
+- ```\Roave\PsrContainerDoctrine\ConnectionFactory``` (doctrine.connection.*)
+- ```\Roave\PsrContainerDoctrine\ConfigurationFactory``` (doctrine.configuration.*)
+- ```\Roave\PsrContainerDoctrine\DriverFactory``` (doctrine.driver.*)
+- ```\Roave\PsrContainerDoctrine\EventManagerFactory``` (doctrine.event_manager.*)
 
 Each of those factories supports the same static behavior as the entity manager factory. For container specific
 configurations, there are a few examples provided in the example directory:

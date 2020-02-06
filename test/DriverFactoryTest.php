@@ -1,31 +1,30 @@
 <?php
-/**
- * @license See the file LICENSE for copying permission
- */
 
-namespace ContainerInteropDoctrineTest;
+declare(strict_types=1);
 
-use ContainerInteropDoctrineTest\TestAsset\StubFileDriver;
+namespace RoaveTest\PsrContainerDoctrine;
+
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\ORM\Mapping\Driver;
 use OutOfBoundsException;
-use ContainerInteropDoctrine\DriverFactory;
+use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
-use PHPUnit_Framework_TestCase as TestCase;
+use Roave\PsrContainerDoctrine\DriverFactory;
 
 class DriverFactoryTest extends TestCase
 {
-    public function testMissingClassKeyWillReturnOutOfBoundException()
+    public function testMissingClassKeyWillReturnOutOfBoundException() : void
     {
         $container = $this->prophesize(ContainerInterface::class);
-        $factory = new DriverFactory();
+        $factory   = new DriverFactory();
 
-        $this->setExpectedException(OutOfBoundsException::class, 'Missing "class" config key');
+        $this->expectException(OutOfBoundsException::class);
+        $this->expectExceptionMessage('Missing "class" config key');
 
         $factory($container->reveal());
     }
 
-    public function testItSupportsGlobalBasenameOptionOnFileDrivers()
+    public function testItSupportsGlobalBasenameOptionOnFileDrivers() : void
     {
         $globalBasename = 'foobar';
 
@@ -36,7 +35,7 @@ class DriverFactoryTest extends TestCase
                 'driver' => [
                     'orm_default' => [
                         'class' => TestAsset\StubFileDriver::class,
-                        'global_basename' => $globalBasename
+                        'global_basename' => $globalBasename,
                     ],
                 ],
             ],
@@ -49,11 +48,9 @@ class DriverFactoryTest extends TestCase
     }
 
     /**
-     * @param string $driverClass
-     *
      * @dataProvider simplifiedDriverClassProvider
      */
-    public function testItSupportsSettingExtensionInDriversUsingSymfonyFileLocator($driverClass)
+    public function testItSupportsSettingExtensionInDriversUsingSymfonyFileLocator(string $driverClass) : void
     {
         $extension = '.foo.bar';
 
@@ -72,13 +69,13 @@ class DriverFactoryTest extends TestCase
 
         $factory = new DriverFactory();
 
-        /** @var Driver\SimplifiedXmlDriver $driver */
         $driver = $factory($container->reveal());
         $this->assertInstanceOf($driverClass, $driver);
         $this->assertSame($extension, $driver->getLocator()->getFileExtension());
     }
 
-    public function simplifiedDriverClassProvider()
+    /** @return string[][] */
+    public function simplifiedDriverClassProvider() : array
     {
         return [
             [ Driver\SimplifiedXmlDriver::class ],
@@ -86,9 +83,8 @@ class DriverFactoryTest extends TestCase
         ];
     }
 
-    public function testItSupportsSettingDefaultDriverUsingMappingDriverChain()
+    public function testItSupportsSettingDefaultDriverUsingMappingDriverChain() : void
     {
-
         $container = $this->prophesize(ContainerInterface::class);
         $container->has('config')->willReturn(true);
         $container->get('config')->willReturn([
@@ -96,7 +92,7 @@ class DriverFactoryTest extends TestCase
                 'driver' => [
                     'orm_default' => [
                         'class' => MappingDriverChain::class,
-                        'default_driver' => 'orm_stub'
+                        'default_driver' => 'orm_stub',
                     ],
                     'orm_stub' => [
                         'class' => TestAsset\StubFileDriver::class,

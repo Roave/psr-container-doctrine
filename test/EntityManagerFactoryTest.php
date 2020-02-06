@@ -1,33 +1,29 @@
 <?php
-/**
- * container-interop-doctrine
- *
- * @link      http://github.com/DASPRiD/container-interop-doctrine For the canonical source repository
- * @copyright 2016 Ben Scholzen 'DASPRiD'
- * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
- */
 
-namespace ContainerInteropDoctrineTest;
+declare(strict_types=1);
 
-use ContainerInteropDoctrine\AbstractFactory;
-use ContainerInteropDoctrine\EntityManagerFactory;
+namespace RoaveTest\PsrContainerDoctrine;
+
 use Doctrine\Common\EventManager;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Configuration;
+use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
-use PHPUnit_Framework_TestCase;
+use Roave\PsrContainerDoctrine\AbstractFactory;
+use Roave\PsrContainerDoctrine\EntityManagerFactory;
+use function sys_get_temp_dir;
 
-class EntityManagerFactoryTest extends PHPUnit_Framework_TestCase
+class EntityManagerFactoryTest extends TestCase
 {
-    public function testExtendsAbstractFactory()
+    public function testExtendsAbstractFactory() : void
     {
         $this->assertInstanceOf(AbstractFactory::class, new EntityManagerFactory());
     }
 
-    public function testDefaults()
+    public function testDefaults() : void
     {
-        $connection = $this->buildConnection();
+        $connection    = $this->buildConnection();
         $configuration = $this->buildConfiguration();
 
         $container = $this->prophesize(ContainerInterface::class);
@@ -37,16 +33,16 @@ class EntityManagerFactoryTest extends PHPUnit_Framework_TestCase
         $container->has('doctrine.configuration.orm_default')->willReturn(true);
         $container->get('doctrine.configuration.orm_default')->willReturn($configuration);
 
-        $factory = new EntityManagerFactory();
+        $factory       = new EntityManagerFactory();
         $entityManager = $factory($container->reveal());
 
         $this->assertSame($connection, $entityManager->getConnection());
         $this->assertSame($configuration, $entityManager->getConfiguration());
     }
 
-    public function testConfigKeyTakenFromSelf()
+    public function testConfigKeyTakenFromSelf() : void
     {
-        $connection = $this->buildConnection();
+        $connection    = $this->buildConnection();
         $configuration = $this->buildConfiguration();
 
         $container = $this->prophesize(ContainerInterface::class);
@@ -56,16 +52,16 @@ class EntityManagerFactoryTest extends PHPUnit_Framework_TestCase
         $container->has('doctrine.configuration.orm_other')->willReturn(true);
         $container->get('doctrine.configuration.orm_other')->willReturn($configuration);
 
-        $factory = new EntityManagerFactory('orm_other');
+        $factory       = new EntityManagerFactory('orm_other');
         $entityManager = $factory($container->reveal());
 
         $this->assertSame($connection, $entityManager->getConnection());
         $this->assertSame($configuration, $entityManager->getConfiguration());
     }
 
-    public function testConfigKeyTakenFromConfig()
+    public function testConfigKeyTakenFromConfig() : void
     {
-        $connection = $this->buildConnection();
+        $connection    = $this->buildConnection();
         $configuration = $this->buildConfiguration();
 
         $container = $this->prophesize(ContainerInterface::class);
@@ -85,17 +81,14 @@ class EntityManagerFactoryTest extends PHPUnit_Framework_TestCase
         $container->has('doctrine.configuration.orm_bar')->willReturn(true);
         $container->get('doctrine.configuration.orm_bar')->willReturn($configuration);
 
-        $factory = new EntityManagerFactory();
+        $factory       = new EntityManagerFactory();
         $entityManager = $factory($container->reveal());
 
         $this->assertSame($connection, $entityManager->getConnection());
         $this->assertSame($configuration, $entityManager->getConfiguration());
     }
 
-    /**
-     * @return Connection
-     */
-    private function buildConnection()
+    private function buildConnection() : Connection
     {
         $connection = $this->prophesize(Connection::class);
         $connection->getEventManager()->willReturn($this->prophesize(EventManager::class)->reveal());
@@ -103,10 +96,7 @@ class EntityManagerFactoryTest extends PHPUnit_Framework_TestCase
         return $connection->reveal();
     }
 
-    /**
-     * @return Configuration
-     */
-    private function buildConfiguration()
+    private function buildConfiguration() : Configuration
     {
         $configuration = new Configuration();
         $configuration->setMetadataDriverImpl(new MappingDriverChain());

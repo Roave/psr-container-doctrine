@@ -1,19 +1,22 @@
 <?php
-/**
- * container-interop-doctrine
- *
- * @link      http://github.com/DASPRiD/container-interop-doctrine For the canonical source repository
- * @copyright 2016 Ben Scholzen 'DASPRiD'
- * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
- */
 
-namespace ContainerInteropDoctrine;
+declare(strict_types=1);
 
-use ContainerInteropDoctrine\Exception\DomainException;
-use ContainerInteropDoctrine\Exception\InvalidArgumentException;
+namespace Roave\PsrContainerDoctrine;
+
 use Doctrine\Common\EventManager;
 use Doctrine\Common\EventSubscriber;
 use Psr\Container\ContainerInterface;
+use Roave\PsrContainerDoctrine\Exception\DomainException;
+use Roave\PsrContainerDoctrine\Exception\InvalidArgumentException;
+use function class_exists;
+use function get_class;
+use function gettype;
+use function is_array;
+use function is_object;
+use function is_string;
+use function method_exists;
+use function sprintf;
 
 /**
  * @method EventManager __invoke(ContainerInterface $container)
@@ -25,25 +28,25 @@ class EventManagerFactory extends AbstractFactory
      */
     protected function createWithConfig(ContainerInterface $container, $configKey)
     {
-        $config = $this->retrieveConfig($container, $configKey, 'event_manager');
+        $config       = $this->retrieveConfig($container, $configKey, 'event_manager');
         $eventManager = new EventManager();
 
         foreach ($config['subscribers'] as $subscriber) {
             if (is_object($subscriber)) {
                 $subscriberName = get_class($subscriber);
-            } elseif (!is_string($subscriber)) {
+            } elseif (! is_string($subscriber)) {
                 $subscriberName = gettype($subscriber);
             } elseif ($container->has($subscriber)) {
-                $subscriber = $container->get($subscriber);
+                $subscriber     = $container->get($subscriber);
                 $subscriberName = $subscriber;
             } elseif (class_exists($subscriber)) {
-                $subscriber = new $subscriber();
+                $subscriber     = new $subscriber();
                 $subscriberName = get_class($subscriber);
             } else {
                 $subscriberName = $subscriber;
             }
 
-            if (!$subscriber instanceof EventSubscriber) {
+            if (! $subscriber instanceof EventSubscriber) {
                 throw new DomainException(sprintf(
                     'Invalid event subscriber "%s" given, mut be a dependency name, class name or an instance'
                     . ' implementing %s',
@@ -56,28 +59,28 @@ class EventManagerFactory extends AbstractFactory
         }
 
         foreach ($config['listeners'] as $listenerConfig) {
-            if (!is_array($listenerConfig)) {
+            if (! is_array($listenerConfig)) {
                 throw new InvalidArgumentException(sprintf(
                     'Invalid event listener config: must be an array, "%s" given',
                     gettype($listenerConfig)
                 ));
             }
 
-            $listener = $listenerConfig['listener'];
+            $listener     = $listenerConfig['listener'];
             $listenerName = $listener;
 
             if (is_object($listener)) {
                 $listenerName = get_class($listener);
-            } elseif (!is_string($listener)) {
+            } elseif (! is_string($listener)) {
                 $listenerName = gettype($listener);
             } elseif ($container->has($listener)) {
                 $listener = $container->get($listener);
             } elseif (class_exists($listener)) {
-                $listener = new $listener();
+                $listener     = new $listener();
                 $listenerName = get_class($listener);
             }
 
-            if (!is_object($listener)) {
+            if (! is_object($listener)) {
                 throw new DomainException(sprintf(
                     'Invalid event listener "%s" given, must be a dependency name, class name or an object',
                     $listenerName
@@ -85,7 +88,7 @@ class EventManagerFactory extends AbstractFactory
             }
 
             foreach ((array) $listenerConfig['events'] as $event) {
-                if (!method_exists($listener, $event)) {
+                if (! method_exists($listener, $event)) {
                     throw new DomainException(sprintf(
                         'Invalid event listener "%s" given: must have a "%s" method',
                         $listenerName,
@@ -103,7 +106,7 @@ class EventManagerFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    protected function getDefaultConfig($configKey)
+    protected function getDefaultConfig($configKey) : array
     {
         return [
             'subscribers' => [],

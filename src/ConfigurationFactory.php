@@ -1,19 +1,16 @@
 <?php
-/**
- * container-interop-doctrine
- *
- * @link      http://github.com/DASPRiD/container-interop-doctrine For the canonical source repository
- * @copyright 2016 Ben Scholzen 'DASPRiD'
- * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
- */
 
-namespace ContainerInteropDoctrine;
+declare(strict_types=1);
+
+namespace Roave\PsrContainerDoctrine;
 
 use Doctrine\ORM\Cache\CacheConfiguration;
 use Doctrine\ORM\Cache\DefaultCacheFactory;
 use Doctrine\ORM\Cache\RegionsConfiguration;
 use Doctrine\ORM\Configuration;
 use Psr\Container\ContainerInterface;
+use function array_key_exists;
+use function is_string;
 
 /**
  * @method Configuration __invoke(ContainerInterface $container)
@@ -83,29 +80,29 @@ class ConfigurationFactory extends AbstractFactory
 
         if (is_string($config['naming_strategy'])) {
             $configuration->setNamingStrategy($container->get($config['naming_strategy']));
-        } elseif (null !== $config['naming_strategy']) {
+        } elseif ($config['naming_strategy'] !== null) {
             $configuration->setNamingStrategy($config['naming_strategy']);
         }
 
         if (is_string($config['quote_strategy'])) {
             $configuration->setQuoteStrategy($container->get($config['quote_strategy']));
-        } elseif (null !== $config['quote_strategy']) {
+        } elseif ($config['quote_strategy'] !== null) {
             $configuration->setQuoteStrategy($config['quote_strategy']);
         }
 
         if (is_string($config['repository_factory'])) {
             $configuration->setRepositoryFactory($container->get($config['repository_factory']));
-        } elseif (null !== $config['repository_factory']) {
+        } elseif ($config['repository_factory'] !== null) {
             $configuration->setRepositoryFactory($config['repository_factory']);
         }
 
         if (is_string($config['entity_listener_resolver'])) {
             $configuration->setEntityListenerResolver($container->get($config['entity_listener_resolver']));
-        } elseif (null !== $config['entity_listener_resolver']) {
+        } elseif ($config['entity_listener_resolver'] !== null) {
             $configuration->setEntityListenerResolver($config['entity_listener_resolver']);
         }
 
-        if (null !== $config['default_repository_class_name']) {
+        if ($config['default_repository_class_name'] !== null) {
             $configuration->setDefaultRepositoryClassName($config['default_repository_class_name']);
         }
 
@@ -120,9 +117,11 @@ class ConfigurationFactory extends AbstractFactory
                     $regionsConfig->setLifetime($regionName, $regionConfig['lifetime']);
                 }
 
-                if (array_key_exists('lock_lifetime', $regionConfig)) {
-                    $regionsConfig->setLockLifetime($regionName, $regionConfig['lock_lifetime']);
+                if (! array_key_exists('lock_lifetime', $regionConfig)) {
+                    continue;
                 }
+
+                $regionsConfig->setLockLifetime($regionName, $regionConfig['lock_lifetime']);
             }
 
             $cacheFactory = new DefaultCacheFactory($regionsConfig, $configuration->getResultCacheImpl());
@@ -138,7 +137,7 @@ class ConfigurationFactory extends AbstractFactory
 
         if (is_string($config['sql_logger'])) {
             $configuration->setSQLLogger($container->get($config['sql_logger']));
-        } elseif (null !== $config['sql_logger']) {
+        } elseif ($config['sql_logger'] !== null) {
             $configuration->setSQLLogger($config['sql_logger']);
         }
 
@@ -148,7 +147,7 @@ class ConfigurationFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    protected function getDefaultConfig($configKey)
+    protected function getDefaultConfig($configKey) : array
     {
         return [
             'metadata_cache' => 'array',

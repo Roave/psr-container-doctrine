@@ -1,88 +1,80 @@
 <?php
-/**
- * container-interop-doctrine
- *
- * @link      http://github.com/DASPRiD/container-interop-doctrine For the canonical source repository
- * @copyright 2016 Ben Scholzen 'DASPRiD'
- * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
- */
 
-namespace ContainerInteropDoctrineTest;
+declare(strict_types=1);
 
-use ContainerInteropDoctrine\EventManagerFactory;
-use ContainerInteropDoctrine\Exception\DomainException;
-use ContainerInteropDoctrine\Exception\InvalidArgumentException;
-use ContainerInteropDoctrineTest\TestAsset\StubEventListener;
-use ContainerInteropDoctrineTest\TestAsset\StubEventSubscriber;
+namespace RoaveTest\PsrContainerDoctrine;
+
 use Doctrine\ORM\Events;
-use Psr\Container\ContainerInterface;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
+use Psr\Container\ContainerInterface;
+use Roave\PsrContainerDoctrine\EventManagerFactory;
+use Roave\PsrContainerDoctrine\Exception\DomainException;
+use Roave\PsrContainerDoctrine\Exception\InvalidArgumentException;
+use RoaveTest\PsrContainerDoctrine\TestAsset\StubEventListener;
+use RoaveTest\PsrContainerDoctrine\TestAsset\StubEventSubscriber;
 use stdClass;
+use function array_pop;
+use function count;
+use function sprintf;
 
-class EventManagerFactoryTest extends PHPUnit_Framework_TestCase
+class EventManagerFactoryTest extends TestCase
 {
-    public function testDefaults()
+    public function testDefaults() : void
     {
-        $factory = new EventManagerFactory();
+        $factory      = new EventManagerFactory();
         $eventManager = $factory($this->prophesize(ContainerInterface::class)->reveal());
 
         $this->assertSame(0, count($eventManager->getListeners()));
     }
 
-    public function testInvalidInstanceSubscriber()
+    public function testInvalidInstanceSubscriber() : void
     {
         $factory = new EventManagerFactory();
-        $this->setExpectedException(
-            DomainException::class,
-            'Invalid event subscriber "stdClass" given'
-        );
+        $this->expectException(DomainException::class);
+        $this->expectExceptionMessage('Invalid event subscriber "stdClass" given');
         $factory($this->buildContainer(new stdClass())->reveal());
     }
 
-    public function testInvalidTypeSubscriber()
+    public function testInvalidTypeSubscriber() : void
     {
         $factory = new EventManagerFactory();
-        $this->setExpectedException(
-            DomainException::class,
-            'Invalid event subscriber "integer" given'
-        );
+        $this->expectException(DomainException::class);
+        $this->expectExceptionMessage('Invalid event subscriber "integer" given');
         $factory($this->buildContainer(1)->reveal());
     }
 
-    public function testInvalidStringSubscriber()
+    public function testInvalidStringSubscriber() : void
     {
         $container = $this->buildContainer('NonExistentClass');
         $container->has('NonExistentClass')->willReturn(false);
 
         $factory = new EventManagerFactory();
-        $this->setExpectedException(
-            DomainException::class,
-            'Invalid event subscriber "NonExistentClass" given'
-        );
+        $this->expectException(DomainException::class);
+        $this->expectExceptionMessage('Invalid event subscriber "NonExistentClass" given');
         $factory($container->reveal());
     }
 
-    public function testInstanceSubscriber()
+    public function testInstanceSubscriber() : void
     {
-        $factory = new EventManagerFactory();
+        $factory      = new EventManagerFactory();
         $eventManager = $factory($this->buildContainer(new StubEventSubscriber())->reveal());
 
         $this->assertSame(1, count($eventManager->getListeners('foo')));
     }
 
-    public function testClassNameSubscriber()
+    public function testClassNameSubscriber() : void
     {
         $container = $this->buildContainer(StubEventSubscriber::class);
         $container->has(StubEventSubscriber::class)->willReturn(false);
 
-        $factory = new EventManagerFactory();
+        $factory      = new EventManagerFactory();
         $eventManager = $factory($container->reveal());
 
         $this->assertSame(1, count($eventManager->getListeners('foo')));
     }
 
-    public function testServiceNameSubscriber()
+    public function testServiceNameSubscriber() : void
     {
         $eventSubscriber = new StubEventSubscriber();
 
@@ -90,99 +82,94 @@ class EventManagerFactoryTest extends PHPUnit_Framework_TestCase
         $container->has(StubEventSubscriber::class)->willReturn(true);
         $container->get(StubEventSubscriber::class)->willReturn($eventSubscriber);
 
-        $factory = new EventManagerFactory();
+        $factory      = new EventManagerFactory();
         $eventManager = $factory($container->reveal());
-        $listeners = $eventManager->getListeners('foo');
+        $listeners    = $eventManager->getListeners('foo');
 
         $this->assertSame($eventSubscriber, array_pop($listeners));
     }
 
-    public function testInvalidTypeListener()
+    public function testInvalidTypeListener() : void
     {
         $factory = new EventManagerFactory();
-        $this->setExpectedException(
-            InvalidArgumentException::class,
-            'Invalid event listener config: must be an array'
-        );
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid event listener config: must be an array');
         $factory($this->buildContainerWithListener(1)->reveal());
     }
 
-    public function testInvalidStringListener()
+    public function testInvalidStringListener() : void
     {
         $container = $this->buildContainerWithListener([ 'listener' => 'NonExistentClass']);
         $container->has('NonExistentClass')->willReturn(false);
 
         $factory = new EventManagerFactory();
-        $this->setExpectedException(
-            DomainException::class,
-            'Invalid event listener "NonExistentClass" given'
-        );
+        $this->expectException(DomainException::class);
+        $this->expectExceptionMessage('Invalid event listener "NonExistentClass" given');
         $factory($container->reveal());
     }
 
-    public function testInvalidEventNameListener()
+    public function testInvalidEventNameListener() : void
     {
         $container = $this->buildContainerWithListener([
             'events' => [Events::onFlush, 'foo'],
-            'listener' => new StubEventListener()
+            'listener' => new StubEventListener(),
         ]);
 
         $factory = new EventManagerFactory();
-        $this->setExpectedException(
-            DomainException::class,
-            sprintf(
-                'Invalid event listener "%s" given: must have a "foo" method',
-                StubEventListener::class
-            )
-        );
+        $this->expectException(DomainException::class);
+        $this->expectExceptionMessage(sprintf(
+            'Invalid event listener "%s" given: must have a "foo" method',
+            StubEventListener::class
+        ));
         $factory($container->reveal());
     }
 
-    public function testInstanceListener()
+    public function testInstanceListener() : void
     {
-        $factory = new EventManagerFactory();
+        $factory      = new EventManagerFactory();
         $eventManager = $factory($this->buildContainerWithListener([
             'events' => Events::onFlush,
-            'listener' => new StubEventListener()
+            'listener' => new StubEventListener(),
         ])->reveal());
 
         $this->assertSame(1, count($eventManager->getListeners(Events::onFlush)));
     }
 
-    public function testClassNameListener()
+    public function testClassNameListener() : void
     {
         $container = $this->buildContainerWithListener([
             'events' => Events::onFlush,
-            'listener' => StubEventListener::class
+            'listener' => StubEventListener::class,
         ]);
         $container->has(StubEventListener::class)->willReturn(false);
 
-        $factory = new EventManagerFactory();
+        $factory      = new EventManagerFactory();
         $eventManager = $factory($container->reveal());
 
         $this->assertSame(1, count($eventManager->getListeners(Events::onFlush)));
     }
 
-    public function testServiceNameListener()
+    public function testServiceNameListener() : void
     {
         $eventListener = new StubEventListener();
 
         $container = $this->buildContainerWithListener([
             'events' => Events::onFlush,
-            'listener' => StubEventListener::class
+            'listener' => StubEventListener::class,
         ]);
         $container->has(StubEventListener::class)->willReturn(true);
         $container->get(StubEventListener::class)->willReturn($eventListener);
 
-        $factory = new EventManagerFactory();
+        $factory      = new EventManagerFactory();
         $eventManager = $factory($container->reveal());
-        $listeners = $eventManager->getListeners(Events::onFlush);
+        $listeners    = $eventManager->getListeners(Events::onFlush);
 
         $this->assertSame($eventListener, array_pop($listeners));
     }
 
     /**
      * @param mixed $subscriber
+     *
      * @return ContainerInterface|ObjectProphecy
      */
     private function buildContainer($subscriber)
@@ -193,9 +180,7 @@ class EventManagerFactoryTest extends PHPUnit_Framework_TestCase
             'doctrine' => [
                 'event_manager' => [
                     'orm_default' => [
-                        'subscribers' => [
-                            $subscriber
-                        ],
+                        'subscribers' => [$subscriber],
                     ],
                 ],
             ],
@@ -206,6 +191,7 @@ class EventManagerFactoryTest extends PHPUnit_Framework_TestCase
 
     /**
      * @param mixed $listener
+     *
      * @return ContainerInterface|ObjectProphecy
      */
     private function buildContainerWithListener($listener)
@@ -216,9 +202,7 @@ class EventManagerFactoryTest extends PHPUnit_Framework_TestCase
             'doctrine' => [
                 'event_manager' => [
                     'orm_default' => [
-                        'listeners' => [
-                            $listener
-                        ],
+                        'listeners' => [$listener],
                     ],
                 ],
             ],

@@ -1,15 +1,9 @@
 <?php
-/**
- * container-interop-doctrine
- *
- * @link      http://github.com/DASPRiD/container-interop-doctrine For the canonical source repository
- * @copyright 2016 Ben Scholzen 'DASPRiD'
- * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
- */
 
-namespace ContainerInteropDoctrineTest;
+declare(strict_types=1);
 
-use ContainerInteropDoctrine\ConnectionFactory;
+namespace RoaveTest\PsrContainerDoctrine;
+
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Driver\PDOSqlite\Driver as PDOSqliteDriver;
 use Doctrine\DBAL\Exception\ConnectionException;
@@ -17,35 +11,35 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\BooleanType;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration;
-use Psr\Container\ContainerInterface;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
+use Psr\Container\ContainerInterface;
+use ReflectionObject;
+use Roave\PsrContainerDoctrine\ConnectionFactory;
+use function defined;
+use function sprintf;
 
-class ConnectionFactoryTest extends PHPUnit_Framework_TestCase
+class ConnectionFactoryTest extends TestCase
 {
-    /**
-     * @var Configuration
-     */
+    /** @var Configuration */
     private $configuration;
 
-    /**
-     * @var EventManager
-     */
+    /** @var EventManager */
     private $eventManger;
 
-    public function setUp()
+    public function setUp() : void
     {
         $this->configuration = $this->prophesize(Configuration::class)->reveal();
-        $this->eventManger = $this->prophesize(EventManager::class)->reveal();
+        $this->eventManger   = $this->prophesize(EventManager::class)->reveal();
     }
 
-    public function testDefaultsThroughException()
+    public function testDefaultsThroughException() : void
     {
         if (defined('HHVM_VERSION')) {
             $this->markTestSkipped('HHVM is somewhat funky here');
         }
 
-        $factory = new ConnectionFactory();
+        $factory   = new ConnectionFactory();
         $container = $this->prophesize(ContainerInterface::class);
         $container->has('config')->willReturn(false);
         $container->has('doctrine.configuration.orm_default')->willReturn(true);
@@ -59,24 +53,25 @@ class ConnectionFactoryTest extends PHPUnit_Framework_TestCase
         try {
             $factory($container->reveal());
         } catch (ConnectionException $e) {
-            $this->assertRegExp('#.*Access denied for user \'\'@\'.*\' \(using password: NO\)#', $e->getMessage());
-
             foreach ($e->getTrace() as $entry) {
-                if ('Doctrine\DBAL\Driver\PDOMySql\Driver' === $entry['class']) {
+                if ($entry['class'] === 'Doctrine\DBAL\Driver\PDOMySql\Driver') {
+                    $this->addToAssertionCount(1);
+
                     return;
                 }
             }
 
             $this->fail('Exception was not raised by PDOMySql');
+
             return;
         }
 
         $this->fail('An expected exception was not raised');
     }
 
-    public function testDefaults()
+    public function testDefaults() : void
     {
-        $factory = new ConnectionFactory();
+        $factory    = new ConnectionFactory();
         $connection = $factory($this->buildContainer()->reveal());
 
         $this->assertSame($this->configuration, $connection->getConfiguration());
@@ -88,18 +83,18 @@ class ConnectionFactoryTest extends PHPUnit_Framework_TestCase
         ], $connection->getParams());
     }
 
-    public function testConfigKeysTakenFromSelf()
+    public function testConfigKeysTakenFromSelf() : void
     {
-        $factory = new ConnectionFactory('orm_other');
+        $factory    = new ConnectionFactory('orm_other');
         $connection = $factory($this->buildContainer('orm_other', 'orm_other', 'orm_other')->reveal());
 
         $this->assertSame($this->configuration, $connection->getConfiguration());
         $this->assertSame($this->eventManger, $connection->getEventManager());
     }
 
-    public function testConfigKeysTakenFromConfig()
+    public function testConfigKeysTakenFromConfig() : void
     {
-        $factory = new ConnectionFactory('orm_other');
+        $factory    = new ConnectionFactory('orm_other');
         $connection = $factory($this->buildContainer('orm_other', 'orm_foo', 'orm_bar', [
             'configuration' => 'orm_foo',
             'event_manager' => 'orm_bar',
@@ -109,9 +104,9 @@ class ConnectionFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertSame($this->eventManger, $connection->getEventManager());
     }
 
-    public function testParamsInjection()
+    public function testParamsInjection() : void
     {
-        $factory = new ConnectionFactory();
+        $factory    = new ConnectionFactory();
         $connection = $factory($this->buildContainer('orm_default', 'orm_default', 'orm_default', [
             'params' => ['username' => 'foo'],
         ])->reveal());
@@ -124,9 +119,9 @@ class ConnectionFactoryTest extends PHPUnit_Framework_TestCase
         ], $connection->getParams());
     }
 
-    public function testDoctrineMappingTypesInjection()
+    public function testDoctrineMappingTypesInjection() : void
     {
-        $factory = new ConnectionFactory();
+        $factory    = new ConnectionFactory();
         $connection = $factory($this->buildContainer('orm_default', 'orm_default', 'orm_default', [
             'doctrine_mapping_types' => ['foo' => 'boolean'],
         ])->reveal());
@@ -134,11 +129,11 @@ class ConnectionFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($connection->getDatabasePlatform()->hasDoctrineTypeMappingFor('foo'));
     }
 
-    public function testDoctrineCommentedTypesInjection()
+    public function testDoctrineCommentedTypesInjection() : void
     {
         $type = Type::getType('boolean');
 
-        $factory = new ConnectionFactory();
+        $factory    = new ConnectionFactory();
         $connection = $factory($this->buildContainer('orm_default', 'orm_default', 'orm_default', [
             'doctrine_commented_types' => [$type],
         ])->reveal());
@@ -146,10 +141,10 @@ class ConnectionFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($connection->getDatabasePlatform()->isCommentedDoctrineType($type));
     }
 
-    public function testCustomTypeDoctrineMappingTypesInjection()
+    public function testCustomTypeDoctrineMappingTypesInjection() : void
     {
-        $factory = new ConnectionFactory();
-        $property = (new \ReflectionObject($factory))->getProperty('areTypesRegistered');
+        $factory  = new ConnectionFactory();
+        $property = (new ReflectionObject($factory))->getProperty('areTypesRegistered');
         $property->setAccessible(true);
         $property->setValue($factory, false);
 
@@ -160,14 +155,12 @@ class ConnectionFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($connection->getDatabasePlatform()->hasDoctrineTypeMappingFor('foo'));
     }
 
-    public function testCustomPlatform()
+    public function testCustomPlatform() : void
     {
         $factory = new ConnectionFactory();
 
         $config = [
-            'params' => [
-                'platform' => 'custom.platform',
-            ]
+            'params' => ['platform' => 'custom.platform'],
         ];
 
         $container = $this->buildContainer('orm_default', 'orm_default', 'orm_default', $config);
@@ -182,16 +175,14 @@ class ConnectionFactoryTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $ownKey
-     * @param string $configurationKey
-     * @param string $eventManagerKey
-     * @param array $config
+     * @param mixed[] $config
+     *
      * @return ContainerInterface|ObjectProphecy
      */
     private function buildContainer(
-        $ownKey = 'orm_default',
-        $configurationKey = 'orm_default',
-        $eventManagerKey = 'orm_default',
+        string $ownKey = 'orm_default',
+        string $configurationKey = 'orm_default',
+        string $eventManagerKey = 'orm_default',
         array $config = []
     ) {
         $container = $this->prophesize(ContainerInterface::class);
@@ -204,8 +195,8 @@ class ConnectionFactoryTest extends PHPUnit_Framework_TestCase
                     ],
                 ],
                 'types' => [
-                    'custom_type' => BooleanType::class
-                ]
+                    'custom_type' => BooleanType::class,
+                ],
             ],
         ]);
 

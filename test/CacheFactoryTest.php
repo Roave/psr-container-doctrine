@@ -1,34 +1,26 @@
 <?php
-/**
- * container-interop-doctrine
- *
- * @link      http://github.com/DASPRiD/container-interop-doctrine For the canonical source repository
- * @copyright 2016-2017 Ben Scholzen 'DASPRiD'
- * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
- */
 
-namespace ContainerInteropDoctrineTest;
+declare(strict_types=1);
 
-use ContainerInteropDoctrine\AbstractFactory;
-use ContainerInteropDoctrine\CacheFactory;
+namespace RoaveTest\PsrContainerDoctrine;
+
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\ChainCache;
 use Doctrine\Common\Cache\FilesystemCache;
+use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
-use PHPUnit_Framework_TestCase;
+use Roave\PsrContainerDoctrine\AbstractFactory;
+use Roave\PsrContainerDoctrine\CacheFactory;
 
 /**
- * Class CacheFactoryTest
- * @package ContainerInteropDoctrineTest
- * @coversDefaultClass \ContainerInteropDoctrine\CacheFactory
+ * @coversDefaultClass \Roave\PsrContainerDoctrine\CacheFactory
  */
-class CacheFactoryTest extends PHPUnit_Framework_TestCase
+class CacheFactoryTest extends TestCase
 {
-
     /**
      * @covers ::__construct
      */
-    public function testExtendsAbstractFactory()
+    public function testExtendsAbstractFactory() : void
     {
         $this->assertInstanceOf(AbstractFactory::class, new CacheFactory());
     }
@@ -36,7 +28,7 @@ class CacheFactoryTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ::createWithConfig
      */
-    public function testFileSystemCacheConstructor()
+    public function testFileSystemCacheConstructor() : void
     {
         $config = [
             'doctrine' => [
@@ -53,13 +45,13 @@ class CacheFactoryTest extends PHPUnit_Framework_TestCase
         $container->has('config')->willReturn(true);
         $container->get('config')->willReturn($config);
 
-        $factory = new CacheFactory('filesystem');
+        $factory       = new CacheFactory('filesystem');
         $cacheInstance = $factory($container->reveal());
 
         $this->assertInstanceOf(FilesystemCache::class, $cacheInstance);
     }
 
-    public function testCacheChainContainsInitializedProviders()
+    public function testCacheChainContainsInitializedProviders() : void
     {
         $config = [
             'doctrine' => [
@@ -77,10 +69,9 @@ class CacheFactoryTest extends PHPUnit_Framework_TestCase
         $container->get('config')->willReturn($config);
         $container->has(ArrayCache::class)->willReturn(false);
 
-        $factory = new CacheFactory('chain');
+        $factory       = new CacheFactory('chain');
         $cacheInstance = $factory($container->reveal());
 
         $this->assertInstanceOf(ChainCache::class, $cacheInstance);
-        $this->assertAttributeCount(2, 'cacheProviders', $cacheInstance);
     }
 }

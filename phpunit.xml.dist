@@ -3,7 +3,7 @@
          xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
          bootstrap="./vendor/autoload.php"
          colors="true">
-    <testsuite name="container-interop-doctrine Test Suite">
+    <testsuite name="psr-container-doctrine Test Suite">
         <directory>./test</directory>
     </testsuite>
 

@@ -1,33 +1,24 @@
 <?php
-/**
- * container-interop-doctrine
- *
- * @link      http://github.com/DASPRiD/container-interop-doctrine For the canonical source repository
- * @copyright 2016 Ben Scholzen 'DASPRiD'
- * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
- */
 
-namespace ContainerInteropDoctrine;
+declare(strict_types=1);
+
+namespace Roave\PsrContainerDoctrine;
 
 use Psr\Container\ContainerInterface;
+use function array_key_exists;
+use function sprintf;
 
 abstract class AbstractFactory
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $configKey;
 
-    /**
-     * @param string $configKey
-     */
-    public function __construct($configKey = 'orm_default')
+    public function __construct(string $configKey = 'orm_default')
     {
         $this->configKey = $configKey;
     }
 
     /**
-     * @param ContainerInterface $container
      * @return mixed
      */
     public function __invoke(ContainerInterface $container)
@@ -47,14 +38,15 @@ abstract class AbstractFactory
      * ];
      * </code>
      *
-     * @param string $name
-     * @param array $arguments
+     * @param mixed[] $arguments
+     *
      * @return mixed
+     *
      * @throws Exception\DomainException
      */
-    public static function __callStatic($name, array $arguments)
+    public static function __callStatic(string $name, array $arguments)
     {
-        if (!array_key_exists(0, $arguments) || !$arguments[0] instanceof ContainerInterface) {
+        if (! array_key_exists(0, $arguments) || ! $arguments[0] instanceof ContainerInterface) {
             throw new Exception\DomainException(sprintf(
                 'The first argument must be of type %s',
                 ContainerInterface::class
@@ -67,33 +59,27 @@ abstract class AbstractFactory
     /**
      * Creates a new instance from a specified config.
      *
-     * @param ContainerInterface $container
-     * @param string $configKey
      * @return mixed
      */
-    abstract protected function createWithConfig(ContainerInterface $container, $configKey);
+    abstract protected function createWithConfig(ContainerInterface $container, string $configKey);
 
     /**
      * Returns the default config.
      *
-     * @param string $configKey
-     * @return array
+     * @return mixed[]
      */
-    abstract protected function getDefaultConfig($configKey);
+    abstract protected function getDefaultConfig(string $configKey) : array;
 
     /**
      * Retrieves the config for a specific section.
      *
-     * @param ContainerInterface $container
-     * @param string $configKey
-     * @param string $section
-     * @return array
+     * @return mixed[]
      */
-    protected function retrieveConfig(ContainerInterface $container, $configKey, $section)
+    protected function retrieveConfig(ContainerInterface $container, string $configKey, string $section) : array
     {
         $applicationConfig = $container->has('config') ? $container->get('config') : [];
-        $doctrineConfig = array_key_exists('doctrine', $applicationConfig) ? $applicationConfig['doctrine'] : [];
-        $sectionConfig = array_key_exists($section, $doctrineConfig) ? $doctrineConfig[$section] : [];
+        $doctrineConfig    = array_key_exists('doctrine', $applicationConfig) ? $applicationConfig['doctrine'] : [];
+        $sectionConfig     = array_key_exists($section, $doctrineConfig) ? $doctrineConfig[$section] : [];
 
         if (array_key_exists($configKey, $sectionConfig)) {
             return $sectionConfig[$configKey] + $this->getDefaultConfig($configKey);
@@ -108,13 +94,9 @@ abstract class AbstractFactory
      * If the container does not know about the dependency, it is pulled from a fresh factory. This saves the user from
      * registering factories which they are not gonna access themself at all, and thus minimized configuration.
      *
-     * @param ContainerInterface $container
-     * @param string $configKey
-     * @param string $section
-     * @param string $factoryClassName
      * @return mixed
      */
-    protected function retrieveDependency(ContainerInterface $container, $configKey, $section, $factoryClassName)
+    protected function retrieveDependency(ContainerInterface $container, string $configKey, string $section, string $factoryClassName)
     {
         $containerKey = sprintf('doctrine.%s.%s', $section, $configKey);
 

@@ -1,28 +1,23 @@
 <?php
-/**
- * container-interop-doctrine
- *
- * @link      http://github.com/DASPRiD/container-interop-doctrine For the canonical source repository
- * @copyright 2016 Ben Scholzen 'DASPRiD'
- * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
- */
 
-namespace ContainerInteropDoctrine;
+declare(strict_types=1);
+
+namespace Roave\PsrContainerDoctrine;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\PDOMySql\Driver as PdoMysqlDriver;
 use Doctrine\DBAL\DriverManager;
-use Psr\Container\ContainerInterface;
 use Doctrine\DBAL\Types\Type;
+use Psr\Container\ContainerInterface;
+use function array_key_exists;
+use function is_string;
 
 /**
  * @method Connection __invoke(ContainerInterface $container)
  */
 class ConnectionFactory extends AbstractFactory
 {
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private static $areTypesRegistered = false;
 
     /**
@@ -58,7 +53,7 @@ class ConnectionFactory extends AbstractFactory
                 EventManagerFactory::class
             )
         );
-        $platform = $connection->getDatabasePlatform();
+        $platform   = $connection->getDatabasePlatform();
 
         foreach ($config['doctrine_mapping_types'] as $dbType => $doctrineType) {
             $platform->registerDoctrineTypeMapping($dbType, $doctrineType);
@@ -74,7 +69,7 @@ class ConnectionFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    protected function getDefaultConfig($configKey)
+    protected function getDefaultConfig($configKey) : array
     {
         return [
             'driver_class' => PdoMysqlDriver::class,
@@ -90,18 +85,16 @@ class ConnectionFactory extends AbstractFactory
 
     /**
      * Registers all declared typed, if not already done.
-     *
-     * @param ContainerInterface $container
      */
-    private function registerTypes(ContainerInterface $container)
+    private function registerTypes(ContainerInterface $container) : void
     {
         if (self::$areTypesRegistered) {
             return;
         }
 
-        $applicationConfig = $container->has('config') ? $container->get('config') : [];
-        $doctrineConfig = array_key_exists('doctrine', $applicationConfig) ? $applicationConfig['doctrine'] : [];
-        $typesConfig = array_key_exists('types', $doctrineConfig) ? $doctrineConfig['types'] : [];
+        $applicationConfig        = $container->has('config') ? $container->get('config') : [];
+        $doctrineConfig           = array_key_exists('doctrine', $applicationConfig) ? $applicationConfig['doctrine'] : [];
+        $typesConfig              = array_key_exists('types', $doctrineConfig) ? $doctrineConfig['types'] : [];
         self::$areTypesRegistered = true;
 
         foreach ($typesConfig as $name => $className) {

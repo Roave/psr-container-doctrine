@@ -1,16 +1,11 @@
 <?php
-/**
- * container-interop-doctrine
- *
- * @link      http://github.com/DASPRiD/container-interop-doctrine For the canonical source repository
- * @copyright 2016 Ben Scholzen 'DASPRiD'
- * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
- */
 
-namespace ContainerInteropDoctrineTest\TestAsset;
+declare(strict_types=1);
 
-use ContainerInteropDoctrine\AbstractFactory;
+namespace RoaveTest\PsrContainerDoctrine\TestAsset;
+
 use Psr\Container\ContainerInterface;
+use Roave\PsrContainerDoctrine\AbstractFactory;
 
 class StubFactory extends AbstractFactory
 {
@@ -25,15 +20,18 @@ class StubFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    public function retrieveConfig(ContainerInterface $container, $configKey, $section)
+    // phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod.Found
+    public function retrieveConfig(ContainerInterface $container, string $configKey, string $section) : array
     {
         return parent::retrieveConfig($container, $configKey, $section);
     }
 
+    // phpcs:enable
+
     /**
      * {@inheritdoc}
      */
-    protected function getDefaultConfig($configKey)
+    protected function getDefaultConfig($configKey) : array
     {
         return [];
     }

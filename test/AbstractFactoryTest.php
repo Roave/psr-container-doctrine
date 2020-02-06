@@ -1,62 +1,54 @@
 <?php
-/**
- * container-interop-doctrine
- *
- * @link      http://github.com/DASPRiD/container-interop-doctrine For the canonical source repository
- * @copyright 2016 Ben Scholzen 'DASPRiD'
- * @license   http://opensource.org/licenses/BSD-2-Clause Simplified BSD License
- */
 
-namespace ContainerInteropDoctrineTest;
+declare(strict_types=1);
 
-use ContainerInteropDoctrine\Exception\DomainException;
-use ContainerInteropDoctrineTest\TestAsset\StubFactory;
+namespace RoaveTest\PsrContainerDoctrine;
+
+use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
-use PHPUnit_Framework_TestCase;
+use Roave\PsrContainerDoctrine\Exception\DomainException;
+use RoaveTest\PsrContainerDoctrine\TestAsset\StubFactory;
 
-class AbstractFactoryTest extends PHPUnit_Framework_TestCase
+class AbstractFactoryTest extends TestCase
 {
-    public function testDefaultConfigKey()
+    public function testDefaultConfigKey() : void
     {
         $container = $this->prophesize(ContainerInterface::class)->reveal();
-        $factory = new StubFactory();
+        $factory   = new StubFactory();
         $this->assertSame('orm_default', $factory($container));
     }
 
-    public function testCustomConfigKey()
+    public function testCustomConfigKey() : void
     {
         $container = $this->prophesize(ContainerInterface::class)->reveal();
-        $factory = new StubFactory('orm_other');
+        $factory   = new StubFactory('orm_other');
         $this->assertSame('orm_other', $factory($container));
     }
 
-    public function testStaticCall()
+    public function testStaticCall() : void
     {
         $container = $this->prophesize(ContainerInterface::class)->reveal();
         $this->assertSame('orm_other', StubFactory::orm_other($container));
     }
 
-    public function testStaticCallWithoutContainer()
+    public function testStaticCallWithoutContainer() : void
     {
-        $this->setExpectedException(
-            DomainException::class,
-            'The first argument must be of type Psr\Container\ContainerInterface'
-        );
+        $this->expectException(DomainException::class);
+        $this->expectExceptionMessage('The first argument must be of type Psr\Container\ContainerInterface');
         StubFactory::orm_other();
     }
 
     /**
+     * @param int[]          $expectedResult
+     * @param int[][][]|null $config
+     *
      * @dataProvider configProvider
-     * @param string $configKey
-     * @param string $section
-     * @param array $expectedResult
-     * @param array|null $config
      */
-    public function testRetrieveConfig($configKey, $section, array $expectedResult, array $config = null)
+    public function testRetrieveConfig(string $configKey, string $section, array $expectedResult, ?array $config = null) : void
     {
         $container = $this->prophesize(ContainerInterface::class);
 
-        if (null === $config) {
+        if ($config === null) {
             $container->has('config')->willReturn(false);
         } else {
             $container->has('config')->willReturn(true);
@@ -64,12 +56,15 @@ class AbstractFactoryTest extends PHPUnit_Framework_TestCase
         }
 
         $factory = new StubFactory();
-        $result = $factory->retrieveConfig($container->reveal(), $configKey, $section);
+        $result  = $factory->retrieveConfig($container->reveal(), $configKey, $section);
 
         $this->assertSame($expectedResult, $result);
     }
 
-    public function configProvider()
+    /**
+     * @return mixed[]
+     */
+    public function configProvider() : array
     {
         return [
             'no-config' => ['foo', 'bar', [], null],
