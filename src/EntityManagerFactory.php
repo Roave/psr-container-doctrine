@@ -10,7 +10,7 @@ use Psr\Container\ContainerInterface;
 /**
  * @method EntityManager __invoke(ContainerInterface $container)
  */
-class EntityManagerFactory extends AbstractFactory
+final class EntityManagerFactory extends AbstractFactory
 {
     /**
      * {@inheritdoc}

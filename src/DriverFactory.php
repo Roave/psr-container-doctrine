@@ -21,7 +21,7 @@ use function is_subclass_of;
 /**
  * @method MappingDriver __invoke(ContainerInterface $container)
  */
-class DriverFactory extends AbstractFactory
+final class DriverFactory extends AbstractFactory
 {
     /** @var bool */
     private static $isAnnotationLoaderRegistered = false;

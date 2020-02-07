@@ -21,7 +21,7 @@ use function sprintf;
 /**
  * @method EventManager __invoke(ContainerInterface $container)
  */
-class EventManagerFactory extends AbstractFactory
+final class EventManagerFactory extends AbstractFactory
 {
     /**
      * {@inheritdoc}

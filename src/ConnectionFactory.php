@@ -15,7 +15,7 @@ use function is_string;
 /**
  * @method Connection __invoke(ContainerInterface $container)
  */
-class ConnectionFactory extends AbstractFactory
+final class ConnectionFactory extends AbstractFactory
 {
     /** @var bool */
     private static $areTypesRegistered = false;
