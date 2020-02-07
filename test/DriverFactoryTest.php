@@ -50,7 +50,7 @@ class DriverFactoryTest extends TestCase
     }
 
     /**
-     * @psalm-param string|class-string<FileDriver> $driverClass
+     * @psalm-param class-string<FileDriver> $driverClass
      * @dataProvider simplifiedDriverClassProvider
      */
     public function testItSupportsSettingExtensionInDriversUsingSymfonyFileLocator(string $driverClass) : void
@@ -75,7 +75,11 @@ class DriverFactoryTest extends TestCase
         $this->assertSame($extension, $driver->getLocator()->getFileExtension());
     }
 
-    /** @return string[][] */
+    /**
+     * @return string[][]
+     *
+     * @psalm-return list<list<class-string<FileDriver>>>
+     */
     public function simplifiedDriverClassProvider() : array
     {
         return [
