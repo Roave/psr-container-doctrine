@@ -9,7 +9,7 @@ use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\Exception\DomainException;
 use RoaveTest\PsrContainerDoctrine\TestAsset\StubFactory;
 
-class AbstractFactoryTest extends TestCase
+final class AbstractFactoryTest extends TestCase
 {
     public function testDefaultConfigKey() : void
     {
