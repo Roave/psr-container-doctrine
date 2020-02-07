@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace RoaveTest\PsrContainerDoctrine;
 
 use Doctrine\Common\EventManager;
-use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Configuration;
+use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\AbstractFactory;
@@ -99,6 +99,7 @@ class EntityManagerFactoryTest extends TestCase
     private function buildConfiguration() : Configuration
     {
         $configuration = new Configuration();
+        /** @psalm-suppress InvalidArgument - some funky stuff going on with the BC shim from Doctrine here... */
         $configuration->setMetadataDriverImpl(new MappingDriverChain());
         $configuration->setProxyDir(sys_get_temp_dir());
         $configuration->setProxyNamespace('EntityManagerFactoryTest');

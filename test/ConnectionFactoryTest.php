@@ -56,6 +56,7 @@ class ConnectionFactoryTest extends TestCase
         } catch (ConnectionException $e) {
             foreach ($e->getTrace() as $entry) {
                 if ($entry['class'] === PDOMySQLDriver::class) {
+                    /** @psalm-suppress InternalMethod @todo find a better way to add to assertion count... */
                     $this->addToAssertionCount(1);
 
                     return;

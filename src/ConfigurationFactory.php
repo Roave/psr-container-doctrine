@@ -10,6 +10,7 @@ use Doctrine\ORM\Cache\RegionsConfiguration;
 use Doctrine\ORM\Configuration;
 use Psr\Container\ContainerInterface;
 use function array_key_exists;
+use function assert;
 use function is_string;
 
 /**
@@ -124,7 +125,9 @@ final class ConfigurationFactory extends AbstractFactory
                 $regionsConfig->setLockLifetime($regionName, $regionConfig['lock_lifetime']);
             }
 
-            $cacheFactory = new DefaultCacheFactory($regionsConfig, $configuration->getResultCacheImpl());
+            $resultCacheImpl = $configuration->getResultCacheImpl();
+            assert($resultCacheImpl !== null);
+            $cacheFactory = new DefaultCacheFactory($regionsConfig, $resultCacheImpl);
             $cacheFactory->setFileLockRegionDirectory($config['second_level_cache']['file_lock_region_directory']);
 
             $cacheConfiguration = new CacheConfiguration();

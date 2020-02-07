@@ -20,6 +20,7 @@ use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\Exception\OutOfBoundsException;
 use function array_key_exists;
 use function array_map;
+use function assert;
 use function is_array;
 use function is_string;
 
@@ -52,6 +53,7 @@ final class CacheFactory extends AbstractFactory
                 break;
 
             case PredisCache::class:
+                assert($instance !== null);
                 $cache = new PredisCache($instance);
                 break;
 
@@ -70,8 +72,10 @@ final class CacheFactory extends AbstractFactory
         }
 
         if ($cache instanceof MemcachedCache) {
+            assert($instance !== null);
             $cache->setMemcached($instance);
         } elseif ($cache instanceof RedisCache) {
+            assert($instance !== null);
             $cache->setRedis($instance);
         }
 
