@@ -169,10 +169,8 @@ class EventManagerFactoryTest extends TestCase
 
     /**
      * @param mixed $subscriber
-     *
-     * @return ContainerInterface|ObjectProphecy
      */
-    private function buildContainer($subscriber)
+    private function buildContainer($subscriber) : ObjectProphecy
     {
         $container = $this->prophesize(ContainerInterface::class);
         $container->has('config')->willReturn(true);
@@ -191,10 +189,8 @@ class EventManagerFactoryTest extends TestCase
 
     /**
      * @param mixed $listener
-     *
-     * @return ContainerInterface|ObjectProphecy
      */
-    private function buildContainerWithListener($listener)
+    private function buildContainerWithListener($listener) : ObjectProphecy
     {
         $container = $this->prophesize(ContainerInterface::class);
         $container->has('config')->willReturn(true);

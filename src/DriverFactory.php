@@ -7,14 +7,13 @@ namespace Roave\PsrContainerDoctrine;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\CachedReader;
-use Doctrine\Common\Persistence\Mapping\Driver\AnnotationDriver;
-use Doctrine\Common\Persistence\Mapping\Driver\FileDriver;
-use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
-use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
-use Doctrine\Common\Proxy\Exception\OutOfBoundsException;
+use Doctrine\Persistence\Mapping\Driver\AnnotationDriver;
+use Doctrine\Persistence\Mapping\Driver\FileDriver;
+use Doctrine\Persistence\Mapping\Driver\MappingDriver;
+use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
 use Psr\Container\ContainerInterface;
+use Roave\PsrContainerDoctrine\Exception\OutOfBoundsException;
 use function array_key_exists;
-use function class_exists;
 use function is_array;
 use function is_subclass_of;
 
@@ -29,7 +28,7 @@ final class DriverFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    protected function createWithConfig(ContainerInterface $container, $configKey)
+    protected function createWithConfig(ContainerInterface $container, string $configKey)
     {
         $config = $this->retrieveConfig($container, $configKey, 'driver');
 
@@ -44,6 +43,7 @@ final class DriverFactory extends AbstractFactory
         if ($config['class'] === AnnotationDriver::class || is_subclass_of($config['class'], AnnotationDriver::class)) {
             $this->registerAnnotationLoader();
 
+            /** @psalm-suppress UndefinedClass */
             $driver = new $config['class'](
                 new CachedReader(
                     new AnnotationReader(),
@@ -53,13 +53,13 @@ final class DriverFactory extends AbstractFactory
             );
         }
 
-        if ($config['extension'] !== null
-            && ($config['class'] === FileDriver::class || is_subclass_of($config['class'], FileDriver::class))
-        ) {
+        if ($config['extension'] !== null && is_subclass_of($config['class'], FileDriver::class)) {
+            /** @psalm-suppress UndefinedClass */
             $driver = new $config['class']($config['paths'], $config['extension']);
         }
 
         if (! isset($driver)) {
+            /** @psalm-suppress UndefinedClass */
             $driver = new $config['class']($config['paths']);
         }
 
@@ -87,7 +87,7 @@ final class DriverFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    protected function getDefaultConfig($configKey) : array
+    protected function getDefaultConfig(string $configKey) : array
     {
         return [
             'paths' => [],
@@ -105,11 +105,8 @@ final class DriverFactory extends AbstractFactory
             return;
         }
 
-        AnnotationRegistry::registerLoader(
-            static function ($className) {
-                return class_exists($className);
-            }
-        );
+        /** @psalm-suppress DeprecatedMethod */
+        AnnotationRegistry::registerLoader('class_exists');
 
         self::$isAnnotationLoaderRegistered = true;
     }

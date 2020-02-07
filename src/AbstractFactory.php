@@ -68,14 +68,14 @@ abstract class AbstractFactory
     /**
      * Returns the default config.
      *
-     * @return mixed[]
+     * @return array<string, mixed>
      */
     abstract protected function getDefaultConfig(string $configKey) : array;
 
     /**
      * Retrieves the config for a specific section.
      *
-     * @return mixed[]
+     * @return array<string, mixed>
      */
     protected function retrieveConfig(ContainerInterface $container, string $configKey, string $section) : array
     {
@@ -97,6 +97,8 @@ abstract class AbstractFactory
      * registering factories which they are not gonna access themself at all, and thus minimized configuration.
      *
      * @return mixed
+     *
+     * @psalm-param class-string<AbstractFactory> $factoryClassName
      */
     protected function retrieveDependency(ContainerInterface $container, string $configKey, string $section, string $factoryClassName)
     {

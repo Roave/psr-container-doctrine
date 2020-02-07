@@ -10,18 +10,17 @@ use Doctrine\Common\Cache\Cache;
 use Doctrine\Common\Cache\CacheProvider;
 use Doctrine\Common\Cache\ChainCache;
 use Doctrine\Common\Cache\FilesystemCache;
-use Doctrine\Common\Cache\MemcacheCache;
 use Doctrine\Common\Cache\MemcachedCache;
 use Doctrine\Common\Cache\PhpFileCache;
 use Doctrine\Common\Cache\PredisCache;
 use Doctrine\Common\Cache\RedisCache;
 use Doctrine\Common\Cache\WinCacheCache;
-use Doctrine\Common\Cache\XcacheCache;
 use Doctrine\Common\Cache\ZendDataCache;
-use Doctrine\Common\Proxy\Exception\OutOfBoundsException;
 use Psr\Container\ContainerInterface;
+use Roave\PsrContainerDoctrine\Exception\OutOfBoundsException;
 use function array_key_exists;
 use function array_map;
+use function assert;
 use function is_array;
 use function is_string;
 
@@ -33,7 +32,7 @@ final class CacheFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    protected function createWithConfig(ContainerInterface $container, $configKey)
+    protected function createWithConfig(ContainerInterface $container, string $configKey)
     {
         $config = $this->retrieveConfig($container, $configKey, 'cache');
 
@@ -54,28 +53,29 @@ final class CacheFactory extends AbstractFactory
                 break;
 
             case PredisCache::class:
-                $cache = new $config['class']($instance);
+                assert($instance !== null);
+                $cache = new PredisCache($instance);
                 break;
 
             case ChainCache::class:
                 $providers = array_map(
-                    function ($provider) use ($container) {
+                    function ($provider) use ($container) : CacheProvider {
                         return $this->createWithConfig($container, $provider);
                     },
                     is_array($config['providers']) ? $config['providers'] : []
                 );
-                $cache     = new $config['class']($providers);
+                $cache     = new ChainCache($providers);
                 break;
 
             default:
                 $cache = $container->has($config['class']) ? $container->get($config['class']) : new $config['class']();
         }
 
-        if ($cache instanceof MemcacheCache) {
-            $cache->setMemcache($instance);
-        } elseif ($cache instanceof MemcachedCache) {
+        if ($cache instanceof MemcachedCache) {
+            assert($instance !== null);
             $cache->setMemcached($instance);
         } elseif ($cache instanceof RedisCache) {
+            assert($instance !== null);
             $cache->setRedis($instance);
         }
 
@@ -108,12 +108,6 @@ final class CacheFactory extends AbstractFactory
                     'directory' => 'data/cache/DoctrineCache',
                     'namespace' => 'psr-container-doctrine',
                 ];
-            case 'memcache':
-                return [
-                    'class' => MemcacheCache::class,
-                    'instance' => 'my_memcache_alias',
-                    'namespace' => 'psr-container-doctrine',
-                ];
             case 'memcached':
                 return [
                     'class' => MemcachedCache::class,
@@ -141,11 +135,6 @@ final class CacheFactory extends AbstractFactory
             case 'wincache':
                 return [
                     'class' => WinCacheCache::class,
-                    'namespace' => 'psr-container-doctrine',
-                ];
-            case 'xcache':
-                return [
-                    'class' => XcacheCache::class,
                     'namespace' => 'psr-container-doctrine',
                 ];
             case 'zenddata':

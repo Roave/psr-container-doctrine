@@ -12,15 +12,16 @@ class StubFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    protected function createWithConfig(ContainerInterface $container, $configKey)
+    protected function createWithConfig(ContainerInterface $container, string $configKey)
     {
         return $configKey;
     }
 
+    // phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod.Found
+
     /**
      * {@inheritdoc}
      */
-    // phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod.Found
     public function retrieveConfig(ContainerInterface $container, string $configKey, string $section) : array
     {
         return parent::retrieveConfig($container, $configKey, $section);
@@ -31,7 +32,7 @@ class StubFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    protected function getDefaultConfig($configKey) : array
+    protected function getDefaultConfig(string $configKey) : array
     {
         return [];
     }

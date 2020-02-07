@@ -21,7 +21,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Removed
 
-- Nothing.
+- [#9](https://github.com/roave/psr-container-doctrine/pull/9) Removed support for `XcacheCache`, `MemcacheCache`, Doctrine namespace updates (thanks @edigu!)
 
 ### Fixed
 

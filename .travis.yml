@@ -13,6 +13,8 @@ matrix:
       env:
         - EXECUTE_CS_CHECK=true
     - php: 7.4
+      env:
+        - EXECUTE_STATIC_ANALYSIS_CHECK=true
 
 before_install:
   - composer self-update
@@ -23,3 +25,4 @@ install:
 script:
   - vendor/bin/phpunit
   - if [[ $EXECUTE_CS_CHECK == 'true' ]]; then ./vendor/bin/phpcs ; fi
+  - if [[ $EXECUTE_STATIC_ANALYSIS_CHECK == 'true' ]]; then ./vendor/bin/psalm ; fi

@@ -62,7 +62,7 @@ class AbstractFactoryTest extends TestCase
     }
 
     /**
-     * @return mixed[]
+     * @return array<string, mixed>
      */
     public function configProvider() : array
     {

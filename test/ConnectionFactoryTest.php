@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace RoaveTest\PsrContainerDoctrine;
 
 use Doctrine\Common\EventManager;
+use Doctrine\DBAL\Driver\PDOMySql\Driver as PDOMySQLDriver;
 use Doctrine\DBAL\Driver\PDOSqlite\Driver as PDOSqliteDriver;
 use Doctrine\DBAL\Exception\ConnectionException;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
@@ -54,7 +55,8 @@ class ConnectionFactoryTest extends TestCase
             $factory($container->reveal());
         } catch (ConnectionException $e) {
             foreach ($e->getTrace() as $entry) {
-                if ($entry['class'] === 'Doctrine\DBAL\Driver\PDOMySql\Driver') {
+                if ($entry['class'] === PDOMySQLDriver::class) {
+                    /** @psalm-suppress InternalMethod @todo find a better way to add to assertion count... */
                     $this->addToAssertionCount(1);
 
                     return;
@@ -175,16 +177,14 @@ class ConnectionFactoryTest extends TestCase
     }
 
     /**
-     * @param mixed[] $config
-     *
-     * @return ContainerInterface|ObjectProphecy
+     * @param array<string, mixed> $config
      */
     private function buildContainer(
         string $ownKey = 'orm_default',
         string $configurationKey = 'orm_default',
         string $eventManagerKey = 'orm_default',
         array $config = []
-    ) {
+    ) : ObjectProphecy {
         $container = $this->prophesize(ContainerInterface::class);
         $container->has('config')->willReturn(true);
         $container->get('config')->willReturn([
