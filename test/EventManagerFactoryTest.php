@@ -109,7 +109,6 @@ class EventManagerFactoryTest extends TestCase
         $eventManager = $factory($container);
         $listeners    = $eventManager->getListeners('foo');
 
-        $this->assertIsArray($listeners);
         $this->assertCount(1, $listeners);
         $this->assertSame($eventSubscriber, array_pop($listeners));
     }
@@ -215,7 +214,6 @@ class EventManagerFactoryTest extends TestCase
         $eventManager = $factory($container);
         $listeners    = $eventManager->getListeners(Events::onFlush);
 
-        $this->assertIsArray($listeners);
         $this->assertCount(1, $listeners);
         $this->assertSame($eventListener, array_pop($listeners));
     }
