@@ -12,7 +12,7 @@ class StubFileDriver extends FileDriver
     /**
      * {@inheritdoc}
      */
-    protected function loadMappingFile($file)
+    protected function loadMappingFile($file) : array
     {
         return [];
     }
