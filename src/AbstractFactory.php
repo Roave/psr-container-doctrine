@@ -8,11 +8,13 @@ use Psr\Container\ContainerInterface;
 use function array_key_exists;
 use function sprintf;
 
+/** @internal */
 abstract class AbstractFactory
 {
     /** @var string */
     private $configKey;
 
+    /** @internal */
     public function __construct(string $configKey = 'orm_default')
     {
         $this->configKey = $configKey;

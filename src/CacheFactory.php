@@ -28,7 +28,7 @@ use function is_string;
 /**
  * @method Cache __invoke(ContainerInterface $container)
  */
-class CacheFactory extends AbstractFactory
+final class CacheFactory extends AbstractFactory
 {
     /**
      * {@inheritdoc}
