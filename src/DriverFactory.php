@@ -46,9 +46,7 @@ final class DriverFactory extends AbstractFactory
             );
         }
 
-        if ($config['extension'] !== null
-            && ($config['class'] === FileDriver::class || is_subclass_of($config['class'], FileDriver::class))
-        ) {
+        if ($config['extension'] !== null && is_subclass_of($config['class'], FileDriver::class)) {
             $driver = new $config['class']($config['paths'], $config['extension']);
         }
 
