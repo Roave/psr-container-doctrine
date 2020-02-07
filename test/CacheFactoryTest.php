@@ -41,12 +41,12 @@ class CacheFactoryTest extends TestCase
             ],
         ];
 
-        $container = $this->prophesize(ContainerInterface::class);
-        $container->has('config')->willReturn(true);
-        $container->get('config')->willReturn($config);
+        $container = $this->getMockBuilder(ContainerInterface::class)->onlyMethods(['has', 'get'])->getMock();
+        $container->expects($this->once())->method('has')->with('config')->willReturn(true);
+        $container->expects($this->once())->method('get')->with('config')->willReturn($config);
 
         $factory       = new CacheFactory('filesystem');
-        $cacheInstance = $factory($container->reveal());
+        $cacheInstance = $factory($container);
 
         $this->assertInstanceOf(FilesystemCache::class, $cacheInstance);
     }
@@ -64,13 +64,14 @@ class CacheFactoryTest extends TestCase
             ],
         ];
 
-        $container = $this->prophesize(ContainerInterface::class);
-        $container->has('config')->willReturn(true);
-        $container->get('config')->willReturn($config);
-        $container->has(ArrayCache::class)->willReturn(false);
+        $container = $this->getMockBuilder(ContainerInterface::class)->onlyMethods(['has', 'get'])->getMock();
+        $container->method('has')
+            ->withConsecutive(['config'], ['config'], [ArrayCache::class], ['config'], [ArrayCache::class])
+            ->willReturnOnConsecutiveCalls(true, true, false, true, false);
+        $container->method('get')->with('config')->willReturn($config);
 
         $factory       = new CacheFactory('chain');
-        $cacheInstance = $factory($container->reveal());
+        $cacheInstance = $factory($container);
 
         $this->assertInstanceOf(ChainCache::class, $cacheInstance);
     }
