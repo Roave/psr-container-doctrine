@@ -26,6 +26,14 @@
                 <referencedMethod name="Roave\PsrContainerDoctrine\AbstractFactory::retrieveConfig"/>
                 <referencedMethod name="Roave\PsrContainerDoctrine\AbstractFactory::__callStatic"/>
                 <referencedMethod name="Roave\PsrContainerDoctrine\AbstractFactory::__invoke"/>
+
+                <!-- InvocationMocker is still internal. See https://github.com/sebastianbergmann/phpunit/issues/3742 -->
+                <referencedMethod name="PHPUnit\Framework\MockObject\Builder\InvocationMocker::willReturn" />
+                <referencedMethod name="PHPUnit\Framework\MockObject\Builder\InvocationMocker::method" />
+                <referencedMethod name="PHPUnit\Framework\MockObject\Builder\InvocationMocker::willReturnOnConsecutiveCalls" />
+                <referencedMethod name="PHPUnit\Framework\MockObject\Builder\InvocationMocker::with" />
+                <referencedMethod name="PHPUnit\Framework\MockObject\Builder\InvocationMocker::will" />
+                <referencedMethod name="PHPUnit\Framework\MockObject\Builder\InvocationMocker::withConsecutive" />
             </errorLevel>
         </InternalMethod>
         <InternalClass>
