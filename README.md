@@ -8,7 +8,8 @@
 [Doctrine](https://github.com/doctrine) factories for [PSR-11 containers](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-11-container.md).
 
 This package provides a set of factories to be used with containers using the PSR-11 standard for an easy
-Doctrine integration in a project.
+Doctrine integration in a project. This project was originally written by
+[@DASPRiD](https://github.com/DASPRiD/container-interop-doctrine) but maintenance has been taken over by Roave.
 
 ## Installation
 
