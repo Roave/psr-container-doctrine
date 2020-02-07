@@ -36,7 +36,7 @@ final class DriverFactory extends AbstractFactory
             $config['paths'] = [$config['paths']];
         }
 
-        if ($config['class'] === AnnotationDriver::class || is_subclass_of($config['class'], AnnotationDriver::class)) {
+        if (is_subclass_of($config['class'], AnnotationDriver::class)) {
             $driver = new $config['class'](
                 new CachedReader(
                     new AnnotationReader(),
