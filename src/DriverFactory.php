@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Roave\PsrContainerDoctrine;
 
 use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\CachedReader;
 use Doctrine\Persistence\Mapping\Driver\AnnotationDriver;
 use Doctrine\Persistence\Mapping\Driver\FileDriver;
@@ -13,6 +14,7 @@ use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
 use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\Exception\OutOfBoundsException;
 use function array_key_exists;
+use function class_exists;
 use function is_array;
 use function is_subclass_of;
 
@@ -21,6 +23,9 @@ use function is_subclass_of;
  */
 final class DriverFactory extends AbstractFactory
 {
+    /** @var bool */
+    private static $isAnnotationLoaderRegistered = false;
+
     /**
      * {@inheritdoc}
      */
@@ -36,7 +41,9 @@ final class DriverFactory extends AbstractFactory
             $config['paths'] = [$config['paths']];
         }
 
-        if (is_subclass_of($config['class'], AnnotationDriver::class)) {
+        if ($config['class'] === AnnotationDriver::class || is_subclass_of($config['class'], AnnotationDriver::class)) {
+            $this->registerAnnotationLoader();
+
             /** @psalm-suppress UndefinedClass */
             $driver = new $config['class'](
                 new CachedReader(
@@ -88,5 +95,25 @@ final class DriverFactory extends AbstractFactory
             'extension' => null,
             'drivers' => [],
         ];
+    }
+
+    /**
+     * Registers the annotation loader
+     */
+    private function registerAnnotationLoader() : void
+    {
+        if (self::$isAnnotationLoaderRegistered) {
+            return;
+        }
+
+        /** @psalm-suppress DeprecatedMethod */
+        AnnotationRegistry::registerLoader(
+            /** @psalm-param class-string $className */
+            static function (string $className) {
+                return class_exists($className);
+            }
+        );
+
+        self::$isAnnotationLoaderRegistered = true;
     }
 }
