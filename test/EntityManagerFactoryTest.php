@@ -14,7 +14,7 @@ use Roave\PsrContainerDoctrine\AbstractFactory;
 use Roave\PsrContainerDoctrine\EntityManagerFactory;
 use function sys_get_temp_dir;
 
-class EntityManagerFactoryTest extends TestCase
+final class EntityManagerFactoryTest extends TestCase
 {
     public function testExtendsAbstractFactory() : void
     {
@@ -26,15 +26,19 @@ class EntityManagerFactoryTest extends TestCase
         $connection    = $this->buildConnection();
         $configuration = $this->buildConfiguration();
 
-        $container = $this->prophesize(ContainerInterface::class);
-        $container->has('config')->willReturn(false);
-        $container->has('doctrine.connection.orm_default')->willReturn(true);
-        $container->get('doctrine.connection.orm_default')->willReturn($connection);
-        $container->has('doctrine.configuration.orm_default')->willReturn(true);
-        $container->get('doctrine.configuration.orm_default')->willReturn($configuration);
+        $container = $this->getMockBuilder(ContainerInterface::class)->setMethods(['has', 'get'])->getMock();
+        $container->expects($this->exactly(3))
+            ->method('has')
+            ->withConsecutive(['config'], ['doctrine.connection.orm_default'], ['doctrine.configuration.orm_default'])
+            ->willReturnOnConsecutiveCalls(false, true, true);
+
+        $container->expects($this->exactly(2))
+            ->method('get')
+            ->withConsecutive(['doctrine.connection.orm_default'], ['doctrine.configuration.orm_default'])
+            ->willReturnOnConsecutiveCalls($connection, $configuration);
 
         $factory       = new EntityManagerFactory();
-        $entityManager = $factory($container->reveal());
+        $entityManager = $factory($container);
 
         $this->assertSame($connection, $entityManager->getConnection());
         $this->assertSame($configuration, $entityManager->getConfiguration());
@@ -45,15 +49,18 @@ class EntityManagerFactoryTest extends TestCase
         $connection    = $this->buildConnection();
         $configuration = $this->buildConfiguration();
 
-        $container = $this->prophesize(ContainerInterface::class);
-        $container->has('config')->willReturn(false);
-        $container->has('doctrine.connection.orm_other')->willReturn(true);
-        $container->get('doctrine.connection.orm_other')->willReturn($connection);
-        $container->has('doctrine.configuration.orm_other')->willReturn(true);
-        $container->get('doctrine.configuration.orm_other')->willReturn($configuration);
+        $container = $this->getMockBuilder(ContainerInterface::class)->setMethods(['has', 'get'])->getMock();
+        $container->expects($this->exactly(3))
+            ->method('has')
+            ->withConsecutive(['config'], ['doctrine.connection.orm_other'], ['doctrine.configuration.orm_other'])
+            ->willReturnOnConsecutiveCalls(false, true, true);
+        $container->expects($this->exactly(2))
+            ->method('get')
+            ->withConsecutive(['doctrine.connection.orm_other'], ['doctrine.configuration.orm_other'])
+            ->willReturnOnConsecutiveCalls($connection, $configuration);
 
         $factory       = new EntityManagerFactory('orm_other');
-        $entityManager = $factory($container->reveal());
+        $entityManager = $factory($container);
 
         $this->assertSame($connection, $entityManager->getConnection());
         $this->assertSame($configuration, $entityManager->getConfiguration());
@@ -63,10 +70,7 @@ class EntityManagerFactoryTest extends TestCase
     {
         $connection    = $this->buildConnection();
         $configuration = $this->buildConfiguration();
-
-        $container = $this->prophesize(ContainerInterface::class);
-        $container->has('config')->willReturn(true);
-        $container->get('config')->willReturn([
+        $config        = [
             'doctrine' => [
                 'entity_manager' => [
                     'orm_default' => [
@@ -75,14 +79,20 @@ class EntityManagerFactoryTest extends TestCase
                     ],
                 ],
             ],
-        ]);
-        $container->has('doctrine.connection.orm_foo')->willReturn(true);
-        $container->get('doctrine.connection.orm_foo')->willReturn($connection);
-        $container->has('doctrine.configuration.orm_bar')->willReturn(true);
-        $container->get('doctrine.configuration.orm_bar')->willReturn($configuration);
+        ];
+
+        $container = $this->getMockBuilder(ContainerInterface::class)->setMethods(['has', 'get'])->getMock();
+        $container->expects($this->exactly(3))
+            ->method('has')
+            ->withConsecutive(['config'], ['doctrine.connection.orm_foo'], ['doctrine.configuration.orm_bar'])
+            ->willReturnOnConsecutiveCalls(true, true, true);
+        $container->expects($this->exactly(3))
+            ->method('get')
+            ->withConsecutive(['config'], ['doctrine.connection.orm_foo'], ['doctrine.configuration.orm_bar'])
+            ->willReturnOnConsecutiveCalls($config, $connection, $configuration);
 
         $factory       = new EntityManagerFactory();
-        $entityManager = $factory($container->reveal());
+        $entityManager = $factory($container);
 
         $this->assertSame($connection, $entityManager->getConnection());
         $this->assertSame($configuration, $entityManager->getConfiguration());
@@ -90,10 +100,14 @@ class EntityManagerFactoryTest extends TestCase
 
     private function buildConnection() : Connection
     {
-        $connection = $this->prophesize(Connection::class);
-        $connection->getEventManager()->willReturn($this->prophesize(EventManager::class)->reveal());
+        $eventManager = $this->createStub(EventManager::class);
+        $connection   = $this->getMockBuilder(Connection::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getEventManager'])
+            ->getMock();
+        $connection->method('getEventManager')->willReturn($eventManager);
 
-        return $connection->reveal();
+        return $connection;
     }
 
     private function buildConfiguration() : Configuration
