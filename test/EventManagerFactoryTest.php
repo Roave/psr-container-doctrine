@@ -220,8 +220,6 @@ class EventManagerFactoryTest extends TestCase
 
     /**
      * @param mixed $subscriber
-     *
-     * @pslam-return ContainerInterface&\PHPUnit\Framework\MockObject\MockObject
      */
     private function buildContainer($subscriber) : ContainerInterface
     {
