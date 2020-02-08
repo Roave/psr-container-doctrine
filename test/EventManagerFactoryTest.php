@@ -49,7 +49,7 @@ class EventManagerFactoryTest extends TestCase
 
     public function testInvalidStringSubscriber() : void
     {
-        $container = $this->createContainerMock();
+        $container = $this->createMock(ContainerInterface::class);
         $container->expects($this->exactly(2))
             ->method('has')
             ->withConsecutive(['config'], ['NonExistentClass'])
@@ -76,7 +76,7 @@ class EventManagerFactoryTest extends TestCase
 
     public function testClassNameSubscriber() : void
     {
-        $container = $this->createContainerMock();
+        $container = $this->createMock(ContainerInterface::class);
         $container->expects($this->exactly(2))
             ->method('has')
             ->withConsecutive(['config'], [StubEventSubscriber::class])
@@ -95,7 +95,7 @@ class EventManagerFactoryTest extends TestCase
     {
         $eventSubscriber = new StubEventSubscriber();
 
-        $container = $this->createContainerMock();
+        $container = $this->createMock(ContainerInterface::class);
         $container->expects($this->exactly(2))
             ->method('has')
             ->withConsecutive(['config'], [StubEventSubscriber::class])
@@ -123,7 +123,7 @@ class EventManagerFactoryTest extends TestCase
 
     public function testInvalidStringListener() : void
     {
-        $container = $this->createContainerMock();
+        $container = $this->createMock(ContainerInterface::class);
         $container->expects($this->exactly(2))
             ->method('has')
             ->withConsecutive(['config'], ['NonExistentClass'])
@@ -167,7 +167,7 @@ class EventManagerFactoryTest extends TestCase
 
     public function testClassNameListener() : void
     {
-        $container = $this->createContainerMock();
+        $container = $this->createMock(ContainerInterface::class);
         $container->expects($this->exactly(2))
             ->method('has')
             ->withConsecutive(['config'], [StubEventListener::class])
@@ -193,7 +193,7 @@ class EventManagerFactoryTest extends TestCase
     {
         $eventListener = new StubEventListener();
 
-        $container = $this->createContainerMock();
+        $container = $this->createMock(ContainerInterface::class);
         $container->expects($this->exactly(2))
             ->method('has')
             ->withConsecutive(['config'], [StubEventListener::class])
@@ -225,7 +225,7 @@ class EventManagerFactoryTest extends TestCase
      */
     private function buildContainer($subscriber) : ContainerInterface
     {
-        $container = $this->createContainerMock();
+        $container = $this->createMock(ContainerInterface::class);
         $container->method('has')->with('config')->willReturn(true);
         $container->method('get')->with('config')->willReturn(
             [
@@ -249,7 +249,7 @@ class EventManagerFactoryTest extends TestCase
      */
     private function buildContainerWithListener($listener) : ContainerInterface
     {
-        $container = $this->createContainerMock();
+        $container = $this->createMock(ContainerInterface::class);
         $container->method('has')->with('config')->willReturn(true);
         $container->method('get')->with('config')->willReturn($this->getConfigForListener($listener));
 
@@ -290,13 +290,5 @@ class EventManagerFactoryTest extends TestCase
                 ],
             ],
         ];
-    }
-
-    /**
-     * @psalm-return ContainerInterface&\PHPUnit\Framework\MockObject\MockObject
-     */
-    private function createContainerMock() : ContainerInterface
-    {
-        return $this->getMockBuilder(ContainerInterface::class)->onlyMethods(['has', 'get'])->getMock();
     }
 }

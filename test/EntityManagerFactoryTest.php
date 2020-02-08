@@ -26,7 +26,7 @@ final class EntityManagerFactoryTest extends TestCase
         $connection    = $this->buildConnection();
         $configuration = $this->buildConfiguration();
 
-        $container = $this->getMockBuilder(ContainerInterface::class)->onlyMethods(['has', 'get'])->getMock();
+        $container = $this->createMock(ContainerInterface::class);
         $container->expects($this->exactly(3))
             ->method('has')
             ->withConsecutive(['config'], ['doctrine.connection.orm_default'], ['doctrine.configuration.orm_default'])
@@ -49,7 +49,7 @@ final class EntityManagerFactoryTest extends TestCase
         $connection    = $this->buildConnection();
         $configuration = $this->buildConfiguration();
 
-        $container = $this->getMockBuilder(ContainerInterface::class)->onlyMethods(['has', 'get'])->getMock();
+        $container = $this->createMock(ContainerInterface::class);
         $container->expects($this->exactly(3))
             ->method('has')
             ->withConsecutive(['config'], ['doctrine.connection.orm_other'], ['doctrine.configuration.orm_other'])
@@ -81,7 +81,7 @@ final class EntityManagerFactoryTest extends TestCase
             ],
         ];
 
-        $container = $this->getMockBuilder(ContainerInterface::class)->onlyMethods(['has', 'get'])->getMock();
+        $container = $this->createMock(ContainerInterface::class);
         $container->expects($this->exactly(3))
             ->method('has')
             ->withConsecutive(['config'], ['doctrine.connection.orm_foo'], ['doctrine.configuration.orm_bar'])
@@ -98,6 +98,9 @@ final class EntityManagerFactoryTest extends TestCase
         $this->assertSame($configuration, $entityManager->getConfiguration());
     }
 
+    /**
+     * @psalm-return Connection&\PHPUnit\Framework\MockObject\MockObject
+     */
     private function buildConnection() : Connection
     {
         $eventManager = $this->createStub(EventManager::class);

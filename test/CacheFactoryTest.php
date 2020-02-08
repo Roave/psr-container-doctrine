@@ -41,7 +41,7 @@ class CacheFactoryTest extends TestCase
             ],
         ];
 
-        $container = $this->getMockBuilder(ContainerInterface::class)->onlyMethods(['has', 'get'])->getMock();
+        $container = $this->createMock(ContainerInterface::class);
         $container->expects($this->once())->method('has')->with('config')->willReturn(true);
         $container->expects($this->once())->method('get')->with('config')->willReturn($config);
 
@@ -64,7 +64,7 @@ class CacheFactoryTest extends TestCase
             ],
         ];
 
-        $container = $this->getMockBuilder(ContainerInterface::class)->onlyMethods(['has', 'get'])->getMock();
+        $container = $this->createMock(ContainerInterface::class);
         $container->method('has')
             ->withConsecutive(['config'], ['config'], [ArrayCache::class], ['config'], [ArrayCache::class])
             ->willReturnOnConsecutiveCalls(true, true, false, true, false);

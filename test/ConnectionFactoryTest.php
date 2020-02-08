@@ -13,7 +13,6 @@ use Doctrine\DBAL\Types\BooleanType;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Container\ContainerInterface;
 use ReflectionObject;
 use Roave\PsrContainerDoctrine\ConnectionFactory;
@@ -28,10 +27,14 @@ class ConnectionFactoryTest extends TestCase
     /** @var EventManager */
     private $eventManger;
 
+    /** @var AbstractPlatform */
+    private $customPlatform;
+
     public function setUp() : void
     {
-        $this->configuration = $this->prophesize(Configuration::class)->reveal();
-        $this->eventManger   = $this->prophesize(EventManager::class)->reveal();
+        $this->configuration  = $this->createMock(Configuration::class);
+        $this->eventManger    = $this->createMock(EventManager::class);
+        $this->customPlatform = $this->createMock(AbstractPlatform::class);
     }
 
     public function testDefaultsThroughException() : void
@@ -41,18 +44,28 @@ class ConnectionFactoryTest extends TestCase
         }
 
         $factory   = new ConnectionFactory();
-        $container = $this->prophesize(ContainerInterface::class);
-        $container->has('config')->willReturn(false);
-        $container->has('doctrine.configuration.orm_default')->willReturn(true);
-        $container->get('doctrine.configuration.orm_default')->willReturn($this->configuration);
-        $container->has('doctrine.event_manager.orm_default')->willReturn(true);
-        $container->get('doctrine.event_manager.orm_default')->willReturn($this->eventManger);
+        $container = $this->createMock(ContainerInterface::class);
+        $container->method('has')->willReturnCallback(
+            static function (string $id) : bool {
+                // Return false for config, true for anything else
+                return $id !== 'config';
+            }
+        );
+        $container->method('get')->willReturnCallback(
+            function (string $id) {
+                if ($id === 'doctrine.configuration.orm_default') {
+                    return $this->configuration;
+                }
+
+                return $this->eventManger;
+            }
+        );
 
         // This is actually quite tricky. We cannot really test the pure defaults, as that would require a MySQL
         // connection without a username and password. Since that can't work, we just verify that we get an exception
         // with the right backtrace, and test the other defaults with a pure memory-database later.
         try {
-            $factory($container->reveal());
+            $factory($container);
         } catch (ConnectionException $e) {
             foreach ($e->getTrace() as $entry) {
                 if ($entry['class'] === PDOMySQLDriver::class) {
@@ -74,7 +87,7 @@ class ConnectionFactoryTest extends TestCase
     public function testDefaults() : void
     {
         $factory    = new ConnectionFactory();
-        $connection = $factory($this->buildContainer()->reveal());
+        $connection = $factory($this->buildContainer());
 
         $this->assertSame($this->configuration, $connection->getConfiguration());
         $this->assertSame($this->eventManger, $connection->getEventManager());
@@ -88,7 +101,7 @@ class ConnectionFactoryTest extends TestCase
     public function testConfigKeysTakenFromSelf() : void
     {
         $factory    = new ConnectionFactory('orm_other');
-        $connection = $factory($this->buildContainer('orm_other', 'orm_other', 'orm_other')->reveal());
+        $connection = $factory($this->buildContainer('orm_other', 'orm_other', 'orm_other'));
 
         $this->assertSame($this->configuration, $connection->getConfiguration());
         $this->assertSame($this->eventManger, $connection->getEventManager());
@@ -100,7 +113,7 @@ class ConnectionFactoryTest extends TestCase
         $connection = $factory($this->buildContainer('orm_other', 'orm_foo', 'orm_bar', [
             'configuration' => 'orm_foo',
             'event_manager' => 'orm_bar',
-        ])->reveal());
+        ]));
 
         $this->assertSame($this->configuration, $connection->getConfiguration());
         $this->assertSame($this->eventManger, $connection->getEventManager());
@@ -111,7 +124,7 @@ class ConnectionFactoryTest extends TestCase
         $factory    = new ConnectionFactory();
         $connection = $factory($this->buildContainer('orm_default', 'orm_default', 'orm_default', [
             'params' => ['username' => 'foo'],
-        ])->reveal());
+        ]));
 
         $this->assertSame([
             'username' => 'foo',
@@ -124,9 +137,12 @@ class ConnectionFactoryTest extends TestCase
     public function testDoctrineMappingTypesInjection() : void
     {
         $factory    = new ConnectionFactory();
-        $connection = $factory($this->buildContainer('orm_default', 'orm_default', 'orm_default', [
-            'doctrine_mapping_types' => ['foo' => 'boolean'],
-        ])->reveal());
+        $connection = $factory($this->buildContainer(
+            'orm_default',
+            'orm_default',
+            'orm_default',
+            ['doctrine_mapping_types' => ['foo' => 'boolean']]
+        ));
 
         $this->assertTrue($connection->getDatabasePlatform()->hasDoctrineTypeMappingFor('foo'));
     }
@@ -138,7 +154,7 @@ class ConnectionFactoryTest extends TestCase
         $factory    = new ConnectionFactory();
         $connection = $factory($this->buildContainer('orm_default', 'orm_default', 'orm_default', [
             'doctrine_commented_types' => [$type],
-        ])->reveal());
+        ]));
 
         $this->assertTrue($connection->getDatabasePlatform()->isCommentedDoctrineType($type));
     }
@@ -152,7 +168,7 @@ class ConnectionFactoryTest extends TestCase
 
         $connection = $factory($this->buildContainer('orm_default', 'orm_default', 'orm_default', [
             'doctrine_mapping_types' => ['foo' => 'custom_type'],
-        ])->reveal());
+        ]));
 
         $this->assertTrue($connection->getDatabasePlatform()->hasDoctrineTypeMappingFor('foo'));
     }
@@ -167,13 +183,9 @@ class ConnectionFactoryTest extends TestCase
 
         $container = $this->buildContainer('orm_default', 'orm_default', 'orm_default', $config);
 
-        $platform = $this->prophesize(AbstractPlatform::class);
+        $connection = $factory($container);
 
-        $container->get('custom.platform')->willReturn($platform);
-
-        $connection = $factory($container->reveal());
-
-        $this->assertSame($platform->reveal(), $connection->getDatabasePlatform());
+        $this->assertSame($this->customPlatform, $connection->getDatabasePlatform());
     }
 
     /**
@@ -184,26 +196,36 @@ class ConnectionFactoryTest extends TestCase
         string $configurationKey = 'orm_default',
         string $eventManagerKey = 'orm_default',
         array $config = []
-    ) : ObjectProphecy {
-        $container = $this->prophesize(ContainerInterface::class);
-        $container->has('config')->willReturn(true);
-        $container->get('config')->willReturn([
+    ) : ContainerInterface {
+        $container = $this->createMock(ContainerInterface::class);
+        $container->method('has')->willReturn(true);
+        $mockConfig = [
             'doctrine' => [
                 'connection' => [
-                    $ownKey => $config + [
-                        'driver_class' => PDOSqliteDriver::class,
-                    ],
+                    $ownKey => $config + ['driver_class' => PDOSqliteDriver::class],
                 ],
                 'types' => [
                     'custom_type' => BooleanType::class,
                 ],
             ],
-        ]);
+        ];
 
-        $container->has(sprintf('doctrine.configuration.%s', $configurationKey))->willReturn(true);
-        $container->get(sprintf('doctrine.configuration.%s', $configurationKey))->willReturn($this->configuration);
-        $container->has(sprintf('doctrine.event_manager.%s', $eventManagerKey))->willReturn(true);
-        $container->get(sprintf('doctrine.event_manager.%s', $eventManagerKey))->willReturn($this->eventManger);
+        $container->method('get')->willReturnCallback(
+            function (string $id) use ($mockConfig, $configurationKey, $eventManagerKey) {
+                switch ($id) {
+                    case 'config':
+                        return $mockConfig;
+                    case sprintf('doctrine.configuration.%s', $configurationKey):
+                        return $this->configuration;
+                    case sprintf('doctrine.event_manager.%s', $eventManagerKey):
+                        return $this->eventManger;
+                    case 'custom.platform':
+                        return $this->customPlatform;
+                    default:
+                        $this->fail(sprintf('Unexpected call: Container::get(%s)', $id));
+                }
+            }
+        );
 
         return $container;
     }

@@ -16,7 +16,7 @@ final class DriverFactoryTest extends TestCase
 {
     public function testMissingClassKeyWillReturnOutOfBoundException() : void
     {
-        $container = $this->getMockBuilder(ContainerInterface::class)->getMock();
+        $container = $this->createMock(ContainerInterface::class);
         $factory   = new DriverFactory();
 
         $this->expectException(OutOfBoundsException::class);
@@ -115,7 +115,7 @@ final class DriverFactoryTest extends TestCase
      */
     private function createContainerMockWithConfig(array $config, int $expectedCalls = 1) : ContainerInterface
     {
-        $container = $this->getMockBuilder(ContainerInterface::class)->getMock();
+        $container = $this->createMock(ContainerInterface::class);
         $container->expects($this->exactly($expectedCalls))->method('has')->with('config')->willReturn(true);
         $container->expects($this->exactly($expectedCalls))->method('get')->with('config')->willReturn($config);
 

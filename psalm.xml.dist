@@ -34,6 +34,7 @@
                 <referencedMethod name="PHPUnit\Framework\MockObject\Builder\InvocationMocker::with" />
                 <referencedMethod name="PHPUnit\Framework\MockObject\Builder\InvocationMocker::will" />
                 <referencedMethod name="PHPUnit\Framework\MockObject\Builder\InvocationMocker::withConsecutive" />
+                <referencedMethod name="PHPUnit\Framework\MockObject\Builder\InvocationMocker::willReturnCallback" />
             </errorLevel>
         </InternalMethod>
         <InternalClass>

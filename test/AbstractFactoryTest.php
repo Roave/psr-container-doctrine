@@ -13,21 +13,21 @@ final class AbstractFactoryTest extends TestCase
 {
     public function testDefaultConfigKey() : void
     {
-        $container = $this->prophesize(ContainerInterface::class)->reveal();
+        $container = $this->createMock(ContainerInterface::class);
         $factory   = new StubFactory();
         $this->assertSame('orm_default', $factory($container));
     }
 
     public function testCustomConfigKey() : void
     {
-        $container = $this->prophesize(ContainerInterface::class)->reveal();
+        $container = $this->createMock(ContainerInterface::class);
         $factory   = new StubFactory('orm_other');
         $this->assertSame('orm_other', $factory($container));
     }
 
     public function testStaticCall() : void
     {
-        $container = $this->prophesize(ContainerInterface::class)->reveal();
+        $container = $this->createMock(ContainerInterface::class);
         $this->assertSame('orm_other', StubFactory::orm_other($container));
     }
 
@@ -46,19 +46,18 @@ final class AbstractFactoryTest extends TestCase
      */
     public function testRetrieveConfig(string $configKey, string $section, array $expectedResult, ?array $config = null) : void
     {
-        $container = $this->prophesize(ContainerInterface::class);
+        $container = $this->createMock(ContainerInterface::class);
 
         if ($config === null) {
-            $container->has('config')->willReturn(false);
+            $container->expects($this->once())->method('has')->with('config')->willReturn(false);
         } else {
-            $container->has('config')->willReturn(true);
-            $container->get('config')->willReturn($config);
+            $container->expects($this->once())->method('has')->with('config')->willReturn(true);
+            $container->expects($this->once())->method('get')->with('config')->willReturn($config);
         }
 
-        $factory = new StubFactory();
-        $result  = $factory->retrieveConfig($container->reveal(), $configKey, $section);
+        $actualResult = (new StubFactory())->retrieveConfig($container, $configKey, $section);
 
-        $this->assertSame($expectedResult, $result);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     /**
