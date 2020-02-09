@@ -9,7 +9,6 @@ use Doctrine\DBAL\Driver\PDOMySql\Driver as PdoMysqlDriver;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Types\Type;
 use Psr\Container\ContainerInterface;
-use function array_key_exists;
 use function is_string;
 
 /**
@@ -93,8 +92,7 @@ final class ConnectionFactory extends AbstractFactory
         }
 
         $applicationConfig        = $container->has('config') ? $container->get('config') : [];
-        $doctrineConfig           = array_key_exists('doctrine', $applicationConfig) ? $applicationConfig['doctrine'] : [];
-        $typesConfig              = array_key_exists('types', $doctrineConfig) ? $doctrineConfig['types'] : [];
+        $typesConfig              = $applicationConfig['doctrine']['types'] ?? [];
         self::$areTypesRegistered = true;
 
         foreach ($typesConfig as $name => $className) {
