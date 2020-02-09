@@ -12,39 +12,37 @@ use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\DriverFactory;
 use Roave\PsrContainerDoctrine\Exception\OutOfBoundsException;
 
-class DriverFactoryTest extends TestCase
+final class DriverFactoryTest extends TestCase
 {
     public function testMissingClassKeyWillReturnOutOfBoundException() : void
     {
-        $container = $this->prophesize(ContainerInterface::class);
+        $container = $this->createMock(ContainerInterface::class);
         $factory   = new DriverFactory();
 
         $this->expectException(OutOfBoundsException::class);
         $this->expectExceptionMessage('Missing "class" config key');
 
-        $factory($container->reveal());
+        $factory($container);
     }
 
     public function testItSupportsGlobalBasenameOptionOnFileDrivers() : void
     {
         $globalBasename = 'foobar';
 
-        $container = $this->prophesize(ContainerInterface::class);
-        $container->has('config')->willReturn(true);
-        $container->get('config')->willReturn([
-            'doctrine' => [
-                'driver' => [
-                    'orm_default' => [
-                        'class' => TestAsset\StubFileDriver::class,
-                        'global_basename' => $globalBasename,
+        $container = $this->createContainerMockWithConfig(
+            [
+                'doctrine' => [
+                    'driver' => [
+                        'orm_default' => [
+                            'class' => TestAsset\StubFileDriver::class,
+                            'global_basename' => $globalBasename,
+                        ],
                     ],
                 ],
-            ],
-        ]);
+            ]
+        );
 
-        $factory = new DriverFactory();
-
-        $driver = $factory($container->reveal());
+        $driver = (new DriverFactory())->__invoke($container);
         $this->assertInstanceOf(FileDriver::class, $driver);
         $this->assertSame($globalBasename, $driver->getGlobalBasename());
     }
@@ -57,20 +55,20 @@ class DriverFactoryTest extends TestCase
     {
         $extension = '.foo.bar';
 
-        $container = $this->prophesize(ContainerInterface::class);
-        $container->has('config')->willReturn(true);
-        $container->get('config')->willReturn([
-            'doctrine' => [
-                'driver' => [
-                    'orm_default' => [
-                        'class' => $driverClass,
-                        'extension' => $extension,
+        $container = $this->createContainerMockWithConfig(
+            [
+                'doctrine' => [
+                    'driver' => [
+                        'orm_default' => [
+                            'class' => $driverClass,
+                            'extension' => $extension,
+                        ],
                     ],
                 ],
-            ],
-        ]);
+            ]
+        );
 
-        $driver = (new DriverFactory())->__invoke($container->reveal());
+        $driver = (new DriverFactory())->__invoke($container);
         $this->assertInstanceOf(FileDriver::class, $driver);
         $this->assertSame($extension, $driver->getLocator()->getFileExtension());
     }
@@ -90,26 +88,37 @@ class DriverFactoryTest extends TestCase
 
     public function testItSupportsSettingDefaultDriverUsingMappingDriverChain() : void
     {
-        $container = $this->prophesize(ContainerInterface::class);
-        $container->has('config')->willReturn(true);
-        $container->get('config')->willReturn([
-            'doctrine' => [
-                'driver' => [
-                    'orm_default' => [
-                        'class' => MappingDriverChain::class,
-                        'default_driver' => 'orm_stub',
-                    ],
-                    'orm_stub' => [
-                        'class' => TestAsset\StubFileDriver::class,
+        $container = $this->createContainerMockWithConfig(
+            [
+                'doctrine' => [
+                    'driver' => [
+                        'orm_default' => [
+                            'class' => MappingDriverChain::class,
+                            'default_driver' => 'orm_stub',
+                        ],
+                        'orm_stub' => [
+                            'class' => TestAsset\StubFileDriver::class,
+                        ],
                     ],
                 ],
             ],
-        ]);
+            2
+        );
 
-        $factory = new DriverFactory();
-
-        $driver = $factory($container->reveal());
+        $driver = (new DriverFactory())->__invoke($container);
         $this->assertInstanceOf(MappingDriverChain::class, $driver);
         $this->assertInstanceOf(TestAsset\StubFileDriver::class, $driver->getDefaultDriver());
+    }
+
+    /**
+     * @param array<string, mixed> $config
+     */
+    private function createContainerMockWithConfig(array $config, int $expectedCalls = 1) : ContainerInterface
+    {
+        $container = $this->createMock(ContainerInterface::class);
+        $container->expects($this->exactly($expectedCalls))->method('has')->with('config')->willReturn(true);
+        $container->expects($this->exactly($expectedCalls))->method('get')->with('config')->willReturn($config);
+
+        return $container;
     }
 }
