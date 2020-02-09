@@ -15,6 +15,7 @@ matrix:
     - php: 7.4
       env:
         - EXECUTE_STATIC_ANALYSIS_CHECK=true
+        - EXECUTE_BC_CHECK=true
 
 before_install:
   - composer self-update
@@ -27,3 +28,4 @@ script:
   - vendor/bin/phpunit
   - if [[ $EXECUTE_CS_CHECK == 'true' ]]; then ./vendor/bin/phpcs ; fi
   - if [[ $EXECUTE_STATIC_ANALYSIS_CHECK == 'true' ]]; then ./vendor/bin/psalm ; fi
+  - if [[ $EXECUTE_BC_CHECK == 'true' ]]; then wget -q wget https://github.com/Roave/BackwardCompatibilityCheck/releases/download/4.4.0/roave-backward-compatibility-check.phar ; php roave-backward-compatibility-check.phar ; fi
