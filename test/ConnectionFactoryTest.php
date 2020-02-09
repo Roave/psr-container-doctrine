@@ -19,7 +19,7 @@ use Roave\PsrContainerDoctrine\ConnectionFactory;
 use function defined;
 use function sprintf;
 
-class ConnectionFactoryTest extends TestCase
+final class ConnectionFactoryTest extends TestCase
 {
     /** @var Configuration */
     private $configuration;
