@@ -80,8 +80,7 @@ abstract class AbstractFactory
     protected function retrieveConfig(ContainerInterface $container, string $configKey, string $section) : array
     {
         $applicationConfig = $container->has('config') ? $container->get('config') : [];
-        $doctrineConfig    = array_key_exists('doctrine', $applicationConfig) ? $applicationConfig['doctrine'] : [];
-        $sectionConfig     = array_key_exists($section, $doctrineConfig) ? $doctrineConfig[$section] : [];
+        $sectionConfig     = $applicationConfig['doctrine'][$section] ?? [];
 
         if (array_key_exists($configKey, $sectionConfig)) {
             return $sectionConfig[$configKey] + $this->getDefaultConfig($configKey);
