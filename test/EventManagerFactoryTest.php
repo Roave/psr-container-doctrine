@@ -21,7 +21,7 @@ class EventManagerFactoryTest extends TestCase
     public function testDefaults() : void
     {
         $factory      = new EventManagerFactory();
-        $container    = $this->createStub(ContainerInterface::class);
+        $container    = $this->createMock(ContainerInterface::class);
         $eventManager = $factory($container);
 
         $this->assertCount(0, $eventManager->getListeners());
@@ -242,8 +242,6 @@ class EventManagerFactoryTest extends TestCase
 
     /**
      * @param mixed $listener
-     *
-     * @psalm-return ContainerInterface&\PHPUnit\Framework\MockObject\MockObject
      */
     private function buildContainerWithListener($listener) : ContainerInterface
     {

@@ -98,16 +98,10 @@ final class EntityManagerFactoryTest extends TestCase
         $this->assertSame($configuration, $entityManager->getConfiguration());
     }
 
-    /**
-     * @psalm-return Connection&\PHPUnit\Framework\MockObject\MockObject
-     */
     private function buildConnection() : Connection
     {
-        $eventManager = $this->createStub(EventManager::class);
-        $connection   = $this->getMockBuilder(Connection::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getEventManager'])
-            ->getMock();
+        $eventManager = $this->createMock(EventManager::class);
+        $connection   = $this->createPartialMock(Connection::class, ['getEventManager']);
         $connection->method('getEventManager')->willReturn($eventManager);
 
         return $connection;
