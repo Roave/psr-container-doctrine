@@ -148,8 +148,8 @@ final class CacheFactory extends AbstractFactory
                     'namespace' => 'psr-container-doctrine',
                     'providers' => [],
                 ];
+            default:
+                return [];
         }
-
-        return [];
     }
 }
