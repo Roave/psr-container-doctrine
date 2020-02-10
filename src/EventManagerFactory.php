@@ -16,7 +16,6 @@ use function is_array;
 use function is_object;
 use function is_string;
 use function method_exists;
-use function sprintf;
 
 /**
  * @method EventManager __invoke(ContainerInterface $container)
@@ -47,12 +46,7 @@ final class EventManagerFactory extends AbstractFactory
             }
 
             if (! $subscriber instanceof EventSubscriber) {
-                throw new DomainException(sprintf(
-                    'Invalid event subscriber "%s" given, mut be a dependency name, class name or an instance'
-                    . ' implementing %s',
-                    $subscriberName,
-                    EventSubscriber::class
-                ));
+                throw DomainException::forInvalidEventSubscriber($subscriberName);
             }
 
             $eventManager->addEventSubscriber($subscriber);
@@ -60,10 +54,7 @@ final class EventManagerFactory extends AbstractFactory
 
         foreach ($config['listeners'] as $listenerConfig) {
             if (! is_array($listenerConfig)) {
-                throw new InvalidArgumentException(sprintf(
-                    'Invalid event listener config: must be an array, "%s" given',
-                    gettype($listenerConfig)
-                ));
+                throw InvalidArgumentException::forInvalidEventListenerConfig($listenerConfig);
             }
 
             $listener     = $listenerConfig['listener'];
@@ -81,19 +72,12 @@ final class EventManagerFactory extends AbstractFactory
             }
 
             if (! is_object($listener)) {
-                throw new DomainException(sprintf(
-                    'Invalid event listener "%s" given, must be a dependency name, class name or an object',
-                    $listenerName
-                ));
+                throw DomainException::forInvalidListener($listenerName);
             }
 
             foreach ((array) $listenerConfig['events'] as $event) {
                 if (! method_exists($listener, $event)) {
-                    throw new DomainException(sprintf(
-                        'Invalid event listener "%s" given: must have a "%s" method',
-                        $listenerName,
-                        $event
-                    ));
+                    throw DomainException::forMissingMethodOnListener($listenerName, $event);
                 }
             }
 

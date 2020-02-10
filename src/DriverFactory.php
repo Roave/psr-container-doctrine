@@ -33,7 +33,7 @@ final class DriverFactory extends AbstractFactory
         $config = $this->retrieveConfig($container, $configKey, 'driver');
 
         if (! array_key_exists('class', $config)) {
-            throw new OutOfBoundsException('Missing "class" config key');
+            throw OutOfBoundsException::forMissingConfigKey('class');
         }
 
         if (! is_array($config['paths'])) {

@@ -37,7 +37,7 @@ final class CacheFactory extends AbstractFactory
         $config = $this->retrieveConfig($container, $configKey, 'cache');
 
         if (! array_key_exists('class', $config)) {
-            throw new OutOfBoundsException('Missing "class" config key');
+            throw OutOfBoundsException::forMissingConfigKey('class');
         }
 
         $instance = null;
@@ -148,8 +148,8 @@ final class CacheFactory extends AbstractFactory
                     'namespace' => 'psr-container-doctrine',
                     'providers' => [],
                 ];
+            default:
+                return [];
         }
-
-        return [];
     }
 }

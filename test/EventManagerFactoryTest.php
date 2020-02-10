@@ -16,7 +16,7 @@ use stdClass;
 use function array_pop;
 use function sprintf;
 
-class EventManagerFactoryTest extends TestCase
+final class EventManagerFactoryTest extends TestCase
 {
     public function testDefaults() : void
     {
