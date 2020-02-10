@@ -24,7 +24,6 @@ $ composer require roave/psr-container-doctrine
 In the general case where you are only using a single connection, it's enough to define the entity manager factory:
 
 ```php
-```php
 return [
     'dependencies' => [
         'factories' => [
@@ -37,7 +36,6 @@ return [
 If you want to add a second connection, or use another name than "orm_default", you can do so by using the static
 variants of the factories:
 
-```php
 ```php
 return [
     'dependencies' => [
