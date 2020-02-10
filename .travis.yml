@@ -25,7 +25,7 @@ install:
   - travis_retry composer update --no-interaction
 
 script:
-  - vendor/bin/phpunit
-  - if [[ $EXECUTE_CS_CHECK == 'true' ]]; then ./vendor/bin/phpcs ; fi
-  - if [[ $EXECUTE_STATIC_ANALYSIS_CHECK == 'true' ]]; then ./vendor/bin/psalm ; fi
-  - if [[ $EXECUTE_BC_CHECK == 'true' ]]; then wget -q wget https://github.com/Roave/BackwardCompatibilityCheck/releases/download/4.4.0/roave-backward-compatibility-check.phar ; php roave-backward-compatibility-check.phar ; fi
+  - make unit
+  - if [[ $EXECUTE_CS_CHECK == 'true' ]]; then make cs ; fi
+  - if [[ $EXECUTE_STATIC_ANALYSIS_CHECK == 'true' ]]; then make static-analysis ; fi
+  - if [[ $EXECUTE_BC_CHECK == 'true' ]]; then make bc-check ; fi
