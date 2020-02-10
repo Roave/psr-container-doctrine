@@ -86,6 +86,26 @@ final class DriverFactoryTest extends TestCase
         ];
     }
 
+    public function testMappingDriverChainIsCreatedWithNoDefaultDriverWhenDefaultDriverNotSpecified() : void
+    {
+        $container = $this->createContainerMockWithConfig(
+            [
+                'doctrine' => [
+                    'driver' => [
+                        'orm_default' => [
+                            'class' => MappingDriverChain::class,
+                        ],
+                    ],
+                ],
+            ],
+            1
+        );
+
+        $driver = (new DriverFactory())->__invoke($container);
+        self::assertInstanceOf(MappingDriverChain::class, $driver);
+        self::assertNull($driver->getDefaultDriver());
+    }
+
     public function testItSupportsSettingDefaultDriverUsingMappingDriverChain() : void
     {
         $container = $this->createContainerMockWithConfig(
