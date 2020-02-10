@@ -84,6 +84,7 @@ return [
                 'extension' => null,
                 'drivers' => [],
                 'global_basename' => null,
+                'default_driver' => null,
             ],
         ],
         'cache' => [

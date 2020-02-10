@@ -68,7 +68,7 @@ final class DriverFactory extends AbstractFactory
         }
 
         if ($driver instanceof MappingDriverChain) {
-            if (array_key_exists('default_driver', $config) && $config['default_driver'] !== null) {
+            if ($config['default_driver'] !== null) {
                 $driver->setDefaultDriver($this->createWithConfig($container, $config['default_driver']));
             }
 
@@ -93,6 +93,7 @@ final class DriverFactory extends AbstractFactory
             'paths' => [],
             'extension' => null,
             'drivers' => [],
+            'default_driver' => null,
         ];
     }
 
