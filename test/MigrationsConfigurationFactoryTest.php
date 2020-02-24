@@ -27,8 +27,13 @@ final class MigrationsConfigurationFactoryTest extends TestCase
 
     public function testConfigValues() : void
     {
-        $connection = $this->buildConnection();
-        $container  = $this->createStub(ContainerInterface::class);
+        $connection = $this->createStub(Connection::class);
+        $connection->method('getSchemaManager')
+            ->willReturn($this->createMock(AbstractSchemaManager::class));
+        $connection->method('getDatabasePlatform')
+            ->willReturn($this->createMock(AbstractPlatform::class));
+
+        $container = $this->createStub(ContainerInterface::class);
 
         $config = [
             'doctrine' => [
@@ -72,16 +77,5 @@ final class MigrationsConfigurationFactoryTest extends TestCase
         $this->assertSame(self::NS, $migrationsConfiguration->getMigrationsNamespace());
         $this->assertSame(self::TABLE, $migrationsConfiguration->getMigrationsTableName());
         $this->assertSame(self::COLUMN, $migrationsConfiguration->getMigrationsColumnName());
-    }
-
-    private function buildConnection() : Connection
-    {
-        $schemaManager = $this->createMock(AbstractSchemaManager::class);
-        $platform      = $this->createMock(AbstractPlatform::class);
-        $connection    = $this->createPartialMock(Connection::class, ['getSchemaManager', 'getDatabasePlatform']);
-        $connection->method('getSchemaManager')->willReturn($schemaManager);
-        $connection->method('getDatabasePlatform')->willReturn($platform);
-
-        return $connection;
     }
 }
