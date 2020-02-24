@@ -44,9 +44,9 @@ class MigrationsConfigurationFactory extends AbstractFactory
     protected function getDefaultConfig(string $configKey) : array
     {
         return [
-            'directory' => 'data/doctrine-orm/migrations',
+            'directory' => 'scripts/doctrine-orm-migrations',
             'name'      => 'Doctrine Database Migrations',
-            'namespace' => 'Doctrine\Migrations',
+            'namespace' => 'My\Migrations',
             'table'     => 'migrations',
             'column'    => 'version',
         ];

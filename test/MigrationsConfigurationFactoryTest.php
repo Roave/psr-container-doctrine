@@ -14,6 +14,12 @@ use Roave\PsrContainerDoctrine\MigrationsConfigurationFactory;
 
 final class MigrationsConfigurationFactoryTest extends TestCase
 {
+    private const DIRECTORY = 'test/TestAsset';
+    private const NAME      = 'Foo Bar';
+    private const NS        = 'Acme\Lib\Migrations';
+    private const TABLE     = 'baz';
+    private const COLUMN    = 'bat';
+
     public function testExtendsAbstractFactory() : void
     {
         $this->assertInstanceOf(AbstractFactory::class, new MigrationsConfigurationFactory());
@@ -22,55 +28,50 @@ final class MigrationsConfigurationFactoryTest extends TestCase
     public function testConfigValues() : void
     {
         $connection = $this->buildConnection();
-        $container  = $this->createMock(ContainerInterface::class);
+        $container  = $this->createStub(ContainerInterface::class);
 
         $config = [
             'doctrine' => [
                 'migrations_configuration' => [
                     'orm_default' => [
-                        'directory' => 'test/TestAsset',
-                        'name'      => 'Foo Bar',
-                        'namespace' => 'Acme\Lib\Migrations',
-                        'table'     => 'baz',
-                        'column'    => 'ver',
+                        'directory' => self::DIRECTORY,
+                        'name'      => self::NAME,
+                        'namespace' => self::NS,
+                        'table'     => self::TABLE,
+                        'column'    => self::COLUMN,
                     ],
                 ],
             ],
         ];
 
-        $container->expects($this->exactly(2))
-            ->method('has')
-            ->withConsecutive(['config'], ['doctrine.connection.orm_default'])
-            ->willReturnOnConsecutiveCalls(true, true);
+        $container->method('has')
+            ->will(
+                $this->returnValueMap(
+                    [
+                        ['config', true],
+                        ['doctrine.connection.orm_default', true],
+                    ]
+                )
+            );
 
-        $container->expects($this->exactly(2))
-            ->method('get')
-            ->withConsecutive(['config'], ['doctrine.connection.orm_default'])
-            ->willReturnOnConsecutiveCalls($config, $connection);
+        $container->method('get')
+            ->will(
+                $this->returnValueMap(
+                    [
+                        ['config', $config],
+                        ['doctrine.connection.orm_default', $connection],
+                    ]
+                )
+            );
 
         $migrationsConfiguration = (new MigrationsConfigurationFactory())($container);
 
         $this->assertSame($connection, $migrationsConfiguration->getConnection());
-        $this->assertSame(
-            $config['doctrine']['migrations_configuration']['orm_default']['directory'],
-            $migrationsConfiguration->getMigrationsDirectory()
-        );
-        $this->assertSame(
-            $config['doctrine']['migrations_configuration']['orm_default']['name'],
-            $migrationsConfiguration->getName()
-        );
-        $this->assertSame(
-            $config['doctrine']['migrations_configuration']['orm_default']['namespace'],
-            $migrationsConfiguration->getMigrationsNamespace()
-        );
-        $this->assertSame(
-            $config['doctrine']['migrations_configuration']['orm_default']['table'],
-            $migrationsConfiguration->getMigrationsTableName()
-        );
-        $this->assertSame(
-            $config['doctrine']['migrations_configuration']['orm_default']['column'],
-            $migrationsConfiguration->getMigrationsColumnName()
-        );
+        $this->assertSame(self::DIRECTORY, $migrationsConfiguration->getMigrationsDirectory());
+        $this->assertSame(self::NAME, $migrationsConfiguration->getName());
+        $this->assertSame(self::NS, $migrationsConfiguration->getMigrationsNamespace());
+        $this->assertSame(self::TABLE, $migrationsConfiguration->getMigrationsTableName());
+        $this->assertSame(self::COLUMN, $migrationsConfiguration->getMigrationsColumnName());
     }
 
     private function buildConnection() : Connection
