@@ -12,7 +12,7 @@ use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\AbstractFactory;
 use Roave\PsrContainerDoctrine\MigrationsConfigurationFactory;
 
-class MigrationsConfigurationFactoryTest extends TestCase
+final class MigrationsConfigurationFactoryTest extends TestCase
 {
     public function testExtendsAbstractFactory() : void
     {
