@@ -41,7 +41,7 @@ class MigrationsConfigurationFactory extends AbstractFactory
     /**
      * @inheritDoc
      */
-    protected function getDefaultConfig(string $configKey): array
+    protected function getDefaultConfig(string $configKey) : array
     {
         return [
             'directory' => 'data/doctrine-orm/migrations',

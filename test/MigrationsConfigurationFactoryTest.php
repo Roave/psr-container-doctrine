@@ -22,7 +22,7 @@ class MigrationsConfigurationFactoryTest extends TestCase
     public function testConfigValues() : void
     {
         $connection = $this->buildConnection();
-        $container = $this->createMock(ContainerInterface::class);
+        $container  = $this->createMock(ContainerInterface::class);
 
         $config = [
             'doctrine' => [
@@ -48,8 +48,7 @@ class MigrationsConfigurationFactoryTest extends TestCase
             ->withConsecutive(['config'], ['doctrine.connection.orm_default'])
             ->willReturnOnConsecutiveCalls($config, $connection);
 
-        $factory = new MigrationsConfigurationFactory();
-        $migrationsConfiguration = $factory($container);
+        $migrationsConfiguration = (new MigrationsConfigurationFactory())($container);
 
         $this->assertSame($connection, $migrationsConfiguration->getConnection());
         $this->assertSame(
@@ -74,11 +73,11 @@ class MigrationsConfigurationFactoryTest extends TestCase
         );
     }
 
-    private function buildConnection()
+    private function buildConnection(): Connection
     {
         $schemaManager = $this->createMock(AbstractSchemaManager::class);
-        $platform = $this->createMock(AbstractPlatform::class);
-        $connection = $this->createPartialMock(Connection::class, ['getSchemaManager', 'getDatabasePlatform']);
+        $platform      = $this->createMock(AbstractPlatform::class);
+        $connection    = $this->createPartialMock(Connection::class, ['getSchemaManager', 'getDatabasePlatform']);
         $connection->method('getSchemaManager')->willReturn($schemaManager);
         $connection->method('getDatabasePlatform')->willReturn($platform);
 
