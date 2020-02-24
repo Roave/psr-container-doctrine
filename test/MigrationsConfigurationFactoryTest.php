@@ -68,12 +68,12 @@ class MigrationsConfigurationFactoryTest extends TestCase
             $migrationsConfiguration->getMigrationsTableName()
         );
         $this->assertSame(
-            $config['doctrine']['migrations_configuration']['orm_default']['version'],
+            $config['doctrine']['migrations_configuration']['orm_default']['column'],
             $migrationsConfiguration->getMigrationsColumnName()
         );
     }
 
-    private function buildConnection(): Connection
+    private function buildConnection() : Connection
     {
         $schemaManager = $this->createMock(AbstractSchemaManager::class);
         $platform      = $this->createMock(AbstractPlatform::class);
