@@ -37,7 +37,7 @@ final class MigrationsConfigurationFactoryTest extends TestCase
 
         $config = [
             'doctrine' => [
-                'migrations_configuration' => [
+                'migrations' => [
                     'orm_default' => [
                         'directory' => self::DIRECTORY,
                         'name'      => self::NAME,

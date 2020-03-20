@@ -17,7 +17,7 @@ class MigrationsConfigurationFactory extends AbstractFactory
      */
     protected function createWithConfig(ContainerInterface $container, string $configKey)
     {
-        $migrationsConfig = $this->retrieveConfig($container, $configKey, 'migrations_configuration');
+        $migrationsConfig = $this->retrieveConfig($container, $configKey, 'migrations');
 
         $configuration = new Configuration(
             $this->retrieveDependency(

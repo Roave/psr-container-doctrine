@@ -46,6 +46,15 @@ return [
 ];
 ```
 
+You can also define an alias to retrieve an entity manager instance using `::class` capability:
+```php
+return [
+    'aliases' => [
+        'doctrine.entity_manager.orm_default' => Doctrine\ORM\EntityManagerInterface::class,
+    ],
+];
+```
+
 Each factory supplied by this package will by default look for a registered factory in the container. If it cannot find
 one, it will automatically pull its dependencies from on-the-fly created factories. This saves you the hassle of
 registering factories in your container which you may not need at all. Of course, you can always register those
@@ -56,6 +65,7 @@ factories when required. The following additional factories are available:
 - ```\Roave\PsrContainerDoctrine\ConfigurationFactory``` (doctrine.configuration.*)
 - ```\Roave\PsrContainerDoctrine\DriverFactory``` (doctrine.driver.*)
 - ```\Roave\PsrContainerDoctrine\EventManagerFactory``` (doctrine.event_manager.*)
+- ```\Roave\PsrContainerDoctrine\MigrationsConfigurationFactory``` (doctrine.migrations.*)
 
 Each of those factories supports the same static behavior as the entity manager factory. For container specific
 configurations, there are a few examples provided in the example directory:
