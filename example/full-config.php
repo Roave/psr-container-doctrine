@@ -148,5 +148,12 @@ return [
             ],
         ],
         'types' => [],
+        'migrations' => [
+            'directory' => 'scripts/orm/migrations',
+            'name' => 'My DB Migrations',
+            'namespace' => 'My\Migration',
+            'table' => 'migration',
+            'column' => 'version_timestamp',
+        ],
     ],
 ];
