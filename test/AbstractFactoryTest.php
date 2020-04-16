@@ -6,7 +6,7 @@ namespace RoaveTest\PsrContainerDoctrine;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
-use Roave\PsrContainerDoctrine\Exception\DomainException;
+use Roave\PsrContainerDoctrine\Exception\InvalidArgumentException;
 use RoaveTest\PsrContainerDoctrine\TestAsset\StubFactory;
 
 final class AbstractFactoryTest extends TestCase
@@ -33,7 +33,7 @@ final class AbstractFactoryTest extends TestCase
 
     public function testStaticCallWithoutContainer() : void
     {
-        $this->expectException(DomainException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The first argument must be of type Psr\Container\ContainerInterface');
         StubFactory::orm_other();
     }

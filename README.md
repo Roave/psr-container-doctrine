@@ -81,6 +81,23 @@ the values in there are the defaults, and don't have to be supplied when you are
 configuration as minimal as possible. A minimal configuration can be found in
 [example/minimal-config.php](example/minimal-config.php)
 
+## Migrations
+
+If you want to expose the migration commands, you have to map the command name to `MigrationsCommandFactory`.  This factory needs migrations config setup.
+For `ExecuteCommand` example:
+
+```php
+return [
+    'dependencies' => [
+        'factories' => [
+            \Doctrine\Migrations\Tools\Console\Command\ExecuteCommand::class => \Roave\PsrContainerDoctrine\MigrationsCommandFactory::class,
+        ],
+    ],
+];
+```
+
+You can find a full list of available commands in [example/full-config.php](example/full-config.php).
+
 ## Using the Doctrine CLI
 
 In order to be able to use the CLI tool of Doctrine, you need to set-up a ```cli-config.php``` file in your project

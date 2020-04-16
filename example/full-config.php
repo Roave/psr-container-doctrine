@@ -16,6 +16,7 @@ use Doctrine\Common\Cache\WinCacheCache;
 use Doctrine\Common\Cache\XcacheCache;
 use Doctrine\Common\Cache\ZendDataCache;
 use Doctrine\DBAL\Driver\PDOMySql\Driver;
+use Doctrine\Migrations\Tools\Console\Command;
 
 return [
     'doctrine' => [
@@ -154,6 +155,20 @@ return [
             'namespace' => 'My\Migration',
             'table' => 'migration',
             'column' => 'version_timestamp',
+        ],
+    ],
+    'dependencies' => [
+        'factories' => [
+            Command\DiffCommand::class => Roave\PsrContainerDoctrine\MigrationsCommandFactory::class,
+            Command\DumpSchemaCommand::class => Roave\PsrContainerDoctrine\MigrationsCommandFactory::class,
+            Command\ExecuteCommand::class => Roave\PsrContainerDoctrine\MigrationsCommandFactory::class,
+            Command\GenerateCommand::class => Roave\PsrContainerDoctrine\MigrationsCommandFactory::class,
+            Command\LatestCommand::class => Roave\PsrContainerDoctrine\MigrationsCommandFactory::class,
+            Command\MigrateCommand::class => Roave\PsrContainerDoctrine\MigrationsCommandFactory::class,
+            Command\RollupCommand::class => Roave\PsrContainerDoctrine\MigrationsCommandFactory::class,
+            Command\StatusCommand::class => Roave\PsrContainerDoctrine\MigrationsCommandFactory::class,
+            Command\UpToDateCommand::class => Roave\PsrContainerDoctrine\MigrationsCommandFactory::class,
+            Command\VersionCommand::class => Roave\PsrContainerDoctrine\MigrationsCommandFactory::class,
         ],
     ],
 ];

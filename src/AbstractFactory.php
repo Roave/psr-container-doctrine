@@ -44,12 +44,12 @@ abstract class AbstractFactory
      *
      * @return mixed
      *
-     * @throws Exception\DomainException
+     * @throws Exception\InvalidArgumentException
      */
     public static function __callStatic(string $name, array $arguments)
     {
         if (! array_key_exists(0, $arguments) || ! $arguments[0] instanceof ContainerInterface) {
-            throw new Exception\DomainException(sprintf(
+            throw new Exception\InvalidArgumentException(sprintf(
                 'The first argument must be of type %s',
                 ContainerInterface::class
             ));
