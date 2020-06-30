@@ -65,7 +65,7 @@ final class ContainerRepositoryFactory implements RepositoryFactory
         return $this->getOrCreateRepository($entityManager, $metadata);
     }
 
-    public function getOrCreateRepository(
+    private function getOrCreateRepository(
         EntityManagerInterface $entityManager,
         ClassMetadata $metadata
     ) : ObjectRepository {
