@@ -107,11 +107,9 @@ directory. That file is generally quite short, and should look something like th
 <?php
 $container = require 'config/container.php';
 
-return new \Symfony\Component\Console\Helper\HelperSet([
-    'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper(
-        $container->get('doctrine.entity_manager.orm_default')
-    ),
-]);
+return \Doctrine\ORM\Tools\Console\ConsoleRunner::createHelperSet(
+    $container->get('doctrine.entity_manager.orm_default')
+);
 ```
 
 After that, you can simply invoke ```php vendor/bin/doctrine```. It gets a little trickier when you have multiple entity
