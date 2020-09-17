@@ -112,8 +112,39 @@ return \Doctrine\ORM\Tools\Console\ConsoleRunner::createHelperSet(
 );
 ```
 
-After that, you can simply invoke ```php vendor/bin/doctrine```. It gets a little trickier when you have multiple entity
-managers. Doctrine itself has no way to handle that itself, so a possible way would be to have two separate directories
-with two unique ```cli-config.php``` files. You then invoke the doctrine CLI from each respective directory. Since the
-CLI is looking for the config file in the current working directory, it will then always use the one from the directory
-you are currently in.
+After that, you can simply invoke ```php vendor/bin/doctrine```.
+
+### Multiple connections
+
+It gets a little trickier when you have multiple entity managers. Doctrine itself has no way to handle that itself, so
+a possible way would be to have two separate directories with two unique ```cli-config.php``` files. You then invoke the
+doctrine CLI from each respective directory. Since the CLI is looking for the config file in the current working
+directory, it will then always use the one from the directory you are currently in.
+
+The following code can be used for multiple connections, but it got the drawback, that you won't see the `--em=...`
+option within the help section of each command.
+
+```php
+<?php
+$container = require 'config/container.php';
+
+$input = new \Symfony\Component\Console\Input\ArgvInput();
+
+/** @var string $em */
+$em = $input->getParameterOption('--em', 'orm_default');
+
+// hack to remove the --em option, cause it's not supported by the original ConsoleRunner.
+foreach ($_SERVER['argv'] as $i => $arg) {
+    if (0 === strpos($arg, '--em=')) {
+        unset($_SERVER['argv'][$i]);
+    }
+}
+
+try {
+    $entityManager = $this->container->get('doctrine.entity_manager.'.$em);
+} catch (\Psr\Container\NotFoundExceptionInterface $serviceNotFoundException) {
+    throw new \InvalidArgumentException(sprintf('Missing entity manager with name "%s"', $entityManagerName));
+}
+
+return \Doctrine\ORM\Tools\Console\ConsoleRunner::createHelperSet($entityManager);
+```
