@@ -33,13 +33,12 @@ class MigrationsCommandFactoryTest extends TestCase
 
         $migrationsConfiguration = new MigrationsConfiguration($connection);
 
-        $container->method('get')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        ['doctrine.migrations', $migrationsConfiguration],
-                    ]
-                )
+        $container->expects($this->once())
+            ->method('get')
+            ->willReturnMap(
+                [
+                    ['doctrine.migrations', $migrationsConfiguration],
+                ]
             );
 
         $factory = new MigrationsCommandFactory();
@@ -78,12 +77,10 @@ class MigrationsCommandFactoryTest extends TestCase
         $migrationsConfiguration = new MigrationsConfiguration($connection);
 
         $container->method('get')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        ['doctrine.migrations', $migrationsConfiguration],
-                    ]
-                )
+            ->willReturnMap(
+                [
+                    ['doctrine.migrations', $migrationsConfiguration],
+                ]
             );
 
         $factory = new MigrationsCommandFactory();

@@ -50,23 +50,19 @@ final class MigrationsConfigurationFactoryTest extends TestCase
         ];
 
         $container->method('has')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        ['config', true],
-                        ['doctrine.connection.orm_default', true],
-                    ]
-                )
+            ->willReturnMap(
+                [
+                    ['config', true],
+                    ['doctrine.connection.orm_default', true],
+                ]
             );
 
         $container->method('get')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        ['config', $config],
-                        ['doctrine.connection.orm_default', $connection],
-                    ]
-                )
+            ->willReturnMap(
+                [
+                    ['config', $config],
+                    ['doctrine.connection.orm_default', $connection],
+                ]
             );
 
         $migrationsConfiguration = (new MigrationsConfigurationFactory())($container);
