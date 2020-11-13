@@ -25,9 +25,9 @@
     },
     "require-dev": {
         "doctrine/coding-standard": "^7.0",
-        "phpunit/phpunit": "^8.5",
-        "psalm/plugin-phpunit": "^0.9.0",
-        "vimeo/psalm": "^3.8"
+        "phpunit/phpunit": "^9.3",
+        "psalm/plugin-phpunit": "^0.9",
+        "vimeo/psalm": "^3.18"
     },
     "autoload": {
         "psr-4": {
