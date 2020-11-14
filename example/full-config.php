@@ -158,9 +158,7 @@ return [
                     'executed_at_column_name' => 'executed_at',
                     'execution_time_column_name' => 'execution_time',
                 ],
-                'migrations_paths' => [
-                    'My\Migrations' => 'scripts/orm/migrations',
-                ],
+                'migrations_paths' => ['My\Migrations' => 'scripts/orm/migrations'],
                 'all_or_nothing' => true,
                 'check_database_platform' => true,
             ],
