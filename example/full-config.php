@@ -16,7 +16,12 @@ use Doctrine\Common\Cache\WinCacheCache;
 use Doctrine\Common\Cache\XcacheCache;
 use Doctrine\Common\Cache\ZendDataCache;
 use Doctrine\DBAL\Driver\PDOMySql\Driver;
+use Doctrine\Migrations\Configuration\Migration\ConfigurationLoader;
+use Doctrine\Migrations\DependencyFactory;
 use Doctrine\Migrations\Tools\Console\Command;
+use Roave\PsrContainerDoctrine\ConfigurationLoaderFactory;
+use Roave\PsrContainerDoctrine\Migrations\CommandFactory;
+use Roave\PsrContainerDoctrine\Migrations\DependencyFactoryFactory;
 
 return [
     'doctrine' => [
@@ -166,19 +171,22 @@ return [
     ],
     'dependencies' => [
         'factories' => [
-            Command\CurrentCommand::class => Roave\PsrContainerDoctrine\MigrationsCommandFactory::class,
-            Command\DiffCommand::class => Roave\PsrContainerDoctrine\MigrationsCommandFactory::class,
-            Command\DumpSchemaCommand::class => Roave\PsrContainerDoctrine\MigrationsCommandFactory::class,
-            Command\ExecuteCommand::class => Roave\PsrContainerDoctrine\MigrationsCommandFactory::class,
-            Command\GenerateCommand::class => Roave\PsrContainerDoctrine\MigrationsCommandFactory::class,
-            Command\LatestCommand::class => Roave\PsrContainerDoctrine\MigrationsCommandFactory::class,
-            Command\ListCommand::class => Roave\PsrContainerDoctrine\MigrationsCommandFactory::class,
-            Command\MigrateCommand::class => Roave\PsrContainerDoctrine\MigrationsCommandFactory::class,
-            Command\RollupCommand::class => Roave\PsrContainerDoctrine\MigrationsCommandFactory::class,
-            Command\SyncMetadataCommand::class => Roave\PsrContainerDoctrine\MigrationsCommandFactory::class,
-            Command\StatusCommand::class => Roave\PsrContainerDoctrine\MigrationsCommandFactory::class,
-            Command\UpToDateCommand::class => Roave\PsrContainerDoctrine\MigrationsCommandFactory::class,
-            Command\VersionCommand::class => Roave\PsrContainerDoctrine\MigrationsCommandFactory::class,
+            Command\CurrentCommand::class => CommandFactory::class,
+            Command\DiffCommand::class => CommandFactory::class,
+            Command\DumpSchemaCommand::class => CommandFactory::class,
+            Command\ExecuteCommand::class => CommandFactory::class,
+            Command\GenerateCommand::class => CommandFactory::class,
+            Command\LatestCommand::class => CommandFactory::class,
+            Command\ListCommand::class => CommandFactory::class,
+            Command\MigrateCommand::class => CommandFactory::class,
+            Command\RollupCommand::class => CommandFactory::class,
+            Command\SyncMetadataCommand::class => CommandFactory::class,
+            Command\StatusCommand::class => CommandFactory::class,
+            Command\UpToDateCommand::class => CommandFactory::class,
+            Command\VersionCommand::class => CommandFactory::class,
+
+            DependencyFactory::class => DependencyFactoryFactory::class,
+            ConfigurationLoader::class => ConfigurationLoaderFactory::class,
         ],
     ],
 ];

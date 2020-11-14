@@ -12,10 +12,10 @@ use Doctrine\Migrations\Tools\Console\Command;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
+use Roave\PsrContainerDoctrine\CommandFactory;
 use Roave\PsrContainerDoctrine\Exception\InvalidArgumentException;
-use Roave\PsrContainerDoctrine\MigrationsCommandFactory;
 
-class MigrationsCommandFactoryTest extends TestCase
+class CommandFactoryTest extends TestCase
 {
     /**
      * @dataProvider commandClassProvider
@@ -41,7 +41,7 @@ class MigrationsCommandFactoryTest extends TestCase
                 ]
             );
 
-        $factory = new MigrationsCommandFactory();
+        $factory = new CommandFactory();
         $this->assertInstanceOf($commandClass, $factory($container, $commandClass));
     }
 
@@ -83,7 +83,7 @@ class MigrationsCommandFactoryTest extends TestCase
                 ]
             );
 
-        $factory = new MigrationsCommandFactory();
+        $factory = new CommandFactory();
         $this->expectException(InvalidArgumentException::class);
         $factory($container, ConsoleRunner::class);
     }

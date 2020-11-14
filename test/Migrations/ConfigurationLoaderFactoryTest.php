@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace RoaveTest\PsrContainerDoctrine;
+namespace RoaveTest\PsrContainerDoctrine\Migrations;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
@@ -10,9 +10,9 @@ use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\AbstractFactory;
-use Roave\PsrContainerDoctrine\MigrationsConfigurationFactory;
+use Roave\PsrContainerDoctrine\ConfigurationLoaderFactory;
 
-final class MigrationsConfigurationFactoryTest extends TestCase
+final class ConfigurationLoaderFactoryTest extends TestCase
 {
     private const DIRECTORY = 'test/TestAsset';
     private const NAME      = 'Foo Bar';
@@ -22,7 +22,7 @@ final class MigrationsConfigurationFactoryTest extends TestCase
 
     public function testExtendsAbstractFactory() : void
     {
-        $this->assertInstanceOf(AbstractFactory::class, new MigrationsConfigurationFactory());
+        $this->assertInstanceOf(AbstractFactory::class, new ConfigurationLoaderFactory());
     }
 
     public function testConfigValues() : void
@@ -65,7 +65,7 @@ final class MigrationsConfigurationFactoryTest extends TestCase
                 ]
             );
 
-        $migrationsConfiguration = (new MigrationsConfigurationFactory())($container);
+        $migrationsConfiguration = (new ConfigurationLoaderFactory())($container);
 
         $this->assertSame($connection, $migrationsConfiguration->getConnection());
         $this->assertSame(self::DIRECTORY, $migrationsConfiguration->getMigrationsDirectory());
