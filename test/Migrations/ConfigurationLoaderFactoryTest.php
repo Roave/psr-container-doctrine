@@ -7,18 +7,23 @@ namespace RoaveTest\PsrContainerDoctrine\Migrations;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
+use Doctrine\Migrations\Configuration\Migration\ConfigurationArray;
+use Doctrine\Migrations\Metadata\Storage\TableMetadataStorageConfiguration;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\AbstractFactory;
-use Roave\PsrContainerDoctrine\ConfigurationLoaderFactory;
+use Roave\PsrContainerDoctrine\Migrations\ConfigurationLoaderFactory;
+use function assert;
 
 final class ConfigurationLoaderFactoryTest extends TestCase
 {
-    private const DIRECTORY = 'test/TestAsset';
-    private const NAME      = 'Foo Bar';
-    private const NS        = 'Acme\Lib\Migrations';
-    private const TABLE     = 'baz';
-    private const COLUMN    = 'bat';
+    private const DIRECTORY      = 'test/TestAsset';
+    private const NS             = 'Acme\Lib\Migrations';
+    private const TABLE          = 'migrations_performed';
+    private const COLUMN         = 'version';
+    private const ALL_OR_NOTHING = true;
+    private const CHECK_PLATFORM = true;
+    private const COLUMN_LENGTH  = 42;
 
     public function testExtendsAbstractFactory() : void
     {
@@ -39,11 +44,16 @@ final class ConfigurationLoaderFactoryTest extends TestCase
             'doctrine' => [
                 'migrations' => [
                     'orm_default' => [
-                        'directory' => self::DIRECTORY,
-                        'name'      => self::NAME,
-                        'namespace' => self::NS,
-                        'table'     => self::TABLE,
-                        'column'    => self::COLUMN,
+                        'table_storage' => [
+                            'table_name' => self::TABLE,
+                            'version_column_name' => self::COLUMN,
+                            'version_column_length' => self::COLUMN_LENGTH,
+                            'executed_at_column_name' => 'executed_at',
+                            'execution_time_column_name' => 'execution_time',
+                        ],
+                        'migrations_paths' => [self::NS => self::DIRECTORY],
+                        'all_or_nothing' => self::ALL_OR_NOTHING,
+                        'check_database_platform' => self::CHECK_PLATFORM,
                     ],
                 ],
             ],
@@ -66,12 +76,16 @@ final class ConfigurationLoaderFactoryTest extends TestCase
             );
 
         $migrationsConfiguration = (new ConfigurationLoaderFactory())($container);
+        $this->assertInstanceOf(ConfigurationArray::class, $migrationsConfiguration);
+        $configuration = $migrationsConfiguration->getConfiguration();
 
-        $this->assertSame($connection, $migrationsConfiguration->getConnection());
-        $this->assertSame(self::DIRECTORY, $migrationsConfiguration->getMigrationsDirectory());
-        $this->assertSame(self::NAME, $migrationsConfiguration->getName());
-        $this->assertSame(self::NS, $migrationsConfiguration->getMigrationsNamespace());
-        $this->assertSame(self::TABLE, $migrationsConfiguration->getMigrationsTableName());
-        $this->assertSame(self::COLUMN, $migrationsConfiguration->getMigrationsColumnName());
+        $this->assertSame(self::ALL_OR_NOTHING, $configuration->isAllOrNothing());
+        $this->assertSame(self::CHECK_PLATFORM, $configuration->isDatabasePlatformChecked());
+        $storageConfiguration = $configuration->getMetadataStorageConfiguration();
+        assert($storageConfiguration instanceof TableMetadataStorageConfiguration);
+        $this->assertInstanceOf(TableMetadataStorageConfiguration::class, $storageConfiguration);
+        $this->assertSame(self::TABLE, $storageConfiguration->getTableName());
+        $this->assertSame(self::COLUMN, $storageConfiguration->getVersionColumnName());
+        $this->assertSame(self::COLUMN_LENGTH, $storageConfiguration->getVersionColumnLength());
     }
 }

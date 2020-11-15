@@ -2,13 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Roave\PsrContainerDoctrine;
+namespace Roave\PsrContainerDoctrine\Migrations;
 
 use Doctrine\Migrations\Configuration\Migration\ConfigurationArray;
+use Doctrine\Migrations\Configuration\Migration\ConfigurationLoader;
 use Psr\Container\ContainerInterface;
+use Roave\PsrContainerDoctrine\AbstractFactory;
 
 /**
- * @method ConfigurationArray __invoke(ContainerInterface $container)
+ * @method ConfigurationLoader __invoke(ContainerInterface $container)
  */
 class ConfigurationLoaderFactory extends AbstractFactory
 {
