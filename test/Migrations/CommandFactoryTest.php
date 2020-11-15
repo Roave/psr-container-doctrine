@@ -4,16 +4,15 @@ declare(strict_types=1);
 
 namespace RoaveTest\PsrContainerDoctrine;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Schema\AbstractSchemaManager;
-use Doctrine\Migrations\Configuration\Configuration as MigrationsConfiguration;
+use Doctrine\Migrations\Configuration\Migration\ConfigurationLoader;
+use Doctrine\Migrations\DependencyFactory;
 use Doctrine\Migrations\Tools\Console\Command;
-use Doctrine\ORM\Tools\Console\ConsoleRunner;
+use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
-use Roave\PsrContainerDoctrine\CommandFactory;
-use Roave\PsrContainerDoctrine\Exception\InvalidArgumentException;
+use Roave\PsrContainerDoctrine\Exception\DomainException;
+use Roave\PsrContainerDoctrine\Migrations\CommandFactory;
+use stdClass;
 
 class CommandFactoryTest extends TestCase
 {
@@ -21,23 +20,48 @@ class CommandFactoryTest extends TestCase
      * @dataProvider commandClassProvider
      * @psalm-param class-string $commandClass
      */
-    public function testFactoryReturnsCommand(string $commandClass) : void
+    public function testReturnsCommandWhenContainerHasDependencyFactory(string $commandClass) : void
     {
-        $connection = $this->createStub(Connection::class);
-        $connection->method('getSchemaManager')
-            ->willReturn($this->createMock(AbstractSchemaManager::class));
-        $connection->method('getDatabasePlatform')
-            ->willReturn($this->createMock(AbstractPlatform::class));
-
         $container = $this->createMock(ContainerInterface::class);
-
-        $migrationsConfiguration = new MigrationsConfiguration($connection);
-
+        $container->expects($this->once())
+            ->method('has')
+            ->willReturnMap(
+                [
+                    [DependencyFactory::class, true],
+                ]
+            );
         $container->expects($this->once())
             ->method('get')
             ->willReturnMap(
                 [
-                    ['doctrine.migrations', $migrationsConfiguration],
+                    [DependencyFactory::class, $this->createMock(DependencyFactory::class)],
+                ]
+            );
+
+        $factory = new CommandFactory();
+        $this->assertInstanceOf($commandClass, $factory($container, $commandClass));
+    }
+
+    /**
+     * @dataProvider commandClassProvider
+     * @psalm-param class-string $commandClass
+     */
+    public function testReturnsCommandWhenContainerHasNoDependencyFactory(string $commandClass) : void
+    {
+        $container = $this->createMock(ContainerInterface::class);
+        $container->method('has')
+            ->willReturnMap(
+                [
+                    [DependencyFactory::class, false],
+                    ['doctrine.entity_manager.orm_default', true],
+                ]
+            );
+        $container->method('get')
+            ->willReturnMap(
+                [
+                    [DependencyFactory::class, $this->createMock(DependencyFactory::class)],
+                    [ConfigurationLoader::class, $this->createMock(ConfigurationLoader::class)],
+                    ['doctrine.entity_manager.orm_default', $this->createMock(EntityManagerInterface::class)],
                 ]
             );
 
@@ -51,40 +75,27 @@ class CommandFactoryTest extends TestCase
     public function commandClassProvider() : array
     {
         return [
+            [Command\CurrentCommand::class],
             [Command\DiffCommand::class],
             [Command\DumpSchemaCommand::class],
             [Command\ExecuteCommand::class],
             [Command\GenerateCommand::class],
             [Command\LatestCommand::class],
+            [Command\ListCommand::class],
             [Command\MigrateCommand::class],
             [Command\RollupCommand::class],
             [Command\StatusCommand::class],
+            [Command\SyncMetadataCommand::class],
             [Command\UpToDateCommand::class],
             [Command\VersionCommand::class],
         ];
     }
 
-    public function testFactoryWithInvalidCommand() : void
+    public function testFactoryThrowsForInvalidCommand() : void
     {
-        $connection = $this->createStub(Connection::class);
-        $connection->method('getSchemaManager')
-            ->willReturn($this->createMock(AbstractSchemaManager::class));
-        $connection->method('getDatabasePlatform')
-            ->willReturn($this->createMock(AbstractPlatform::class));
-
         $container = $this->createMock(ContainerInterface::class);
-
-        $migrationsConfiguration = new MigrationsConfiguration($connection);
-
-        $container->method('get')
-            ->willReturnMap(
-                [
-                    ['doctrine.migrations', $migrationsConfiguration],
-                ]
-            );
-
-        $factory = new CommandFactory();
-        $this->expectException(InvalidArgumentException::class);
-        $factory($container, ConsoleRunner::class);
+        $factory   = new CommandFactory();
+        $this->expectException(DomainException::class);
+        $factory($container, stdClass::class);
     }
 }

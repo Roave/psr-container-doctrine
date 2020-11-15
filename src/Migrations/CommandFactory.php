@@ -4,27 +4,29 @@ declare(strict_types=1);
 
 namespace Roave\PsrContainerDoctrine\Migrations;
 
-use Doctrine\Migrations\Configuration\Migration\ConfigurationLoader;
 use Doctrine\Migrations\DependencyFactory;
 use Doctrine\Migrations\Tools\Console\Command\DoctrineCommand;
 use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\AbstractFactory;
+use Roave\PsrContainerDoctrine\Exception\DomainException;
+use function is_a;
 
 class CommandFactory extends AbstractFactory
 {
-    /**
-     * @psalm-var class-string<DoctrineCommand>
-     */
+    /** @psalm-var class-string<DoctrineCommand>|'' */
     private $requestedName;
 
     /**
-     * @psalm-param class-string<DoctrineCommand> $requestedName
+     * @psalm-param class-string<DoctrineCommand>|'' $requestedName
      */
-    public function __invoke(ContainerInterface $container, ?string $requestedName = null) : DoctrineCommand
+    public function __invoke(ContainerInterface $container, string $requestedName = '') : DoctrineCommand
     {
+        if (! is_a($requestedName, DoctrineCommand::class, true)) {
+            throw DomainException::forInvalidMigrationsCommand($requestedName);
+        }
+
         $this->requestedName = $requestedName;
 
-        // Let the parent trigger createWithConfig with $configKey
         return parent::__invoke($container);
     }
 
@@ -36,13 +38,7 @@ class CommandFactory extends AbstractFactory
             $dependencyFactory = (new DependencyFactoryFactory($configKey))($container);
         }
 
-        if ($container->has(ConfigurationLoader::class)) {
-            $configurationLoader = $container->get(ConfigurationLoader::class);
-        } else {
-            $configurationLoader = (new DependencyFactoryFactory($configKey))($container);
-        }
-
-        return new $this->requestedName($dependencyFactory, $configurationLoader);
+        return new $this->requestedName($dependencyFactory);
     }
 
     /**
