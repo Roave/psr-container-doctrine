@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace RoaveTest\PsrContainerDoctrine\Migrations;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\Migrations\Configuration\Migration\ConfigurationArray;
 use Doctrine\Migrations\Metadata\Storage\TableMetadataStorageConfiguration;
 use PHPUnit\Framework\TestCase;
@@ -32,12 +29,6 @@ final class ConfigurationLoaderFactoryTest extends TestCase
 
     public function testConfigValues() : void
     {
-        $connection = $this->createStub(Connection::class);
-        $connection->method('getSchemaManager')
-            ->willReturn($this->createMock(AbstractSchemaManager::class));
-        $connection->method('getDatabasePlatform')
-            ->willReturn($this->createMock(AbstractPlatform::class));
-
         $container = $this->createStub(ContainerInterface::class);
 
         $config = [
@@ -63,7 +54,6 @@ final class ConfigurationLoaderFactoryTest extends TestCase
             ->willReturnMap(
                 [
                     ['config', true],
-                    ['doctrine.connection.orm_default', true],
                 ]
             );
 
@@ -71,7 +61,6 @@ final class ConfigurationLoaderFactoryTest extends TestCase
             ->willReturnMap(
                 [
                     ['config', $config],
-                    ['doctrine.connection.orm_default', $connection],
                 ]
             );
 
