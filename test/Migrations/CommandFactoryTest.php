@@ -14,7 +14,7 @@ use Roave\PsrContainerDoctrine\Exception\DomainException;
 use Roave\PsrContainerDoctrine\Migrations\CommandFactory;
 use stdClass;
 
-class CommandFactoryTest extends TestCase
+final class CommandFactoryTest extends TestCase
 {
     /**
      * @dataProvider commandClassProvider
