@@ -148,3 +148,55 @@ try {
 
 return \Doctrine\ORM\Tools\Console\ConsoleRunner::createHelperSet($entityManager);
 ```
+
+
+## Get repository in the container.
+
+If you want get repository in the container. You can use `ContainerRepositoryFactory`:
+
+
+```php
+// config.php
+use Roave\PsrContainerDoctrine\Repository\ContainerRepositoryFactory;
+
+return  [
+    'doctrine' => [
+        'configuration' => [
+            'orm_default' => [
+                // ...
+                'repository_factory' => ContainerRepositoryFactory::class,
+            ],
+        ],
+    ],
+    'dependencies' => [
+        'factories' => [
+            // Add it by Laminas's ReflectionBasedAbstractFactory or custom callback.
+            // ContainerRepositoryFactory::class => ReflectionBasedAbstractFactory::class,
+            ContainerRepositoryFactory::class => function ($container) {
+                return new ContainerRepositoryFactory($container);
+            },
+
+            // Add custom repository factory.
+            FooRespository::class => FooRespositoryFactory::class,
+        ],
+    ],
+];
+```
+
+```php
+use Roave\PsrContainerDoctrine\Repository\ContainerRepositoryFactory;
+
+$container = require 'config/container.php';
+
+$em = $container->get('doctrine.entity_manager.orm_default');
+$respository = $em->getRepository(FooEntity::class);
+
+/** @var ContainerRepositoryFactory $respositoryFactory */
+$respositoryFactory = $container->get(ContainerRepositoryFactory::class);
+$respository2 = $respositoryFactory->getRepository($em, FooEntity::class);
+
+$respository3 = $container->get(FooRepository::class);
+
+var_dump($respository === $respository2); // true
+var_dump($respository === $respository3); // true
+```
