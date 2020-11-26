@@ -18,7 +18,7 @@ matrix:
         - EXECUTE_BC_CHECK=true
 
 before_install:
-  - composer self-update
+  - composer self-update --1
   - echo "extension=memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 install:
