@@ -105,7 +105,7 @@ final class ConfigurationFactory extends AbstractFactory
 
         if (is_string($config['schema_assets_filter'])) {
             $configuration->setSchemaAssetsFilter($container->get($config['schema_assets_filter']));
-        } elseif (is_callable($config['schema_assets_filter'])) {
+        } elseif ($config['schema_assets_filter'] !== null) {
             $configuration->setSchemaAssetsFilter($config['schema_assets_filter']);
         }
 
