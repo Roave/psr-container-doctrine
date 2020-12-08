@@ -63,6 +63,7 @@ return [
                     'app.foo.middleware', // Will be looked up in the container.
                     'app.bar.middleware', // Will be looked up in the container.
                 ],
+                'schema_assets_filter' => null,
             ],
         ],
         'connection' => [
