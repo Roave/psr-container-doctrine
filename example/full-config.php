@@ -52,6 +52,7 @@ return [
                     'regions' => [],
                 ],
                 'sql_logger' => null,
+                'schema_assets_filter' => null,
             ],
         ],
         'connection' => [
