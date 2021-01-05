@@ -54,7 +54,14 @@ final class DriverFactory extends AbstractFactory
         }
 
         if ($config['extension'] !== null && is_subclass_of($config['class'], FileDriver::class)) {
-            /** @psalm-suppress UndefinedClass */
+            /**
+             * @psalm-suppress UndefinedClass
+             */
+
+            /**
+             * @var  class-string<ObjectRepository> $config['class']
+             * @psalm-suppress NoInterfaceProperties
+             */
             $driver = new $config['class']($config['paths'], $config['extension']);
         }
 

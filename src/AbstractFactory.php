@@ -8,7 +8,10 @@ use Psr\Container\ContainerInterface;
 use function array_key_exists;
 use function sprintf;
 
-/** @internal */
+/**
+ * @internal
+ * @psalm-consistent-constructor
+ */
 abstract class AbstractFactory
 {
     /** @var string */

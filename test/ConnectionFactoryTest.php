@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace RoaveTest\PsrContainerDoctrine;
 
 use Doctrine\Common\EventManager;
-use Doctrine\DBAL\Driver\PDOMySql\Driver as PDOMySQLDriver;
-use Doctrine\DBAL\Driver\PDOSqlite\Driver as PDOSqliteDriver;
+use Doctrine\DBAL\Driver\PDO\MySQL\Driver as PDOMySQLDriver;
+use Doctrine\DBAL\Driver\PDO\SQLite\Driver as PDOSqliteDriver;
 use Doctrine\DBAL\Exception\ConnectionException;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\BooleanType;
@@ -65,7 +65,8 @@ final class ConnectionFactoryTest extends TestCase
         // connection without a username and password. Since that can't work, we just verify that we get an exception
         // with the right backtrace, and test the other defaults with a pure memory-database later.
         try {
-            $factory($container);
+            $connection = $factory($container);
+            $connection->ping();
         } catch (ConnectionException $e) {
             foreach ($e->getTrace() as $entry) {
                 if ($entry['class'] === PDOMySQLDriver::class) {
