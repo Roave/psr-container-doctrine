@@ -15,7 +15,7 @@ abstract class AbstractFactory
     private $configKey;
 
     /** @internal */
-    public function __construct(string $configKey = 'orm_default')
+    final public function __construct(string $configKey = 'orm_default')
     {
         $this->configKey = $configKey;
     }
