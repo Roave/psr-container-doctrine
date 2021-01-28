@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace RoaveTest\PsrContainerDoctrine;
 
 use Doctrine\Common\EventManager;
+use Doctrine\DBAL\Driver\AbstractMySQLDriver;
 use Doctrine\DBAL\Driver\PDO\MySQL\Driver as PDOMySQLDriver;
 use Doctrine\DBAL\Driver\PDO\SQLite\Driver as PDOSqliteDriver;
 use Doctrine\DBAL\Exception\ConnectionException;
@@ -68,7 +69,7 @@ final class ConnectionFactoryTest extends TestCase
             $factory($container);
         } catch (ConnectionException $e) {
             foreach ($e->getTrace() as $entry) {
-                if ($entry['class'] === PDOMySQLDriver::class) {
+                if ($entry['class'] === PDOMySQLDriver::class || $entry['class'] === AbstractMySQLDriver::class) {
                     /** @psalm-suppress InternalMethod @todo find a better way to add to assertion count... */
                     $this->addToAssertionCount(1);
 
@@ -91,6 +92,7 @@ final class ConnectionFactoryTest extends TestCase
 
         $this->assertSame($this->configuration, $connection->getConfiguration());
         $this->assertSame($this->eventManger, $connection->getEventManager());
+        /** @psalm-suppress InternalMethod */
         $this->assertSame([
             'driverClass' => PDOSqliteDriver::class,
             'wrapperClass' => null,
@@ -126,6 +128,7 @@ final class ConnectionFactoryTest extends TestCase
             'params' => ['username' => 'foo'],
         ]));
 
+        /** @psalm-suppress InternalMethod */
         $this->assertSame([
             'username' => 'foo',
             'driverClass' => PDOSqliteDriver::class,
