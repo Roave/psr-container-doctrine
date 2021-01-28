@@ -71,8 +71,8 @@ final class ConfigurationLoaderFactoryTest extends TestCase
         $this->assertSame(self::ALL_OR_NOTHING, $configuration->isAllOrNothing());
         $this->assertSame(self::CHECK_PLATFORM, $configuration->isDatabasePlatformChecked());
         $storageConfiguration = $configuration->getMetadataStorageConfiguration();
+        $this->assertNotNull($storageConfiguration);
         assert($storageConfiguration instanceof TableMetadataStorageConfiguration);
-        $this->assertInstanceOf(TableMetadataStorageConfiguration::class, $storageConfiguration);
         $this->assertSame(self::TABLE, $storageConfiguration->getTableName());
         $this->assertSame(self::COLUMN, $storageConfiguration->getVersionColumnName());
         $this->assertSame(self::COLUMN_LENGTH, $storageConfiguration->getVersionColumnLength());

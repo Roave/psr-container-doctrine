@@ -14,7 +14,7 @@ use function is_a;
 class CommandFactory extends AbstractFactory
 {
     /** @psalm-var class-string<DoctrineCommand>|'' */
-    private $requestedName;
+    private $requestedName = '';
 
     /**
      * @psalm-param class-string<DoctrineCommand>|'' $requestedName
@@ -38,6 +38,7 @@ class CommandFactory extends AbstractFactory
             $dependencyFactory = (new DependencyFactoryFactory($configKey))($container);
         }
 
+        assert($this->requestedName !== '');
         return new $this->requestedName($dependencyFactory);
     }
 

@@ -39,6 +39,7 @@ final class CommandFactoryTest extends TestCase
             );
 
         $factory = new CommandFactory();
+        /** @psalm-suppress ArgumentTypeCoercion */
         $this->assertInstanceOf($commandClass, $factory($container, $commandClass));
     }
 
@@ -66,6 +67,7 @@ final class CommandFactoryTest extends TestCase
             );
 
         $factory = new CommandFactory();
+        /** @psalm-suppress ArgumentTypeCoercion */
         $this->assertInstanceOf($commandClass, $factory($container, $commandClass));
     }
 
@@ -96,6 +98,7 @@ final class CommandFactoryTest extends TestCase
         $container = $this->createMock(ContainerInterface::class);
         $factory   = new CommandFactory();
         $this->expectException(DomainException::class);
+        /** @psalm-suppress InvalidArgument */
         $factory($container, stdClass::class);
     }
 }
