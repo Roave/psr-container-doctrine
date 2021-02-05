@@ -11,8 +11,7 @@ use function sprintf;
 /** @internal */
 abstract class AbstractFactory
 {
-    /** @var string */
-    private $configKey;
+    private string $configKey;
 
     /** @internal */
     final public function __construct(string $configKey = 'orm_default')

@@ -16,8 +16,7 @@ use function is_string;
  */
 final class ConnectionFactory extends AbstractFactory
 {
-    /** @var bool */
-    private static $areTypesRegistered = false;
+    private static bool $areTypesRegistered = false;
 
     /**
      * {@inheritdoc}

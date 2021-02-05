@@ -22,14 +22,11 @@ use function sprintf;
 
 final class ConnectionFactoryTest extends TestCase
 {
-    /** @var Configuration */
-    private $configuration;
+    private Configuration $configuration;
 
-    /** @var EventManager */
-    private $eventManger;
+    private EventManager $eventManger;
 
-    /** @var AbstractPlatform */
-    private $customPlatform;
+    private AbstractPlatform $customPlatform;
 
     public function setUp() : void
     {

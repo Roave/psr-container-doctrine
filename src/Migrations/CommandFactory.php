@@ -9,12 +9,13 @@ use Doctrine\Migrations\Tools\Console\Command\DoctrineCommand;
 use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\AbstractFactory;
 use Roave\PsrContainerDoctrine\Exception\DomainException;
+use function assert;
 use function is_a;
 
 class CommandFactory extends AbstractFactory
 {
     /** @psalm-var class-string<DoctrineCommand>|'' */
-    private $requestedName = '';
+    private string $requestedName = '';
 
     /**
      * @psalm-param class-string<DoctrineCommand>|'' $requestedName
@@ -39,6 +40,7 @@ class CommandFactory extends AbstractFactory
         }
 
         assert($this->requestedName !== '');
+
         return new $this->requestedName($dependencyFactory);
     }
 
