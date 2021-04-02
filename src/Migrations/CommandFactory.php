@@ -9,6 +9,7 @@ use Doctrine\Migrations\Tools\Console\Command\DoctrineCommand;
 use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\AbstractFactory;
 use Roave\PsrContainerDoctrine\Exception\DomainException;
+
 use function assert;
 use function is_a;
 
@@ -20,7 +21,7 @@ class CommandFactory extends AbstractFactory
     /**
      * @psalm-param class-string<DoctrineCommand>|'' $requestedName
      */
-    public function __invoke(ContainerInterface $container, string $requestedName = '') : DoctrineCommand
+    public function __invoke(ContainerInterface $container, string $requestedName = ''): DoctrineCommand
     {
         if (! is_a($requestedName, DoctrineCommand::class, true)) {
             throw DomainException::forInvalidMigrationsCommand($requestedName);
@@ -31,7 +32,7 @@ class CommandFactory extends AbstractFactory
         return parent::__invoke($container);
     }
 
-    protected function createWithConfig(ContainerInterface $container, string $configKey) : DoctrineCommand
+    protected function createWithConfig(ContainerInterface $container, string $configKey): DoctrineCommand
     {
         if ($container->has(DependencyFactory::class)) {
             $dependencyFactory = $container->get(DependencyFactory::class);
@@ -47,7 +48,7 @@ class CommandFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    protected function getDefaultConfig(string $configKey) : array
+    protected function getDefaultConfig(string $configKey): array
     {
         return [];
     }

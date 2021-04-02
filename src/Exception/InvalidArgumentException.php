@@ -12,7 +12,7 @@ final class InvalidArgumentException extends \InvalidArgumentException implement
     /**
      * @param mixed $listenerConfig
      */
-    public static function forInvalidEventListenerConfig($listenerConfig) : self
+    public static function forInvalidEventListenerConfig($listenerConfig): self
     {
         return new self(
             sprintf(

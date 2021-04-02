@@ -12,7 +12,7 @@ class StubFileDriver extends FileDriver
     /**
      * {@inheritdoc}
      */
-    protected function loadMappingFile($file) : array
+    protected function loadMappingFile($file): array
     {
         return [];
     }
@@ -20,7 +20,7 @@ class StubFileDriver extends FileDriver
     /**
      * @param string|class-string $className
      */
-    public function loadMetadataForClass($className, ClassMetadata $metadata) : void
+    public function loadMetadataForClass(string $className, ClassMetadata $metadata): void
     {
     }
 }

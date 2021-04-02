@@ -14,7 +14,7 @@ use Roave\PsrContainerDoctrine\Exception\OutOfBoundsException;
 
 final class DriverFactoryTest extends TestCase
 {
-    public function testMissingClassKeyWillReturnOutOfBoundException() : void
+    public function testMissingClassKeyWillReturnOutOfBoundException(): void
     {
         $container = $this->createMock(ContainerInterface::class);
         $factory   = new DriverFactory();
@@ -25,7 +25,7 @@ final class DriverFactoryTest extends TestCase
         $factory($container);
     }
 
-    public function testItSupportsGlobalBasenameOptionOnFileDrivers() : void
+    public function testItSupportsGlobalBasenameOptionOnFileDrivers(): void
     {
         $globalBasename = 'foobar';
 
@@ -51,7 +51,7 @@ final class DriverFactoryTest extends TestCase
      * @psalm-param class-string<FileDriver> $driverClass
      * @dataProvider simplifiedDriverClassProvider
      */
-    public function testItSupportsSettingExtensionInDriversUsingSymfonyFileLocator(string $driverClass) : void
+    public function testItSupportsSettingExtensionInDriversUsingSymfonyFileLocator(string $driverClass): void
     {
         $extension = '.foo.bar';
 
@@ -78,7 +78,7 @@ final class DriverFactoryTest extends TestCase
      *
      * @psalm-return list<list<class-string<FileDriver>>>
      */
-    public function simplifiedDriverClassProvider() : array
+    public function simplifiedDriverClassProvider(): array
     {
         return [
             [ Driver\SimplifiedXmlDriver::class ],
@@ -86,7 +86,7 @@ final class DriverFactoryTest extends TestCase
         ];
     }
 
-    public function testMappingDriverChainIsCreatedWithNoDefaultDriverWhenDefaultDriverNotSpecified() : void
+    public function testMappingDriverChainIsCreatedWithNoDefaultDriverWhenDefaultDriverNotSpecified(): void
     {
         $container = $this->createContainerMockWithConfig(
             [
@@ -106,7 +106,7 @@ final class DriverFactoryTest extends TestCase
         self::assertNull($driver->getDefaultDriver());
     }
 
-    public function testItSupportsSettingDefaultDriverUsingMappingDriverChain() : void
+    public function testItSupportsSettingDefaultDriverUsingMappingDriverChain(): void
     {
         $container = $this->createContainerMockWithConfig(
             [
@@ -133,7 +133,7 @@ final class DriverFactoryTest extends TestCase
     /**
      * @param array<string, mixed> $config
      */
-    private function createContainerMockWithConfig(array $config, int $expectedCalls = 1) : ContainerInterface
+    private function createContainerMockWithConfig(array $config, int $expectedCalls = 1): ContainerInterface
     {
         $container = $this->createMock(ContainerInterface::class);
         $container->expects($this->exactly($expectedCalls))->method('has')->with('config')->willReturn(true);

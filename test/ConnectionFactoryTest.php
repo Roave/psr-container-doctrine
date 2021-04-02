@@ -17,6 +17,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use ReflectionObject;
 use Roave\PsrContainerDoctrine\ConnectionFactory;
+
 use function defined;
 use function sprintf;
 
@@ -28,14 +29,14 @@ final class ConnectionFactoryTest extends TestCase
 
     private AbstractPlatform $customPlatform;
 
-    public function setUp() : void
+    public function setUp(): void
     {
         $this->configuration  = $this->createMock(Configuration::class);
         $this->eventManger    = $this->createMock(EventManager::class);
         $this->customPlatform = $this->createMock(AbstractPlatform::class);
     }
 
-    public function testDefaultsThroughException() : void
+    public function testDefaultsThroughException(): void
     {
         if (defined('HHVM_VERSION')) {
             $this->markTestSkipped('HHVM is somewhat funky here');
@@ -44,7 +45,7 @@ final class ConnectionFactoryTest extends TestCase
         $factory   = new ConnectionFactory();
         $container = $this->createMock(ContainerInterface::class);
         $container->method('has')->willReturnCallback(
-            static function (string $id) : bool {
+            static function (string $id): bool {
                 // Return false for config, true for anything else
                 return $id !== 'config';
             }
@@ -82,7 +83,7 @@ final class ConnectionFactoryTest extends TestCase
         $this->fail('An expected exception was not raised');
     }
 
-    public function testDefaults() : void
+    public function testDefaults(): void
     {
         $factory    = new ConnectionFactory();
         $connection = $factory($this->buildContainer());
@@ -97,7 +98,7 @@ final class ConnectionFactoryTest extends TestCase
         ], $connection->getParams());
     }
 
-    public function testConfigKeysTakenFromSelf() : void
+    public function testConfigKeysTakenFromSelf(): void
     {
         $factory    = new ConnectionFactory('orm_other');
         $connection = $factory($this->buildContainer('orm_other', 'orm_other', 'orm_other'));
@@ -106,7 +107,7 @@ final class ConnectionFactoryTest extends TestCase
         $this->assertSame($this->eventManger, $connection->getEventManager());
     }
 
-    public function testConfigKeysTakenFromConfig() : void
+    public function testConfigKeysTakenFromConfig(): void
     {
         $factory    = new ConnectionFactory('orm_other');
         $connection = $factory($this->buildContainer('orm_other', 'orm_foo', 'orm_bar', [
@@ -118,7 +119,7 @@ final class ConnectionFactoryTest extends TestCase
         $this->assertSame($this->eventManger, $connection->getEventManager());
     }
 
-    public function testParamsInjection() : void
+    public function testParamsInjection(): void
     {
         $factory    = new ConnectionFactory();
         $connection = $factory($this->buildContainer('orm_default', 'orm_default', 'orm_default', [
@@ -134,7 +135,7 @@ final class ConnectionFactoryTest extends TestCase
         ], $connection->getParams());
     }
 
-    public function testDoctrineMappingTypesInjection() : void
+    public function testDoctrineMappingTypesInjection(): void
     {
         $factory    = new ConnectionFactory();
         $connection = $factory($this->buildContainer(
@@ -147,7 +148,7 @@ final class ConnectionFactoryTest extends TestCase
         $this->assertTrue($connection->getDatabasePlatform()->hasDoctrineTypeMappingFor('foo'));
     }
 
-    public function testDoctrineCommentedTypesInjection() : void
+    public function testDoctrineCommentedTypesInjection(): void
     {
         $type = Type::getType('boolean');
 
@@ -159,7 +160,7 @@ final class ConnectionFactoryTest extends TestCase
         $this->assertTrue($connection->getDatabasePlatform()->isCommentedDoctrineType($type));
     }
 
-    public function testCustomTypeDoctrineMappingTypesInjection() : void
+    public function testCustomTypeDoctrineMappingTypesInjection(): void
     {
         $factory  = new ConnectionFactory();
         $property = (new ReflectionObject($factory))->getProperty('areTypesRegistered');
@@ -173,7 +174,7 @@ final class ConnectionFactoryTest extends TestCase
         $this->assertTrue($connection->getDatabasePlatform()->hasDoctrineTypeMappingFor('foo'));
     }
 
-    public function testCustomPlatform() : void
+    public function testCustomPlatform(): void
     {
         $factory = new ConnectionFactory();
 
@@ -196,7 +197,7 @@ final class ConnectionFactoryTest extends TestCase
         string $configurationKey = 'orm_default',
         string $eventManagerKey = 'orm_default',
         array $config = []
-    ) : ContainerInterface {
+    ): ContainerInterface {
         $container = $this->createMock(ContainerInterface::class);
         $container->method('has')->willReturn(true);
         $mockConfig = [
@@ -215,12 +216,16 @@ final class ConnectionFactoryTest extends TestCase
                 switch ($id) {
                     case 'config':
                         return $mockConfig;
+
                     case sprintf('doctrine.configuration.%s', $configurationKey):
                         return $this->configuration;
+
                     case sprintf('doctrine.event_manager.%s', $eventManagerKey):
                         return $this->eventManger;
+
                     case 'custom.platform':
                         return $this->customPlatform;
+
                     default:
                         $this->fail(sprintf('Unexpected call: Container::get(%s)', $id));
                 }

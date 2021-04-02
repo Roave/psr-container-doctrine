@@ -20,7 +20,7 @@ final class CommandFactoryTest extends TestCase
      * @dataProvider commandClassProvider
      * @psalm-param class-string $commandClass
      */
-    public function testReturnsCommandWhenContainerHasDependencyFactory(string $commandClass) : void
+    public function testReturnsCommandWhenContainerHasDependencyFactory(string $commandClass): void
     {
         $container = $this->createMock(ContainerInterface::class);
         $container->expects($this->once())
@@ -47,7 +47,7 @@ final class CommandFactoryTest extends TestCase
      * @dataProvider commandClassProvider
      * @psalm-param class-string $commandClass
      */
-    public function testReturnsCommandWhenContainerHasNoDependencyFactory(string $commandClass) : void
+    public function testReturnsCommandWhenContainerHasNoDependencyFactory(string $commandClass): void
     {
         $container = $this->createMock(ContainerInterface::class);
         $container->method('has')
@@ -74,7 +74,7 @@ final class CommandFactoryTest extends TestCase
     /**
      * @return array<array<class-string>>
      */
-    public function commandClassProvider() : array
+    public function commandClassProvider(): array
     {
         return [
             [Command\CurrentCommand::class],
@@ -93,7 +93,7 @@ final class CommandFactoryTest extends TestCase
         ];
     }
 
-    public function testFactoryThrowsForInvalidCommand() : void
+    public function testFactoryThrowsForInvalidCommand(): void
     {
         $container = $this->createMock(ContainerInterface::class);
         $factory   = new CommandFactory();
