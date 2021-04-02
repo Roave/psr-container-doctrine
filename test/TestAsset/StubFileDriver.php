@@ -17,10 +17,14 @@ class StubFileDriver extends FileDriver
         return [];
     }
 
+    // phpcs:disable SlevomatCodingStandard.TypeHints.ParameterTypeHint
+
     /**
      * @param string|class-string $className
      */
-    public function loadMetadataForClass(string $className, ClassMetadata $metadata): void
+    public function loadMetadataForClass($className, ClassMetadata $metadata): void
     {
     }
+
+    // phpcs:enable
 }

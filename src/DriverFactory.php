@@ -43,7 +43,10 @@ final class DriverFactory extends AbstractFactory
         if (is_subclass_of($config['class'], AnnotationDriver::class)) {
             $this->registerAnnotationLoader();
 
-            /** @psalm-suppress UndefinedClass */
+            /**
+             * @psalm-suppress UndefinedClass
+             * @psalm-suppress UnsafeInstantiation
+             */
             $driver = new $config['class'](
                 new CachedReader(
                     new AnnotationReader(),
@@ -54,12 +57,18 @@ final class DriverFactory extends AbstractFactory
         }
 
         if ($config['extension'] !== null && is_subclass_of($config['class'], FileDriver::class)) {
-            /** @psalm-suppress UndefinedClass */
+            /**
+             * @psalm-suppress UndefinedClass
+             * @psalm-suppress UnsafeInstantiation
+             */
             $driver = new $config['class']($config['paths'], $config['extension']);
         }
 
         if (! isset($driver)) {
-            /** @psalm-suppress UndefinedClass */
+            /**
+             * @psalm-suppress UndefinedClass
+             * @psalm-suppress UnsafeInstantiation
+             */
             $driver = new $config['class']($config['paths']);
         }
 

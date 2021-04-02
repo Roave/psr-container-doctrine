@@ -42,6 +42,9 @@ class CommandFactory extends AbstractFactory
 
         assert($this->requestedName !== '');
 
+        /**
+         * @psalm-suppress UnsafeInstantiation
+         */
         return new $this->requestedName($dependencyFactory);
     }
 
