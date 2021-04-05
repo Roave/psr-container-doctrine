@@ -27,7 +27,7 @@ class ConfigurationLoaderFactory extends AbstractFactory
     /**
      * @inheritDoc
      */
-    protected function getDefaultConfig(string $configKey) : array
+    protected function getDefaultConfig(string $configKey): array
     {
         return [
             'table_storage' => [

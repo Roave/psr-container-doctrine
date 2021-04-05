@@ -11,27 +11,27 @@ use RoaveTest\PsrContainerDoctrine\TestAsset\StubFactory;
 
 final class AbstractFactoryTest extends TestCase
 {
-    public function testDefaultConfigKey() : void
+    public function testDefaultConfigKey(): void
     {
         $container = $this->createMock(ContainerInterface::class);
         $factory   = new StubFactory();
         $this->assertSame('orm_default', $factory($container));
     }
 
-    public function testCustomConfigKey() : void
+    public function testCustomConfigKey(): void
     {
         $container = $this->createMock(ContainerInterface::class);
         $factory   = new StubFactory('orm_other');
         $this->assertSame('orm_other', $factory($container));
     }
 
-    public function testStaticCall() : void
+    public function testStaticCall(): void
     {
         $container = $this->createMock(ContainerInterface::class);
         $this->assertSame('orm_other', StubFactory::orm_other($container));
     }
 
-    public function testStaticCallWithoutContainer() : void
+    public function testStaticCallWithoutContainer(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The first argument must be of type Psr\Container\ContainerInterface');
@@ -44,7 +44,7 @@ final class AbstractFactoryTest extends TestCase
      *
      * @dataProvider configProvider
      */
-    public function testRetrieveConfig(string $configKey, string $section, array $expectedResult, ?array $config = null) : void
+    public function testRetrieveConfig(string $configKey, string $section, array $expectedResult, ?array $config = null): void
     {
         $container = $this->createMock(ContainerInterface::class);
 
@@ -63,7 +63,7 @@ final class AbstractFactoryTest extends TestCase
     /**
      * @return array<string, mixed>
      */
-    public function configProvider() : array
+    public function configProvider(): array
     {
         return [
             'no-config' => ['foo', 'bar', [], null],

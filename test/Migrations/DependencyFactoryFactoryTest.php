@@ -15,7 +15,7 @@ use Roave\PsrContainerDoctrine\Migrations\DependencyFactoryFactory;
 
 final class DependencyFactoryFactoryTest extends TestCase
 {
-    public function testCanCreateDependencyFactory() : void
+    public function testCanCreateDependencyFactory(): void
     {
         $container = $this->createMock(ContainerInterface::class);
         $container->method('has')

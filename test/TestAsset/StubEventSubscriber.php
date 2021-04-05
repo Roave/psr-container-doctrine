@@ -11,7 +11,7 @@ class StubEventSubscriber implements EventSubscriber
     /**
      * {@inheritdoc}
      */
-    public function getSubscribedEvents() : array
+    public function getSubscribedEvents(): array
     {
         return ['foo'];
     }

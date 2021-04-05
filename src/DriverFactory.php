@@ -13,6 +13,7 @@ use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
 use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\Exception\OutOfBoundsException;
+
 use function array_key_exists;
 use function is_array;
 use function is_subclass_of;
@@ -42,7 +43,10 @@ final class DriverFactory extends AbstractFactory
         if (is_subclass_of($config['class'], AnnotationDriver::class)) {
             $this->registerAnnotationLoader();
 
-            /** @psalm-suppress UndefinedClass */
+            /**
+             * @psalm-suppress UndefinedClass
+             * @psalm-suppress UnsafeInstantiation
+             */
             $driver = new $config['class'](
                 new CachedReader(
                     new AnnotationReader(),
@@ -53,12 +57,18 @@ final class DriverFactory extends AbstractFactory
         }
 
         if ($config['extension'] !== null && is_subclass_of($config['class'], FileDriver::class)) {
-            /** @psalm-suppress UndefinedClass */
+            /**
+             * @psalm-suppress UndefinedClass
+             * @psalm-suppress UnsafeInstantiation
+             */
             $driver = new $config['class']($config['paths'], $config['extension']);
         }
 
         if (! isset($driver)) {
-            /** @psalm-suppress UndefinedClass */
+            /**
+             * @psalm-suppress UndefinedClass
+             * @psalm-suppress UnsafeInstantiation
+             */
             $driver = new $config['class']($config['paths']);
         }
 
@@ -86,7 +96,7 @@ final class DriverFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    protected function getDefaultConfig(string $configKey) : array
+    protected function getDefaultConfig(string $configKey): array
     {
         return [
             'paths' => [],
@@ -99,7 +109,7 @@ final class DriverFactory extends AbstractFactory
     /**
      * Registers the annotation loader
      */
-    private function registerAnnotationLoader() : void
+    private function registerAnnotationLoader(): void
     {
         if (self::$isAnnotationLoaderRegistered) {
             return;

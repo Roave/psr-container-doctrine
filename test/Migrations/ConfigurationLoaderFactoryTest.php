@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\AbstractFactory;
 use Roave\PsrContainerDoctrine\Migrations\ConfigurationLoaderFactory;
+
 use function assert;
 
 final class ConfigurationLoaderFactoryTest extends TestCase
@@ -22,12 +23,12 @@ final class ConfigurationLoaderFactoryTest extends TestCase
     private const CHECK_PLATFORM = true;
     private const COLUMN_LENGTH  = 42;
 
-    public function testExtendsAbstractFactory() : void
+    public function testExtendsAbstractFactory(): void
     {
         $this->assertInstanceOf(AbstractFactory::class, new ConfigurationLoaderFactory());
     }
 
-    public function testConfigValues() : void
+    public function testConfigValues(): void
     {
         $container = $this->createStub(ContainerInterface::class);
 
