@@ -20,12 +20,12 @@ final class MigrationsConfigurationFactoryTest extends TestCase
     private const TABLE     = 'baz';
     private const COLUMN    = 'bat';
 
-    public function testExtendsAbstractFactory() : void
+    public function testExtendsAbstractFactory(): void
     {
         $this->assertInstanceOf(AbstractFactory::class, new MigrationsConfigurationFactory());
     }
 
-    public function testConfigValues() : void
+    public function testConfigValues(): void
     {
         $connection = $this->createStub(Connection::class);
         $connection->method('getSchemaManager')

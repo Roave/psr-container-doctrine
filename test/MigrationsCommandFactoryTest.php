@@ -21,7 +21,7 @@ class MigrationsCommandFactoryTest extends TestCase
      * @dataProvider commandClassProvider
      * @psalm-param class-string $commandClass
      */
-    public function testFactoryReturnsCommand(string $commandClass) : void
+    public function testFactoryReturnsCommand(string $commandClass): void
     {
         $connection = $this->createStub(Connection::class);
         $connection->method('getSchemaManager')
@@ -49,7 +49,7 @@ class MigrationsCommandFactoryTest extends TestCase
     /**
      * @return array<array<class-string>>
      */
-    public function commandClassProvider() : array
+    public function commandClassProvider(): array
     {
         return [
             [Command\DiffCommand::class],
@@ -65,7 +65,7 @@ class MigrationsCommandFactoryTest extends TestCase
         ];
     }
 
-    public function testFactoryWithInvalidCommand() : void
+    public function testFactoryWithInvalidCommand(): void
     {
         $connection = $this->createStub(Connection::class);
         $connection->method('getSchemaManager')

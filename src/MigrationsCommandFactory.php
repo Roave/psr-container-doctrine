@@ -6,6 +6,7 @@ namespace Roave\PsrContainerDoctrine;
 
 use Doctrine\Migrations\Tools\Console\Command\AbstractCommand;
 use Psr\Container\ContainerInterface;
+
 use function class_exists;
 use function sprintf;
 
@@ -14,7 +15,7 @@ class MigrationsCommandFactory
     /**
      * @throws Exception\DomainException
      */
-    public function __invoke(ContainerInterface $container, string $requestedName) : AbstractCommand
+    public function __invoke(ContainerInterface $container, string $requestedName): AbstractCommand
     {
         $configuration = $container->get('doctrine.migrations');
 

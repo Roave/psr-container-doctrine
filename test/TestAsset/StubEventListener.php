@@ -8,7 +8,7 @@ use Doctrine\ORM\Event\OnFlushEventArgs;
 
 class StubEventListener
 {
-    public function onFlush(OnFlushEventArgs $args) : void
+    public function onFlush(OnFlushEventArgs $args): void
     {
     }
 }

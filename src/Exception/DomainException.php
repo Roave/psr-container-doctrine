@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace Roave\PsrContainerDoctrine\Exception;
 
 use Doctrine\Common\EventSubscriber;
+
 use function sprintf;
 
 final class DomainException extends \DomainException implements ExceptionInterface
 {
-    public static function forMissingMethodOnListener(string $listenerName, string $event) : self
+    public static function forMissingMethodOnListener(string $listenerName, string $event): self
     {
         return new self(
             sprintf(
@@ -20,7 +21,7 @@ final class DomainException extends \DomainException implements ExceptionInterfa
         );
     }
 
-    public static function forInvalidListener(string $listenerName) : self
+    public static function forInvalidListener(string $listenerName): self
     {
         return new self(
             sprintf(
@@ -30,7 +31,7 @@ final class DomainException extends \DomainException implements ExceptionInterfa
         );
     }
 
-    public static function forInvalidEventSubscriber(string $subscriberName) : self
+    public static function forInvalidEventSubscriber(string $subscriberName): self
     {
         return new self(
             sprintf(

@@ -12,16 +12,17 @@ use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\AbstractFactory;
 use Roave\PsrContainerDoctrine\EntityManagerFactory;
+
 use function sys_get_temp_dir;
 
 final class EntityManagerFactoryTest extends TestCase
 {
-    public function testExtendsAbstractFactory() : void
+    public function testExtendsAbstractFactory(): void
     {
         $this->assertInstanceOf(AbstractFactory::class, new EntityManagerFactory());
     }
 
-    public function testDefaults() : void
+    public function testDefaults(): void
     {
         $connection    = $this->buildConnection();
         $configuration = $this->buildConfiguration();
@@ -44,7 +45,7 @@ final class EntityManagerFactoryTest extends TestCase
         $this->assertSame($configuration, $entityManager->getConfiguration());
     }
 
-    public function testConfigKeyTakenFromSelf() : void
+    public function testConfigKeyTakenFromSelf(): void
     {
         $connection    = $this->buildConnection();
         $configuration = $this->buildConfiguration();
@@ -66,7 +67,7 @@ final class EntityManagerFactoryTest extends TestCase
         $this->assertSame($configuration, $entityManager->getConfiguration());
     }
 
-    public function testConfigKeyTakenFromConfig() : void
+    public function testConfigKeyTakenFromConfig(): void
     {
         $connection    = $this->buildConnection();
         $configuration = $this->buildConfiguration();
@@ -98,7 +99,7 @@ final class EntityManagerFactoryTest extends TestCase
         $this->assertSame($configuration, $entityManager->getConfiguration());
     }
 
-    private function buildConnection() : Connection
+    private function buildConnection(): Connection
     {
         $eventManager = $this->createMock(EventManager::class);
         $connection   = $this->createPartialMock(Connection::class, ['getEventManager']);
@@ -107,7 +108,7 @@ final class EntityManagerFactoryTest extends TestCase
         return $connection;
     }
 
-    private function buildConfiguration() : Configuration
+    private function buildConfiguration(): Configuration
     {
         $configuration = new Configuration();
         /** @psalm-suppress InvalidArgument - some funky stuff going on with the BC shim from Doctrine here... */
