@@ -12,6 +12,7 @@ use function sprintf;
 /** @internal */
 abstract class AbstractFactory
 {
+    /** @var string */
     private $configKey;
 
     /** @internal */

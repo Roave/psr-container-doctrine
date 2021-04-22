@@ -23,6 +23,7 @@ use function is_subclass_of;
  */
 final class DriverFactory extends AbstractFactory
 {
+    /** @var bool */
     private static $isAnnotationLoaderRegistered = false;
 
     /**
