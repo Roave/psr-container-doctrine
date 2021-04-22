@@ -19,6 +19,7 @@ class StubFileDriver extends FileDriver
 
     /**
      * @param string|class-string $className
+     * @psalm-ignore-var
      */
     public function loadMetadataForClass($className, ClassMetadata $metadata): void
     {
