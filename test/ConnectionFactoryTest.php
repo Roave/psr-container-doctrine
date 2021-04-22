@@ -12,6 +12,7 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\BooleanType;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use ReflectionObject;
@@ -22,10 +23,13 @@ use function sprintf;
 
 final class ConnectionFactoryTest extends TestCase
 {
+    /** @var Configuration|mixed|MockObject  */
     private $configuration;
 
+    /** @var EventManager|mixed|MockObject  */
     private $eventManger;
 
+    /** @var AbstractPlatform|mixed|MockObject  */
     private $customPlatform;
 
     public function setUp(): void
