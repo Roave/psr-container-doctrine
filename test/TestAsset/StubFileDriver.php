@@ -19,6 +19,7 @@ class StubFileDriver extends FileDriver
 
     /**
      * @param string|class-string $className
+     *
      * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
      */
     public function loadMetadataForClass($className, ClassMetadata $metadata): void
