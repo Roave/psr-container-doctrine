@@ -1,0 +1,28 @@
+name: main
+on: [ push, pull_request ]
+jobs:
+  coding-standards:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup PHP, with composer and extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.4
+          coverage: pcov
+          tools: cs2pr
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/composer
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        run: composer install --no-interaction
+
+      - name: Code style with phpcs
+        run: make cs
