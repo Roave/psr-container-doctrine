@@ -1,4 +1,4 @@
-name: main
+name: CS
 on: [ push, pull_request ]
 jobs:
   coding-standards:

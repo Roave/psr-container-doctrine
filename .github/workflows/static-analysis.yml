@@ -1,4 +1,4 @@
-name: main
+name: Psalm
 on: [ push, pull_request ]
 jobs:
   static-analysis:
