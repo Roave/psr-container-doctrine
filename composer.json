@@ -32,10 +32,7 @@
     "autoload": {
         "psr-4": {
             "Roave\\PsrContainerDoctrine\\": "src/"
-        },
-        "files": [
-            "bc-namespace-shim.php"
-        ]
+        }
     },
     "autoload-dev": {
         "psr-4": {
