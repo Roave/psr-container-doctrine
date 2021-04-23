@@ -9,10 +9,12 @@ cache:
 matrix:
   fast_finish: true
   include:
-    - php: 7.3
-      env:
-        - EXECUTE_CS_CHECK=true
     - php: 7.4
+      env:
+        - EXECUTE_STATIC_ANALYSIS_CHECK=true
+        - EXECUTE_BC_CHECK=true
+        - EXECUTE_CS_CHECK=true
+    - php: 8.0
       env:
         - EXECUTE_STATIC_ANALYSIS_CHECK=true
         - EXECUTE_BC_CHECK=true

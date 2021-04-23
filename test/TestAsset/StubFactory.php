@@ -22,7 +22,7 @@ class StubFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    public function retrieveConfig(ContainerInterface $container, string $configKey, string $section) : array
+    public function retrieveConfig(ContainerInterface $container, string $configKey, string $section): array
     {
         return parent::retrieveConfig($container, $configKey, $section);
     }
@@ -32,7 +32,7 @@ class StubFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    protected function getDefaultConfig(string $configKey) : array
+    protected function getDefaultConfig(string $configKey): array
     {
         return [];
     }

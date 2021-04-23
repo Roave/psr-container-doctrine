@@ -65,7 +65,6 @@ factories when required. The following additional factories are available:
 - ```\Roave\PsrContainerDoctrine\ConfigurationFactory``` (doctrine.configuration.*)
 - ```\Roave\PsrContainerDoctrine\DriverFactory``` (doctrine.driver.*)
 - ```\Roave\PsrContainerDoctrine\EventManagerFactory``` (doctrine.event_manager.*)
-- ```\Roave\PsrContainerDoctrine\MigrationsConfigurationFactory``` (doctrine.migrations.*)
 
 Each of those factories supports the same static behavior as the entity manager factory. For container specific
 configurations, there are a few examples provided in the example directory:
@@ -83,14 +82,18 @@ configuration as minimal as possible. A minimal configuration can be found in
 
 ## Migrations
 
-If you want to expose the migration commands, you have to map the command name to `MigrationsCommandFactory`.  This factory needs migrations config setup.
+If you want to expose the migration commands, you have to map the command name to `CommandFactory`. This factory needs migrations config setup.
 For `ExecuteCommand` example:
 
 ```php
 return [
     'dependencies' => [
         'factories' => [
-            \Doctrine\Migrations\Tools\Console\Command\ExecuteCommand::class => \Roave\PsrContainerDoctrine\MigrationsCommandFactory::class,
+            \Doctrine\Migrations\Tools\Console\Command\ExecuteCommand::class => \Roave\PsrContainerDoctrine\Migrations\CommandFactory::class,
+
+            // Optionally, you could make your container aware of additional factories as of migrations release v3.0:
+            \Doctrine\Migrations\Configuration\Migration\ConfigurationLoader::class => \Roave\PsrContainerDoctrine\ConfigurationLoaderFactory::class,
+            \Doctrine\Migrations\DependencyFactory::class => \Roave\PsrContainerDoctrine\Migrations\DependencyFactoryFactory::class,
         ],
     ],
 ];
