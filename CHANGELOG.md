@@ -2,27 +2,29 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 3.1.0 - TBD
+## 3.1.0 - 2021-09-09
 
-### Added
 
-- Nothing.
+-----
 
-### Changed
+### Release Notes for [3.1.0](https://github.com/Roave/psr-container-doctrine/milestone/9)
 
-- Nothing.
+Feature release (minor)
 
-### Deprecated
+### 3.1.0
 
-- Nothing.
+- Total issues resolved: **0**
+- Total pull requests resolved: **3**
+- Total contributors: **3**
 
-### Removed
+#### enhancement
 
-- Nothing.
+ - [50: Declare hard dependency on doctrine/cache](https://github.com/Roave/psr-container-doctrine/pull/50) thanks to @PowerKiKi
+ - [48: Fix namespace of MappingDriverChain in example](https://github.com/Roave/psr-container-doctrine/pull/48) thanks to @rieschl
 
-### Fixed
+#### bug
 
-- Nothing.
+ - [43: README.md: fix class reference](https://github.com/Roave/psr-container-doctrine/pull/43) thanks to @Slamdunk
 
 ## 2.1.0 - TBD
 
