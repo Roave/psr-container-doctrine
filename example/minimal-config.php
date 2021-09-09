@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\ORM\Mapping\Driver\XmlDriver;
+use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
 
 return [
     'doctrine' => [
