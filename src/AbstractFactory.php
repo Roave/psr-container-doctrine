@@ -5,20 +5,21 @@ declare(strict_types=1);
 namespace Roave\PsrContainerDoctrine;
 
 use Psr\Container\ContainerInterface;
+
 use function array_key_exists;
 use function sprintf;
 
 /**
  * @internal
+ *
  * @psalm-consistent-constructor
  */
 abstract class AbstractFactory
 {
-    /** @var string */
-    private $configKey;
+    private string $configKey;
 
     /** @internal */
-    public function __construct(string $configKey = 'orm_default')
+    final public function __construct(string $configKey = 'orm_default')
     {
         $this->configKey = $configKey;
     }
@@ -73,14 +74,14 @@ abstract class AbstractFactory
      *
      * @return array<string, mixed>
      */
-    abstract protected function getDefaultConfig(string $configKey) : array;
+    abstract protected function getDefaultConfig(string $configKey): array;
 
     /**
      * Retrieves the config for a specific section.
      *
      * @return array<string, mixed>
      */
-    protected function retrieveConfig(ContainerInterface $container, string $configKey, string $section) : array
+    protected function retrieveConfig(ContainerInterface $container, string $configKey, string $section): array
     {
         $applicationConfig = $container->has('config') ? $container->get('config') : [];
         $sectionConfig     = $applicationConfig['doctrine'][$section] ?? [];

@@ -9,6 +9,7 @@ use Doctrine\Common\EventSubscriber;
 use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\Exception\DomainException;
 use Roave\PsrContainerDoctrine\Exception\InvalidArgumentException;
+
 use function class_exists;
 use function get_class;
 use function gettype;
@@ -90,7 +91,7 @@ final class EventManagerFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    protected function getDefaultConfig(string $configKey) : array
+    protected function getDefaultConfig(string $configKey): array
     {
         return [
             'subscribers' => [],

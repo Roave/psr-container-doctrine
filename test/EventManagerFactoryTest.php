@@ -13,12 +13,13 @@ use Roave\PsrContainerDoctrine\Exception\InvalidArgumentException;
 use RoaveTest\PsrContainerDoctrine\TestAsset\StubEventListener;
 use RoaveTest\PsrContainerDoctrine\TestAsset\StubEventSubscriber;
 use stdClass;
+
 use function array_pop;
 use function sprintf;
 
 final class EventManagerFactoryTest extends TestCase
 {
-    public function testDefaults() : void
+    public function testDefaults(): void
     {
         $factory      = new EventManagerFactory();
         $container    = $this->createMock(ContainerInterface::class);
@@ -27,7 +28,7 @@ final class EventManagerFactoryTest extends TestCase
         $this->assertCount(0, $eventManager->getListeners());
     }
 
-    public function testInvalidInstanceSubscriber() : void
+    public function testInvalidInstanceSubscriber(): void
     {
         $factory = new EventManagerFactory();
 
@@ -37,7 +38,7 @@ final class EventManagerFactoryTest extends TestCase
         $factory($this->buildContainer(new stdClass()));
     }
 
-    public function testInvalidTypeSubscriber() : void
+    public function testInvalidTypeSubscriber(): void
     {
         $factory = new EventManagerFactory();
 
@@ -47,7 +48,7 @@ final class EventManagerFactoryTest extends TestCase
         $factory($this->buildContainer(1));
     }
 
-    public function testInvalidStringSubscriber() : void
+    public function testInvalidStringSubscriber(): void
     {
         $container = $this->createMock(ContainerInterface::class);
         $container->expects($this->exactly(2))
@@ -66,7 +67,7 @@ final class EventManagerFactoryTest extends TestCase
         $factory($container);
     }
 
-    public function testInstanceSubscriber() : void
+    public function testInstanceSubscriber(): void
     {
         $factory      = new EventManagerFactory();
         $eventManager = $factory($this->buildContainer(new StubEventSubscriber()));
@@ -74,7 +75,7 @@ final class EventManagerFactoryTest extends TestCase
         $this->assertCount(1, $eventManager->getListeners('foo'));
     }
 
-    public function testClassNameSubscriber() : void
+    public function testClassNameSubscriber(): void
     {
         $container = $this->createMock(ContainerInterface::class);
         $container->expects($this->exactly(2))
@@ -91,7 +92,7 @@ final class EventManagerFactoryTest extends TestCase
         $this->assertCount(1, $eventManager->getListeners('foo'));
     }
 
-    public function testServiceNameSubscriber() : void
+    public function testServiceNameSubscriber(): void
     {
         $eventSubscriber = new StubEventSubscriber();
 
@@ -113,7 +114,7 @@ final class EventManagerFactoryTest extends TestCase
         $this->assertSame($eventSubscriber, array_pop($listeners));
     }
 
-    public function testInvalidTypeListener() : void
+    public function testInvalidTypeListener(): void
     {
         $factory = new EventManagerFactory();
         $this->expectException(InvalidArgumentException::class);
@@ -121,7 +122,7 @@ final class EventManagerFactoryTest extends TestCase
         $factory($this->buildContainerWithListener(1));
     }
 
-    public function testInvalidStringListener() : void
+    public function testInvalidStringListener(): void
     {
         $container = $this->createMock(ContainerInterface::class);
         $container->expects($this->exactly(2))
@@ -138,7 +139,7 @@ final class EventManagerFactoryTest extends TestCase
         $factory($container);
     }
 
-    public function testInvalidEventNameListener() : void
+    public function testInvalidEventNameListener(): void
     {
         $container = $this->buildContainerWithListener([
             'events' => [Events::onFlush, 'foo'],
@@ -154,7 +155,7 @@ final class EventManagerFactoryTest extends TestCase
         $factory($container);
     }
 
-    public function testInstanceListener() : void
+    public function testInstanceListener(): void
     {
         $factory      = new EventManagerFactory();
         $eventManager = $factory($this->buildContainerWithListener([
@@ -165,7 +166,7 @@ final class EventManagerFactoryTest extends TestCase
         $this->assertCount(1, $eventManager->getListeners(Events::onFlush));
     }
 
-    public function testClassNameListener() : void
+    public function testClassNameListener(): void
     {
         $container = $this->createMock(ContainerInterface::class);
         $container->expects($this->exactly(2))
@@ -189,7 +190,7 @@ final class EventManagerFactoryTest extends TestCase
         $this->assertCount(1, $eventManager->getListeners(Events::onFlush));
     }
 
-    public function testServiceNameListener() : void
+    public function testServiceNameListener(): void
     {
         $eventListener = new StubEventListener();
 
@@ -221,7 +222,7 @@ final class EventManagerFactoryTest extends TestCase
     /**
      * @param mixed $subscriber
      */
-    private function buildContainer($subscriber) : ContainerInterface
+    private function buildContainer($subscriber): ContainerInterface
     {
         $container = $this->createMock(ContainerInterface::class);
         $container->method('has')->with('config')->willReturn(true);
@@ -243,7 +244,7 @@ final class EventManagerFactoryTest extends TestCase
     /**
      * @param mixed $listener
      */
-    private function buildContainerWithListener($listener) : ContainerInterface
+    private function buildContainerWithListener($listener): ContainerInterface
     {
         $container = $this->createMock(ContainerInterface::class);
         $container->method('has')->with('config')->willReturn(true);
@@ -257,7 +258,7 @@ final class EventManagerFactoryTest extends TestCase
      *
      * @return array<string, mixed>
      */
-    private function getConfigForSubscriber($subscriber) : array
+    private function getConfigForSubscriber($subscriber): array
     {
         return [
             'doctrine' => [
@@ -275,7 +276,7 @@ final class EventManagerFactoryTest extends TestCase
      *
      * @return array<string, mixed>
      */
-    private function getConfigForListener($listener) : array
+    private function getConfigForListener($listener): array
     {
         return [
             'doctrine' => [

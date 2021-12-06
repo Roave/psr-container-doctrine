@@ -12,15 +12,19 @@ class StubFileDriver extends FileDriver
     /**
      * {@inheritdoc}
      */
-    protected function loadMappingFile($file) : array
+    protected function loadMappingFile($file): array
     {
         return [];
     }
 
+    // phpcs:disable SlevomatCodingStandard.TypeHints.ParameterTypeHint
+
     /**
      * @param string|class-string $className
      */
-    public function loadMetadataForClass($className, ClassMetadata $metadata) : void
+    public function loadMetadataForClass($className, ClassMetadata $metadata): void
     {
     }
+
+    // phpcs:enable
 }

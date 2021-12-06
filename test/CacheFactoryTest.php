@@ -13,6 +13,7 @@ use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\AbstractFactory;
 use Roave\PsrContainerDoctrine\CacheFactory;
 use Roave\PsrContainerDoctrine\Exception\OutOfBoundsException;
+
 use function extension_loaded;
 
 /**
@@ -23,7 +24,7 @@ final class CacheFactoryTest extends TestCase
     /**
      * @covers ::__construct
      */
-    public function testExtendsAbstractFactory() : void
+    public function testExtendsAbstractFactory(): void
     {
         $this->assertInstanceOf(AbstractFactory::class, new CacheFactory());
     }
@@ -31,7 +32,7 @@ final class CacheFactoryTest extends TestCase
     /**
      * @covers ::createWithConfig
      */
-    public function testFileSystemCacheConstructor() : void
+    public function testFileSystemCacheConstructor(): void
     {
         $container = $this->createContainerMockWithConfig(
             [
@@ -52,7 +53,7 @@ final class CacheFactoryTest extends TestCase
         $this->assertInstanceOf(FilesystemCache::class, $cacheInstance);
     }
 
-    public function testCacheChainContainsInitializedProviders() : void
+    public function testCacheChainContainsInitializedProviders(): void
     {
         $config = [
             'doctrine' => [
@@ -77,7 +78,7 @@ final class CacheFactoryTest extends TestCase
         $this->assertInstanceOf(ChainCache::class, $cacheInstance);
     }
 
-    public function testCanInjectWrappedInstances() : void
+    public function testCanInjectWrappedInstances(): void
     {
         if (! extension_loaded('memcached')) {
             $this->markTestSkipped('Extension memcached is not loaded');
@@ -112,7 +113,7 @@ final class CacheFactoryTest extends TestCase
         $this->assertSame('foo', $instance->getNamespace());
     }
 
-    public function testThrowsForMissingConfigKey() : void
+    public function testThrowsForMissingConfigKey(): void
     {
         $container = $this->createContainerMockWithConfig(
             [
@@ -131,7 +132,7 @@ final class CacheFactoryTest extends TestCase
     /**
      * @param array<string, mixed> $config
      */
-    private function createContainerMockWithConfig(array $config) : ContainerInterface
+    private function createContainerMockWithConfig(array $config): ContainerInterface
     {
         $container = $this->createMock(ContainerInterface::class);
         $container->expects($this->once())->method('has')->with('config')->willReturn(true);

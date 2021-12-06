@@ -9,6 +9,7 @@ use Doctrine\ORM\Cache\DefaultCacheFactory;
 use Doctrine\ORM\Cache\RegionsConfiguration;
 use Doctrine\ORM\Configuration;
 use Psr\Container\ContainerInterface;
+
 use function array_key_exists;
 use function assert;
 use function is_string;
@@ -150,7 +151,7 @@ final class ConfigurationFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    protected function getDefaultConfig(string $configKey) : array
+    protected function getDefaultConfig(string $configKey): array
     {
         return [
             'metadata_cache' => 'array',

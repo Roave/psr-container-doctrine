@@ -2,8 +2,7 @@
 
 [![Latest Stable Version](https://poser.pugx.org/roave/psr-container-doctrine/v/stable)](https://packagist.org/packages/roave/psr-container-doctrine)
 [![Total Downloads](https://poser.pugx.org/roave/psr-container-doctrine/downloads)](https://packagist.org/packages/roave/psr-container-doctrine)
-[![Build Status](https://api.travis-ci.org/roave/psr-container-doctrine.png?branch=master)](http://travis-ci.org/roave/psr-container-doctrine)
-[![Coverage Status](https://coveralls.io/repos/roave/psr-container-doctrine/badge.png?branch=master)](https://coveralls.io/r/roave/psr-container-doctrine)
+[![Build Status](https://github.com/roave/psr-container-doctrine/workflows/main/badge.svg)](https://github.com/roave/psr-container-doctrine/actions)
 
 [Doctrine](https://github.com/doctrine) factories for [PSR-11 containers](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-11-container.md).
 
@@ -65,7 +64,6 @@ factories when required. The following additional factories are available:
 - ```\Roave\PsrContainerDoctrine\ConfigurationFactory``` (doctrine.configuration.*)
 - ```\Roave\PsrContainerDoctrine\DriverFactory``` (doctrine.driver.*)
 - ```\Roave\PsrContainerDoctrine\EventManagerFactory``` (doctrine.event_manager.*)
-- ```\Roave\PsrContainerDoctrine\MigrationsConfigurationFactory``` (doctrine.migrations.*)
 
 Each of those factories supports the same static behavior as the entity manager factory. For container specific
 configurations, there are a few examples provided in the example directory:
@@ -83,14 +81,18 @@ configuration as minimal as possible. A minimal configuration can be found in
 
 ## Migrations
 
-If you want to expose the migration commands, you have to map the command name to `MigrationsCommandFactory`.  This factory needs migrations config setup.
+If you want to expose the migration commands, you have to map the command name to `CommandFactory`. This factory needs migrations config setup.
 For `ExecuteCommand` example:
 
 ```php
 return [
     'dependencies' => [
         'factories' => [
-            \Doctrine\Migrations\Tools\Console\Command\ExecuteCommand::class => \Roave\PsrContainerDoctrine\MigrationsCommandFactory::class,
+            \Doctrine\Migrations\Tools\Console\Command\ExecuteCommand::class => \Roave\PsrContainerDoctrine\Migrations\CommandFactory::class,
+
+            // Optionally, you could make your container aware of additional factories as of migrations release v3.0:
+            \Doctrine\Migrations\Configuration\Migration\ConfigurationLoader::class => \Roave\PsrContainerDoctrine\Migrations\ConfigurationLoaderFactory::class,
+            \Doctrine\Migrations\DependencyFactory::class => \Roave\PsrContainerDoctrine\Migrations\DependencyFactoryFactory::class,
         ],
     ],
 ];

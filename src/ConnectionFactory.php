@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Roave\PsrContainerDoctrine;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Driver\PDOMySql\Driver as PdoMysqlDriver;
+use Doctrine\DBAL\Driver\PDO\MySQL\Driver as PdoMysqlDriver;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Types\Type;
 use Psr\Container\ContainerInterface;
+
 use function is_string;
 
 /**
@@ -16,8 +17,7 @@ use function is_string;
  */
 final class ConnectionFactory extends AbstractFactory
 {
-    /** @var bool */
-    private static $areTypesRegistered = false;
+    private static bool $areTypesRegistered = false;
 
     /**
      * {@inheritdoc}
@@ -68,7 +68,7 @@ final class ConnectionFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    protected function getDefaultConfig(string $configKey) : array
+    protected function getDefaultConfig(string $configKey): array
     {
         return [
             'driver_class' => PdoMysqlDriver::class,
@@ -85,7 +85,7 @@ final class ConnectionFactory extends AbstractFactory
     /**
      * Registers all declared typed, if not already done.
      */
-    private function registerTypes(ContainerInterface $container) : void
+    private function registerTypes(ContainerInterface $container): void
     {
         if (self::$areTypesRegistered) {
             return;

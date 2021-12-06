@@ -16,7 +16,7 @@ use stdClass;
 
 class ContainerRepositoryFactoryTest extends TestCase
 {
-    public function testGetRepositoryReturnsService() : void
+    public function testGetRepositoryReturnsService(): void
     {
         $fooEntity = 'Foo\FooEntity';
         $em        = $this->buildEntityManager([$fooEntity => 'my_repo']);
@@ -27,7 +27,7 @@ class ContainerRepositoryFactoryTest extends TestCase
         $this->assertSame($repo, $factory->getRepository($em, $fooEntity));
     }
 
-    public function testServiceRepositoriesMustExtendObjectRepository() : void
+    public function testServiceRepositoriesMustExtendObjectRepository(): void
     {
         $fooEntity = 'Foo\FooEntity';
         $em        = $this->buildEntityManager([$fooEntity => 'my_repo']);
@@ -40,7 +40,7 @@ class ContainerRepositoryFactoryTest extends TestCase
         $factory->getRepository($em, $fooEntity);
     }
 
-    public function testCustomRepositoryIsNotAValidClass() : void
+    public function testCustomRepositoryIsNotAValidClass(): void
     {
         $fooEntity = 'Foo\FooEntity';
         $em        = $this->buildEntityManager([$fooEntity => 'not_a_real_class']);
@@ -55,15 +55,15 @@ class ContainerRepositoryFactoryTest extends TestCase
         $factory->getRepository($em, $fooEntity);
     }
 
-    public function testGetRepositoryReturnsEntityRepository() : void
+    public function testGetRepositoryReturnsEntityRepository(): void
     {
         $fooEntity = 'Foo\FooEntity';
-        $container = $this->prophesize(ContainerInterface::class);
-        $container->has($fooEntity)->willReturn(false);
+        $container = $this->createMock(ContainerInterface::class);
+        $container->method('has')->with($this->equalTo($fooEntity))->willReturn(false);
 
         $em = $this->buildEntityManager([$fooEntity => null]);
 
-        $repositoryFactory = new ContainerRepositoryFactory($container->reveal());
+        $repositoryFactory = new ContainerRepositoryFactory($container);
 
         $repository = $repositoryFactory->getRepository($em, $fooEntity);
 
@@ -77,7 +77,7 @@ class ContainerRepositoryFactoryTest extends TestCase
     /**
      * @param array<string, string|null> $entityRepositoryClasses
      */
-    private function buildEntityManager(array $entityRepositoryClasses) : EntityManagerInterface
+    private function buildEntityManager(array $entityRepositoryClasses): EntityManagerInterface
     {
         $classMetadatas = [];
         foreach ($entityRepositoryClasses as $entityClass => $entityRepositoryClass) {
@@ -92,7 +92,7 @@ class ContainerRepositoryFactoryTest extends TestCase
         $em = $this->getMockBuilder(EntityManagerInterface::class)->getMock();
         $em->expects($this->any())
             ->method('getClassMetadata')
-            ->willReturnCallback(static function (string $class) use ($classMetadatas) : ClassMetadata {
+            ->willReturnCallback(static function (string $class) use ($classMetadatas): ClassMetadata {
                 return $classMetadatas[$class];
             });
 
@@ -106,18 +106,18 @@ class ContainerRepositoryFactoryTest extends TestCase
     /**
      * @param array<string, mixed> $services
      */
-    private function buildContainer(array $services) : ContainerInterface
+    private function buildContainer(array $services): ContainerInterface
     {
         $container = $this->createMock(ContainerInterface::class);
 
         $container->expects($this->any())
             ->method('has')
-            ->willReturnCallback(static function (string $id) use ($services) : bool {
+            ->willReturnCallback(static function (string $id) use ($services): bool {
                 return isset($services[$id]);
             });
         $container->expects($this->any())
             ->method('get')
-            ->willReturnCallback(static function (string $id) use ($services) : object {
+            ->willReturnCallback(static function (string $id) use ($services): object {
                 return $services[$id];
             });
 

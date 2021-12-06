@@ -1,0 +1,30 @@
+name: BC
+on: [ push, pull_request ]
+jobs:
+  roave-bc-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Setup PHP, with composer and extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.4
+          coverage: pcov
+          tools: cs2pr
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/composer
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        run: composer install --no-interaction
+
+      - name: Roave BC checks
+        run: make bc-check

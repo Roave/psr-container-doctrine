@@ -10,6 +10,7 @@ use Doctrine\Persistence\Mapping\ClassMetadata;
 use Doctrine\Persistence\ObjectRepository;
 use Psr\Container\ContainerInterface;
 use RuntimeException;
+
 use function class_exists;
 use function spl_object_hash;
 use function sprintf;
@@ -17,10 +18,9 @@ use function sprintf;
 final class ContainerRepositoryFactory implements RepositoryFactory
 {
     /** @var ObjectRepository[] */
-    private $managedRepositories = [];
+    private array $managedRepositories = [];
 
-    /** @var ContainerInterface */
-    private $container;
+    private ContainerInterface $container;
 
     public function __construct(ContainerInterface $container)
     {
@@ -68,7 +68,7 @@ final class ContainerRepositoryFactory implements RepositoryFactory
     private function getOrCreateRepository(
         EntityManagerInterface $entityManager,
         ClassMetadata $metadata
-    ) : ObjectRepository {
+    ): ObjectRepository {
         $repositoryHash = $metadata->getName() . spl_object_hash($entityManager);
         if (isset($this->managedRepositories[$repositoryHash])) {
             return $this->managedRepositories[$repositoryHash];

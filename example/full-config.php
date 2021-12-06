@@ -16,7 +16,12 @@ use Doctrine\Common\Cache\WinCacheCache;
 use Doctrine\Common\Cache\XcacheCache;
 use Doctrine\Common\Cache\ZendDataCache;
 use Doctrine\DBAL\Driver\PDOMySql\Driver;
+use Doctrine\Migrations\Configuration\Migration\ConfigurationLoader;
+use Doctrine\Migrations\DependencyFactory;
 use Doctrine\Migrations\Tools\Console\Command;
+use Roave\PsrContainerDoctrine\ConfigurationLoaderFactory;
+use Roave\PsrContainerDoctrine\Migrations\CommandFactory;
+use Roave\PsrContainerDoctrine\Migrations\DependencyFactoryFactory;
 
 return [
     'doctrine' => [
@@ -150,25 +155,38 @@ return [
         ],
         'types' => [],
         'migrations' => [
-            'directory' => 'scripts/orm/migrations',
-            'name' => 'My DB Migrations',
-            'namespace' => 'My\Migration',
-            'table' => 'migration',
-            'column' => 'version_timestamp',
+            'orm_default' => [
+                'table_storage' => [
+                    'table_name' => 'migrations_executed',
+                    'version_column_name' => 'version',
+                    'version_column_length' => 255,
+                    'executed_at_column_name' => 'executed_at',
+                    'execution_time_column_name' => 'execution_time',
+                ],
+                'migrations_paths' => ['My\Migrations' => 'scripts/orm/migrations'],
+                'all_or_nothing' => true,
+                'check_database_platform' => true,
+            ],
         ],
     ],
     'dependencies' => [
         'factories' => [
-            Command\DiffCommand::class => Roave\PsrContainerDoctrine\MigrationsCommandFactory::class,
-            Command\DumpSchemaCommand::class => Roave\PsrContainerDoctrine\MigrationsCommandFactory::class,
-            Command\ExecuteCommand::class => Roave\PsrContainerDoctrine\MigrationsCommandFactory::class,
-            Command\GenerateCommand::class => Roave\PsrContainerDoctrine\MigrationsCommandFactory::class,
-            Command\LatestCommand::class => Roave\PsrContainerDoctrine\MigrationsCommandFactory::class,
-            Command\MigrateCommand::class => Roave\PsrContainerDoctrine\MigrationsCommandFactory::class,
-            Command\RollupCommand::class => Roave\PsrContainerDoctrine\MigrationsCommandFactory::class,
-            Command\StatusCommand::class => Roave\PsrContainerDoctrine\MigrationsCommandFactory::class,
-            Command\UpToDateCommand::class => Roave\PsrContainerDoctrine\MigrationsCommandFactory::class,
-            Command\VersionCommand::class => Roave\PsrContainerDoctrine\MigrationsCommandFactory::class,
+            Command\CurrentCommand::class => CommandFactory::class,
+            Command\DiffCommand::class => CommandFactory::class,
+            Command\DumpSchemaCommand::class => CommandFactory::class,
+            Command\ExecuteCommand::class => CommandFactory::class,
+            Command\GenerateCommand::class => CommandFactory::class,
+            Command\LatestCommand::class => CommandFactory::class,
+            Command\ListCommand::class => CommandFactory::class,
+            Command\MigrateCommand::class => CommandFactory::class,
+            Command\RollupCommand::class => CommandFactory::class,
+            Command\SyncMetadataCommand::class => CommandFactory::class,
+            Command\StatusCommand::class => CommandFactory::class,
+            Command\UpToDateCommand::class => CommandFactory::class,
+            Command\VersionCommand::class => CommandFactory::class,
+
+            DependencyFactory::class => DependencyFactoryFactory::class,
+            ConfigurationLoader::class => ConfigurationLoaderFactory::class,
         ],
     ],
 ];
