@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace RoaveTest\PsrContainerDoctrine;
 
+use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\ORM\Mapping\Driver;
+use Doctrine\Persistence\Mapping\Driver\AnnotationDriver as AbstractAnnotationDriver;
 use Doctrine\Persistence\Mapping\Driver\FileDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
 use PHPUnit\Framework\TestCase;
@@ -128,6 +130,57 @@ final class DriverFactoryTest extends TestCase
         $driver = (new DriverFactory())->__invoke($container);
         $this->assertInstanceOf(MappingDriverChain::class, $driver);
         $this->assertInstanceOf(TestAsset\StubFileDriver::class, $driver->getDefaultDriver());
+    }
+
+    /**
+     * @return string[][]
+     *
+     * @psalm-return list<list<class-string<AbstractAnnotationDriver>>>
+     */
+    public function annotationDriverClassProvider(): array
+    {
+        return [
+            [ Driver\AttributeDriver::class ],
+            [ Driver\AnnotationDriver::class ],
+        ];
+    }
+
+    /**
+     * @psalm-param class-string<AbstractAnnotationDriver> $driverClass
+     * @dataProvider annotationDriverClassProvider
+     */
+    public function testItSupportsAnnotationDrivers(string $driverClass): void
+    {
+        $services  = [
+            'config' => [
+                'doctrine' => [
+                    'driver' => [
+                        'orm_default' => [
+                            'class' => $driverClass,
+                            'cache' => 'default',
+                        ],
+                    ],
+                ],
+            ],
+            'doctrine.cache.default' => new ArrayCache(),
+        ];
+        $container = $this->createMock(ContainerInterface::class);
+        $container->method('has')->willReturnCallback(
+            static function (string $id) use ($services): bool {
+                return isset($services[$id]);
+            }
+        );
+        $container->method('get')->willReturnCallback(
+            /**
+             * @return object|array
+             */
+            static function (string $id) use ($services) {
+                return $services[$id];
+            }
+        );
+
+        $driver = (new DriverFactory())->__invoke($container);
+        $this->assertInstanceOf($driverClass, $driver);
     }
 
     /**
