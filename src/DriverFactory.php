@@ -7,6 +7,7 @@ namespace Roave\PsrContainerDoctrine;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\CachedReader;
+use Doctrine\ORM\Mapping\Driver\AttributeDriver;
 use Doctrine\Persistence\Mapping\Driver\AnnotationDriver;
 use Doctrine\Persistence\Mapping\Driver\FileDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
@@ -40,7 +41,11 @@ final class DriverFactory extends AbstractFactory
             $config['paths'] = [$config['paths']];
         }
 
-        if (is_subclass_of($config['class'], AnnotationDriver::class)) {
+        if (
+            $config['class'] !== AttributeDriver::class
+            && ! is_subclass_of($config['class'], AttributeDriver::class)
+            && is_subclass_of($config['class'], AnnotationDriver::class)
+        ) {
             $this->registerAnnotationLoader();
 
             /**
@@ -54,9 +59,7 @@ final class DriverFactory extends AbstractFactory
                 ),
                 $config['paths']
             );
-        }
-
-        if ($config['extension'] !== null && is_subclass_of($config['class'], FileDriver::class)) {
+        } elseif ($config['extension'] !== null && is_subclass_of($config['class'], FileDriver::class)) {
             /**
              * @psalm-suppress UndefinedClass
              * @psalm-suppress UnsafeInstantiation
