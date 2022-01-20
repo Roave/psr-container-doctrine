@@ -6,6 +6,7 @@ namespace RoaveTest\PsrContainerDoctrine;
 
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Driver\AbstractMySQLDriver;
+use Doctrine\DBAL\Driver\API\MySQL\ExceptionConverter;
 use Doctrine\DBAL\Driver\PDO\MySQL\Driver as PDOMySQLDriver;
 use Doctrine\DBAL\Driver\PDO\SQLite\Driver as PDOSqliteDriver;
 use Doctrine\DBAL\Exception\ConnectionException;
@@ -19,6 +20,7 @@ use ReflectionObject;
 use Roave\PsrContainerDoctrine\ConnectionFactory;
 
 use function defined;
+use function in_array;
 use function sprintf;
 
 final class ConnectionFactoryTest extends TestCase
@@ -67,7 +69,14 @@ final class ConnectionFactoryTest extends TestCase
             $factory($container);
         } catch (ConnectionException $e) {
             foreach ($e->getTrace() as $entry) {
-                if ($entry['class'] === PDOMySQLDriver::class || $entry['class'] === AbstractMySQLDriver::class) {
+                if (
+                    isset($entry['class'])
+                    && in_array($entry['class'], [
+                        PDOMySQLDriver::class,
+                        AbstractMySQLDriver::class,
+                        ExceptionConverter::class,
+                    ], true)
+                ) {
                     /** @psalm-suppress InternalMethod @todo find a better way to add to assertion count... */
                     $this->addToAssertionCount(1);
 
