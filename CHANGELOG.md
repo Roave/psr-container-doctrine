@@ -2,27 +2,28 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 3.2.0 - TBD
+## 3.2.0 - 2022-01-20
 
-### Added
 
-- Nothing.
+-----
 
-### Changed
+### Release Notes for [3.2.0](https://github.com/Roave/psr-container-doctrine/milestone/12)
 
-- Nothing.
+Feature release (minor)
 
-### Deprecated
+### 3.2.0
 
-- Nothing.
+- Total issues resolved: **0**
+- Total pull requests resolved: **2**
+- Total contributors: **2**
 
-### Removed
+#### enhancement
 
-- Nothing.
+ - [54: Test against PHP 8.1](https://github.com/Roave/psr-container-doctrine/pull/54) thanks to @snapshotpl
 
-### Fixed
+#### bug
 
-- Nothing.
+ - [53: Merge release 3.1.1 into 3.2.x](https://github.com/Roave/psr-container-doctrine/pull/53) thanks to @github-actions[bot]
 
 ## 3.1.0 - 2021-09-09
 
