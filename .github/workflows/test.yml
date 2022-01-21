@@ -9,6 +9,9 @@ jobs:
           - '7.4'
           - '8.0'
           - '8.1'
+        dependencies:
+          - 'locked'
+          - 'latest'
 
     name: PHP ${{ matrix.php-version }}
 
@@ -31,8 +34,13 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
 
-      - name: Install dependencies
+      - name: Install dependencies (locked)
+        if: ${{ matrix.dependencies == 'locked' }}
         run: composer install --no-interaction
+
+      - name: Install dependencies (latest)
+        if: ${{ matrix.dependencies == 'latest' }}
+        run: composer update --no-interaction
 
       - name: Setup problem matchers for PHP
         run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
