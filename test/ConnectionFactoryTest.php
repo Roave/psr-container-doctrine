@@ -157,18 +157,6 @@ final class ConnectionFactoryTest extends TestCase
         $this->assertTrue($connection->getDatabasePlatform()->hasDoctrineTypeMappingFor('foo'));
     }
 
-    public function testDoctrineCommentedTypesInjection(): void
-    {
-        $type = Type::getType('boolean');
-
-        $factory    = new ConnectionFactory();
-        $connection = $factory($this->buildContainer('orm_default', 'orm_default', 'orm_default', [
-            'doctrine_commented_types' => [$type],
-        ]));
-
-        $this->assertTrue($connection->getDatabasePlatform()->isCommentedDoctrineType($type));
-    }
-
     public function testCustomTypeDoctrineMappingTypesInjection(): void
     {
         $factory  = new ConnectionFactory();
