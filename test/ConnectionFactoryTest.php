@@ -12,7 +12,6 @@ use Doctrine\DBAL\Driver\PDO\SQLite\Driver as PDOSqliteDriver;
 use Doctrine\DBAL\Exception\ConnectionException;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\BooleanType;
-use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
