@@ -156,10 +156,9 @@ return \Doctrine\ORM\Tools\Console\ConsoleRunner::createHelperSet($entityManager
 
 If you want get repository in the container. You can use `ContainerRepositoryFactory`:
 
-
 ```php
 // config.php
-use Roave\PsrContainerDoctrine\Repository\ContainerRepositoryFactory;
+use Roave\PsrContainerDoctrine\ORM\ContainerRepositoryFactory;
 
 return  [
     'doctrine' => [
@@ -179,26 +178,33 @@ return  [
             },
 
             // Add custom repository factory.
-            FooRespository::class => FooRespositoryFactory::class,
+            FooRepository::class => FooRepositoryFactory::class,
         ],
     ],
 ];
 ```
 
+That can inject some other service by container.
+
 ```php
-use Roave\PsrContainerDoctrine\Repository\ContainerRepositoryFactory;
+use Roave\PsrContainerDoctrine\ORM\ContainerRepositoryFactory;
+use Psr\Container\ContainerInterface;
+use Doctrine\ORM\EntityManagerInterface;
 
 $container = require 'config/container.php';
 
+class FooRepository extends \Doctrine\ORM\EntityRepository {
+  public function __construct(
+    private SomeOtherService $service, // Inject some other service.
+    EntityManagerInterface $em,
+    ClassMetadata $class
+  ) {
+    parent::__construct($em, $class);
+  }
+}
+
 $em = $container->get('doctrine.entity_manager.orm_default');
-$respository = $em->getRepository(FooEntity::class);
+$repository = $em->getRepository(FooEntity::class);
 
-/** @var ContainerRepositoryFactory $respositoryFactory */
-$respositoryFactory = $container->get(ContainerRepositoryFactory::class);
-$respository2 = $respositoryFactory->getRepository($em, FooEntity::class);
-
-$respository3 = $container->get(FooRepository::class);
-
-var_dump($respository === $respository2); // true
-var_dump($respository === $respository3); // true
+var_dump($repository instanceof FooRepository); // true
 ```

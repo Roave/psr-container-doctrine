@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace RoaveTest\PsrContainerDoctrine\Repository;
+namespace RoaveTest\PsrContainerDoctrine\ORM;
 
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManagerInterface;
@@ -10,7 +10,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
-use Roave\PsrContainerDoctrine\Repository\ContainerRepositoryFactory;
+use Roave\PsrContainerDoctrine\ORM\ContainerRepositoryFactory;
 use RuntimeException;
 use stdClass;
 
@@ -18,6 +18,7 @@ class ContainerRepositoryFactoryTest extends TestCase
 {
     public function testGetRepositoryReturnsService(): void
     {
+        /** @psalm-var class-string $fooEntity */
         $fooEntity = 'Foo\FooEntity';
         $em        = $this->buildEntityManager([$fooEntity => 'my_repo']);
         $repo      = new EntityRepository($em, $em->getClassMetadata($fooEntity));
@@ -29,6 +30,7 @@ class ContainerRepositoryFactoryTest extends TestCase
 
     public function testServiceRepositoriesMustExtendObjectRepository(): void
     {
+        /** @psalm-var class-string $fooEntity */
         $fooEntity = 'Foo\FooEntity';
         $em        = $this->buildEntityManager([$fooEntity => 'my_repo']);
         $repo      = new stdClass();
@@ -42,6 +44,7 @@ class ContainerRepositoryFactoryTest extends TestCase
 
     public function testCustomRepositoryIsNotAValidClass(): void
     {
+        /** @psalm-var class-string $fooEntity */
         $fooEntity = 'Foo\FooEntity';
         $em        = $this->buildEntityManager([$fooEntity => 'not_a_real_class']);
         $container = $this->buildContainer([]);
@@ -57,6 +60,7 @@ class ContainerRepositoryFactoryTest extends TestCase
 
     public function testGetRepositoryReturnsEntityRepository(): void
     {
+        /** @psalm-var class-string $fooEntity */
         $fooEntity = 'Foo\FooEntity';
         $container = $this->createMock(ContainerInterface::class);
         $container->method('has')->with($this->equalTo($fooEntity))->willReturn(false);
@@ -75,10 +79,11 @@ class ContainerRepositoryFactoryTest extends TestCase
     }
 
     /**
-     * @param array<string, string|null> $entityRepositoryClasses
+     * @param array<class-string, string|null> $entityRepositoryClasses
      */
     private function buildEntityManager(array $entityRepositoryClasses): EntityManagerInterface
     {
+        /** @psalm-var array<string, ClassMetadata> $classMetadatas */
         $classMetadatas = [];
         foreach ($entityRepositoryClasses as $entityClass => $entityRepositoryClass) {
             $metadata = new ClassMetadata($entityClass);
