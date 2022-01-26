@@ -58,7 +58,15 @@
                 <referencedClass name="Doctrine\Common\Cache\RedisCache"/>
                 <referencedClass name="Doctrine\Common\Cache\WinCacheCache"/>
                 <referencedClass name="Doctrine\Common\Cache\ZendDataCache"/>
+                <referencedClass name="Doctrine\Common\Annotations\CachedReader"/>
             </errorLevel>
         </DeprecatedClass>
+        <DeprecatedMethod>
+            <errorLevel type="suppress">
+                <referencedMethod name="Doctrine\ORM\Configuration::setHydrationCacheImpl"/>
+                <referencedMethod name="Doctrine\ORM\Configuration::setQueryCacheImpl"/>
+                <referencedMethod name="Doctrine\ORM\Configuration::setMetadataCacheImpl"/>
+            </errorLevel>
+        </DeprecatedMethod>
     </issueHandlers>
 </psalm>

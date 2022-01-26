@@ -6,12 +6,12 @@ namespace RoaveTest\PsrContainerDoctrine;
 
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Driver\AbstractMySQLDriver;
+use Doctrine\DBAL\Driver\API\MySQL\ExceptionConverter;
 use Doctrine\DBAL\Driver\PDO\MySQL\Driver as PDOMySQLDriver;
 use Doctrine\DBAL\Driver\PDO\SQLite\Driver as PDOSqliteDriver;
 use Doctrine\DBAL\Exception\ConnectionException;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\BooleanType;
-use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
@@ -19,6 +19,7 @@ use ReflectionObject;
 use Roave\PsrContainerDoctrine\ConnectionFactory;
 
 use function defined;
+use function in_array;
 use function sprintf;
 
 final class ConnectionFactoryTest extends TestCase
@@ -67,7 +68,14 @@ final class ConnectionFactoryTest extends TestCase
             $factory($container);
         } catch (ConnectionException $e) {
             foreach ($e->getTrace() as $entry) {
-                if ($entry['class'] === PDOMySQLDriver::class || $entry['class'] === AbstractMySQLDriver::class) {
+                if (
+                    isset($entry['class'])
+                    && in_array($entry['class'], [
+                        PDOMySQLDriver::class,
+                        AbstractMySQLDriver::class,
+                        ExceptionConverter::class,
+                    ], true)
+                ) {
                     /** @psalm-suppress InternalMethod @todo find a better way to add to assertion count... */
                     $this->addToAssertionCount(1);
 
@@ -146,18 +154,6 @@ final class ConnectionFactoryTest extends TestCase
         ));
 
         $this->assertTrue($connection->getDatabasePlatform()->hasDoctrineTypeMappingFor('foo'));
-    }
-
-    public function testDoctrineCommentedTypesInjection(): void
-    {
-        $type = Type::getType('boolean');
-
-        $factory    = new ConnectionFactory();
-        $connection = $factory($this->buildContainer('orm_default', 'orm_default', 'orm_default', [
-            'doctrine_commented_types' => [$type],
-        ]));
-
-        $this->assertTrue($connection->getDatabasePlatform()->isCommentedDoctrineType($type));
     }
 
     public function testCustomTypeDoctrineMappingTypesInjection(): void
