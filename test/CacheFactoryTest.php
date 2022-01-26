@@ -8,7 +8,9 @@ use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\ChainCache;
 use Doctrine\Common\Cache\FilesystemCache;
 use Doctrine\Common\Cache\MemcachedCache;
+use Doctrine\Common\Cache\Psr6\DoctrineProvider;
 use PHPUnit\Framework\TestCase;
+use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\AbstractFactory;
 use Roave\PsrContainerDoctrine\CacheFactory;
@@ -110,6 +112,37 @@ final class CacheFactoryTest extends TestCase
 
         $this->assertInstanceOf(MemcachedCache::class, $instance);
         $this->assertSame($wrappedMemcached, $instance->getMemcached());
+        $this->assertSame('foo', $instance->getNamespace());
+    }
+
+    public function testCanInjectPsrCacheInstances(): void
+    {
+        $config = [
+            'doctrine' => [
+                'cache' => [
+                    'psrcache' => [
+                        'class'     => DoctrineProvider::class,
+                        'instance'  => 'psr-cache.default',
+                        'namespace' => 'foo',
+                    ],
+                ],
+            ],
+        ];
+
+        $cachePool = $this->createMock(CacheItemPoolInterface::class);
+        $container = $this->createMock(ContainerInterface::class);
+        $container->method('has')
+            ->withConsecutive(['config'], [DoctrineProvider::class])
+            ->willReturnOnConsecutiveCalls(true, false);
+        $container->expects($this->exactly(2))->method('get')
+            ->withConsecutive(['config'], ['psr-cache.default'])
+            ->willReturnOnConsecutiveCalls($config, $cachePool);
+
+        $factory  = new CacheFactory('psrcache');
+        $instance = $factory($container);
+
+        $this->assertInstanceOf(DoctrineProvider::class, $instance);
+        $this->assertSame($cachePool, $instance->getPool());
         $this->assertSame('foo', $instance->getNamespace());
     }
 

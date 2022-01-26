@@ -13,9 +13,11 @@ use Doctrine\Common\Cache\FilesystemCache;
 use Doctrine\Common\Cache\MemcachedCache;
 use Doctrine\Common\Cache\PhpFileCache;
 use Doctrine\Common\Cache\PredisCache;
+use Doctrine\Common\Cache\Psr6\DoctrineProvider;
 use Doctrine\Common\Cache\RedisCache;
 use Doctrine\Common\Cache\WinCacheCache;
 use Doctrine\Common\Cache\ZendDataCache;
+use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\Exception\OutOfBoundsException;
 
@@ -66,6 +68,10 @@ final class CacheFactory extends AbstractFactory
                     is_array($config['providers']) ? $config['providers'] : []
                 );
                 $cache     = new ChainCache($providers);
+                break;
+
+            case DoctrineProvider::class:
+                $cache = DoctrineProvider::wrap($instance ?? $container->get(CacheItemPoolInterface::class));
                 break;
 
             default:
@@ -157,6 +163,13 @@ final class CacheFactory extends AbstractFactory
                     'class' => ChainCache::class,
                     'namespace' => 'psr-container-doctrine',
                     'providers' => [],
+                ];
+
+            case 'psrcache':
+                return [
+                    'class' => DoctrineProvider::class,
+                    'instance' => CacheItemPoolInterface::class,
+                    'namespace' => 'psr-container-doctrine',
                 ];
 
             default:

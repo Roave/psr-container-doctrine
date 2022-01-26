@@ -11,6 +11,7 @@ use Doctrine\Common\Cache\MemcacheCache;
 use Doctrine\Common\Cache\MemcachedCache;
 use Doctrine\Common\Cache\PhpFileCache;
 use Doctrine\Common\Cache\PredisCache;
+use Doctrine\Common\Cache\Psr6\DoctrineProvider;
 use Doctrine\Common\Cache\RedisCache;
 use Doctrine\Common\Cache\WinCacheCache;
 use Doctrine\Common\Cache\XcacheCache;
@@ -19,6 +20,7 @@ use Doctrine\DBAL\Driver\PDOMySql\Driver;
 use Doctrine\Migrations\Configuration\Migration\ConfigurationLoader;
 use Doctrine\Migrations\DependencyFactory;
 use Doctrine\Migrations\Tools\Console\Command;
+use Psr\Cache\CacheItemPoolInterface;
 use Roave\PsrContainerDoctrine\ConfigurationLoaderFactory;
 use Roave\PsrContainerDoctrine\Migrations\CommandFactory;
 use Roave\PsrContainerDoctrine\Migrations\DependencyFactoryFactory;
@@ -125,6 +127,11 @@ return [
             'predis' => [
                 'class' => PredisCache::class,
                 'instance' => 'my_predis_alias',
+                'namespace' => 'psr-container-doctrine',
+            ],
+            'psrcache' => [
+                'class' => DoctrineProvider::class,
+                'instance' => CacheItemPoolInterface::class,
                 'namespace' => 'psr-container-doctrine',
             ],
             'redis' => [

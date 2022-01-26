@@ -21,6 +21,7 @@
                 <referencedMethod name="Doctrine\DBAL\Configuration::setResultCacheImpl"/>
                 <referencedMethod name="Doctrine\DBAL\Configuration::getResultCacheImpl"/>
                 <referencedMethod name="Doctrine\DBAL\Configuration::setSQLLogger"/>
+                <referencedMethod name="Doctrine\Common\Cache\Psr6\DoctrineProvider::getPool"/>
 
                 <!-- We consume AbstractFactory methods in the tests, but namespaces differ so Psalm complains -->
                 <referencedMethod name="Roave\PsrContainerDoctrine\AbstractFactory::retrieveConfig"/>
