@@ -9,11 +9,7 @@ use Psr\Container\ContainerInterface;
 use function array_key_exists;
 use function sprintf;
 
-/**
- * @internal
- *
- * @psalm-consistent-constructor
- */
+/** @internal */
 abstract class AbstractFactory
 {
     private string $configKey;
