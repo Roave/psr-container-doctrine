@@ -158,6 +158,7 @@ final class DriverFactoryTest extends TestCase
                         'orm_default' => [
                             'class' => $driverClass,
                             'cache' => 'default',
+                            'exclude_paths' => [],
                         ],
                     ],
                 ],
