@@ -111,7 +111,6 @@ final class EntityManagerFactoryTest extends TestCase
     private function buildConfiguration(): Configuration
     {
         $configuration = new Configuration();
-        /** @psalm-suppress InvalidArgument - some funky stuff going on with the BC shim from Doctrine here... */
         $configuration->setMetadataDriverImpl(new MappingDriverChain());
         $configuration->setProxyDir(sys_get_temp_dir());
         $configuration->setProxyNamespace('EntityManagerFactoryTest');
