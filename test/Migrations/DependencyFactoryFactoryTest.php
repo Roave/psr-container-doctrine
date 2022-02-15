@@ -37,8 +37,8 @@ final class DependencyFactoryFactoryTest extends TestCase
 
         $factory           = new DependencyFactoryFactory();
         $dependencyFactory = $factory($container);
-        $this->assertInstanceOf(DependencyFactory::class, $dependencyFactory);
-        $this->assertSame($entityManager, $dependencyFactory->getEntityManager());
-        $this->assertInstanceOf(Configuration::class, $dependencyFactory->getConfiguration());
+        self::assertInstanceOf(DependencyFactory::class, $dependencyFactory);
+        self::assertSame($entityManager, $dependencyFactory->getEntityManager());
+        self::assertInstanceOf(Configuration::class, $dependencyFactory->getConfiguration());
     }
 }
