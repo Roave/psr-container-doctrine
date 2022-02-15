@@ -7,6 +7,7 @@ namespace Roave\PsrContainerDoctrine;
 use Psr\Container\ContainerInterface;
 
 use function array_key_exists;
+use function array_replace_recursive;
 use function sprintf;
 
 /** @internal */
@@ -83,7 +84,7 @@ abstract class AbstractFactory
         $sectionConfig     = $applicationConfig['doctrine'][$section] ?? [];
 
         if (array_key_exists($configKey, $sectionConfig)) {
-            return $sectionConfig[$configKey] + $this->getDefaultConfig($configKey);
+            return array_replace_recursive($this->getDefaultConfig($configKey), $sectionConfig[$configKey]);
         }
 
         return $this->getDefaultConfig($configKey);
