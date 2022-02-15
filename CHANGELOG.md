@@ -2,27 +2,28 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 3.4.0 - TBD
+## 3.4.0 - 2022-02-15
 
-### Added
 
-- Nothing.
+-----
 
-### Changed
+### Release Notes for [3.4.0](https://github.com/Roave/psr-container-doctrine/milestone/17)
 
-- Nothing.
+Feature release (minor)
 
-### Deprecated
+### 3.4.0
 
-- Nothing.
+- Total issues resolved: **1**
+- Total pull requests resolved: **5**
+- Total contributors: **3**
 
-### Removed
+#### enhancement
 
-- Nothing.
-
-### Fixed
-
-- Nothing.
+ - [64: Tighten up php compatibility](https://github.com/Roave/psr-container-doctrine/pull/64) thanks to @boesing and @Ocramius
+ - [63: PSR-6 cache support](https://github.com/Roave/psr-container-doctrine/pull/63) thanks to @boesing
+ - [62: Convert `phpunit/phpunit` assertion method calls to static calls](https://github.com/Roave/psr-container-doctrine/pull/62) thanks to @boesing
+ - [61: Bump `vimeo/psalm` to 4.20](https://github.com/Roave/psr-container-doctrine/pull/61) thanks to @boesing
+ - [57: Use a stricter range for PHP version in composer.json](https://github.com/Roave/psr-container-doctrine/pull/57) thanks to @edigu and @Ocramius
 
 ## 3.3.0 - 2022-01-21
 
