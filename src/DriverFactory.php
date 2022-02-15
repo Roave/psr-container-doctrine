@@ -6,10 +6,10 @@ namespace Roave\PsrContainerDoctrine;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
-use Doctrine\Common\Annotations\CachedReader;
 use Doctrine\Common\Annotations\PsrCachedReader;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Cache\Cache;
+use Doctrine\Common\Cache\Psr6\CacheAdapter;
 use Doctrine\ORM\Mapping\Driver\AttributeDriver;
 use Doctrine\Persistence\Mapping\Driver\AnnotationDriver;
 use Doctrine\Persistence\Mapping\Driver\FileDriver;
@@ -21,6 +21,7 @@ use Roave\PsrContainerDoctrine\Exception\InvalidArgumentException;
 use Roave\PsrContainerDoctrine\Exception\OutOfBoundsException;
 
 use function array_key_exists;
+use function assert;
 use function get_class;
 use function gettype;
 use function is_array;
@@ -132,7 +133,7 @@ final class DriverFactory extends AbstractFactory
     /**
      * @param array<string, mixed> $config
      */
-    private function createCachedReader(ContainerInterface $container, array $config, Reader $reader): Reader
+    private function createCachedReader(ContainerInterface $container, array $config, Reader $reader): PsrCachedReader
     {
         $cache = $this->retrieveDependency(
             $container,
@@ -142,10 +143,7 @@ final class DriverFactory extends AbstractFactory
         );
 
         if ($cache instanceof Cache) {
-            return new CachedReader(
-                $reader,
-                $cache
-            );
+            $cache = CacheAdapter::wrap($cache);
         }
 
         if ($cache instanceof CacheItemPoolInterface) {
