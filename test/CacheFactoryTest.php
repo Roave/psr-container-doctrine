@@ -9,6 +9,7 @@ use Doctrine\Common\Cache\ChainCache;
 use Doctrine\Common\Cache\FilesystemCache;
 use Doctrine\Common\Cache\MemcachedCache;
 use PHPUnit\Framework\TestCase;
+use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\AbstractFactory;
 use Roave\PsrContainerDoctrine\CacheFactory;
@@ -139,5 +140,31 @@ final class CacheFactoryTest extends TestCase
         $container->expects($this->once())->method('get')->with('config')->willReturn($config);
 
         return $container;
+    }
+
+    public function testCanRetrieveCacheItemPoolFromContainer(): void
+    {
+        $containerId = 'ContainerId';
+
+        $container = $this->createMock(ContainerInterface::class);
+        $container
+            ->method('has')
+            ->withConsecutive(['config'], [$containerId])
+            ->willReturnOnConsecutiveCalls(
+                true,
+                true
+            );
+
+        $cacheItemPool = $this->createMock(CacheItemPoolInterface::class);
+        $container
+            ->method('get')
+            ->withConsecutive(['config'], [$containerId])
+            ->willReturnOnConsecutiveCalls(
+                ['doctrine' => ['cache' => ['foo' => ['class' => $containerId]]]],
+                $cacheItemPool
+            );
+
+        $factory = new CacheFactory('foo');
+        self::assertSame($cacheItemPool, $factory($container));
     }
 }

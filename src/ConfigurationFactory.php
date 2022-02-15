@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace Roave\PsrContainerDoctrine;
 
+use Doctrine\Common\Cache\Cache;
+use Doctrine\Common\Cache\Psr6\CacheAdapter;
 use Doctrine\ORM\Cache\CacheConfiguration;
 use Doctrine\ORM\Cache\DefaultCacheFactory;
 use Doctrine\ORM\Cache\RegionsConfiguration;
 use Doctrine\ORM\Configuration;
+use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
 
 use function array_key_exists;
-use function assert;
 use function is_string;
 
 /**
@@ -49,30 +51,58 @@ final class ConfigurationFactory extends AbstractFactory
             $configuration->addFilter($name, $className);
         }
 
-        $configuration->setMetadataCacheImpl($this->retrieveDependency(
+        $metadataCache = $this->retrieveDependency(
             $container,
             $config['metadata_cache'],
             'cache',
             CacheFactory::class
-        ));
-        $configuration->setQueryCacheImpl($this->retrieveDependency(
+        );
+
+        $this->processCacheImplementation(
+            $configuration,
+            $metadataCache,
+            [$configuration, 'setMetadataCache']
+        );
+
+        $queryCache = $this->retrieveDependency(
             $container,
             $config['query_cache'],
             'cache',
             CacheFactory::class
-        ));
-        $configuration->setResultCacheImpl($this->retrieveDependency(
+        );
+
+        $this->processCacheImplementation(
+            $configuration,
+            $queryCache,
+            [$configuration, 'setQueryCache']
+        );
+
+        $resultCache = $this->retrieveDependency(
             $container,
             $config['result_cache'],
             'cache',
             CacheFactory::class
-        ));
-        $configuration->setHydrationCacheImpl($this->retrieveDependency(
+        );
+
+        $this->processCacheImplementation(
+            $configuration,
+            $resultCache,
+            [$configuration, 'setResultCache']
+        );
+
+        $hydrationCache = $this->retrieveDependency(
             $container,
             $config['hydration_cache'],
             'cache',
             CacheFactory::class
-        ));
+        );
+
+        $this->processCacheImplementation(
+            $configuration,
+            $hydrationCache,
+            [$configuration, 'setHydrationCache'],
+        );
+
         $configuration->setMetadataDriverImpl($this->retrieveDependency(
             $container,
             $config['driver'],
@@ -126,9 +156,7 @@ final class ConfigurationFactory extends AbstractFactory
                 $regionsConfig->setLockLifetime($regionName, $regionConfig['lock_lifetime']);
             }
 
-            $resultCacheImpl = $configuration->getResultCacheImpl();
-            assert($resultCacheImpl !== null);
-            $cacheFactory = new DefaultCacheFactory($regionsConfig, $resultCacheImpl);
+            $cacheFactory = new DefaultCacheFactory($regionsConfig, $resultCache);
             $cacheFactory->setFileLockRegionDirectory($config['second_level_cache']['file_lock_region_directory']);
 
             $cacheConfiguration = new CacheConfiguration();
@@ -185,5 +213,21 @@ final class ConfigurationFactory extends AbstractFactory
             ],
             'sql_logger' => null,
         ];
+    }
+
+    /**
+     * @param CacheItemPoolInterface|Cache          $cache
+     * @param callable(CacheItemPoolInterface):void $setCacheOnConfiguration
+     */
+    private function processCacheImplementation(
+        Configuration $configuration,
+        $cache,
+        callable $setCacheOnConfiguration
+    ): void {
+        if ($cache instanceof Cache) {
+            $cache = CacheAdapter::wrap($cache);
+        }
+
+        $setCacheOnConfiguration($cache);
     }
 }
