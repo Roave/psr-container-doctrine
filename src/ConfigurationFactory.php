@@ -58,7 +58,7 @@ final class ConfigurationFactory extends AbstractFactory
             CacheFactory::class
         );
 
-        $configuration = $this->processCacheImplementation(
+        $this->processCacheImplementation(
             $configuration,
             $metadataCache,
             [$configuration, 'setMetadataCache']
@@ -217,19 +217,17 @@ final class ConfigurationFactory extends AbstractFactory
 
     /**
      * @param CacheItemPoolInterface|Cache          $cache
-     * @param callable(CacheItemPoolInterface):void $psr
+     * @param callable(CacheItemPoolInterface):void $setCacheOnConfiguration
      */
     private function processCacheImplementation(
         Configuration $configuration,
         $cache,
-        callable $psr
-    ): Configuration {
+        callable $setCacheOnConfiguration
+    ): void {
         if ($cache instanceof Cache) {
             $cache = CacheAdapter::wrap($cache);
         }
 
-        $psr($cache);
-
-        return $configuration;
+        $setCacheOnConfiguration($cache);
     }
 }
