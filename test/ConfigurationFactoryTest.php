@@ -73,7 +73,7 @@ final class ConfigurationFactoryTest extends TestCase
     private function exctractPropertyValue(object $object, string $propertyName)
     {
         $property = new ReflectionProperty($object, $propertyName);
-        if (PHP_VERSION_ID < 80000) {
+        if (PHP_VERSION_ID < 80100) {
             $property->setAccessible(true);
         }
 
