@@ -13,8 +13,6 @@ use Psr\Container\ContainerInterface;
 use ReflectionProperty;
 use Roave\PsrContainerDoctrine\ConfigurationFactory;
 
-use const PHP_VERSION_ID;
-
 final class ConfigurationFactoryTest extends TestCase
 {
     public function testWillSetCacheItemPoolCaches(): void
@@ -73,9 +71,7 @@ final class ConfigurationFactoryTest extends TestCase
     private function exctractPropertyValue(object $object, string $propertyName)
     {
         $property = new ReflectionProperty($object, $propertyName);
-        if (PHP_VERSION_ID < 80100) {
-            $property->setAccessible(true);
-        }
+        $property->setAccessible(true);
 
         return $property->getValue($object);
     }
