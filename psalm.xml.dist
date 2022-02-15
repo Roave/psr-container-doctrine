@@ -17,11 +17,6 @@
     <issueHandlers>
         <InternalMethod>
             <errorLevel type="suppress">
-                <!-- This is marked @internal API in Doctrine, unsure of how to handle these otherwise -->
-                <referencedMethod name="Doctrine\DBAL\Configuration::setResultCacheImpl"/>
-                <referencedMethod name="Doctrine\DBAL\Configuration::getResultCacheImpl"/>
-                <referencedMethod name="Doctrine\DBAL\Configuration::setSQLLogger"/>
-
                 <!-- We consume AbstractFactory methods in the tests, but namespaces differ so Psalm complains -->
                 <referencedMethod name="Roave\PsrContainerDoctrine\AbstractFactory::retrieveConfig"/>
                 <referencedMethod name="Roave\PsrContainerDoctrine\AbstractFactory::__callStatic"/>
@@ -59,14 +54,13 @@
                 <referencedClass name="Doctrine\Common\Cache\WinCacheCache"/>
                 <referencedClass name="Doctrine\Common\Cache\ZendDataCache"/>
                 <referencedClass name="Doctrine\Common\Annotations\CachedReader"/>
+                <referencedClass name="Doctrine\ORM\Mapping\Driver\SimplifiedYamlDriver"/>
             </errorLevel>
         </DeprecatedClass>
-        <DeprecatedMethod>
+        <PropertyNotSetInConstructor>
             <errorLevel type="suppress">
-                <referencedMethod name="Doctrine\ORM\Configuration::setHydrationCacheImpl"/>
-                <referencedMethod name="Doctrine\ORM\Configuration::setQueryCacheImpl"/>
-                <referencedMethod name="Doctrine\ORM\Configuration::setMetadataCacheImpl"/>
+                <directory name="test/"/>
             </errorLevel>
-        </DeprecatedMethod>
+        </PropertyNotSetInConstructor>
     </issueHandlers>
 </psalm>
