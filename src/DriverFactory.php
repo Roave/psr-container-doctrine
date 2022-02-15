@@ -21,11 +21,7 @@ use Roave\PsrContainerDoctrine\Exception\InvalidArgumentException;
 use Roave\PsrContainerDoctrine\Exception\OutOfBoundsException;
 
 use function array_key_exists;
-use function assert;
-use function get_class;
-use function gettype;
 use function is_array;
-use function is_object;
 use function is_subclass_of;
 
 /**
@@ -150,11 +146,8 @@ final class DriverFactory extends AbstractFactory
             return new PsrCachedReader($reader, $cache);
         }
 
-        $cacheType = is_object($cache) ? get_class($cache) : gettype($cache);
-        assert($cacheType !== '');
-
-        throw InvalidArgumentException::fromUnsupportedCacheType(
-            $cacheType
+        throw InvalidArgumentException::fromUnsupportedCache(
+            $cache
         );
     }
 }
