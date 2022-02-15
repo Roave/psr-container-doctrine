@@ -16,6 +16,7 @@ use Doctrine\Common\Cache\PredisCache;
 use Doctrine\Common\Cache\RedisCache;
 use Doctrine\Common\Cache\WinCacheCache;
 use Doctrine\Common\Cache\ZendDataCache;
+use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\Exception\OutOfBoundsException;
 
@@ -26,7 +27,7 @@ use function is_array;
 use function is_string;
 
 /**
- * @method Cache __invoke(ContainerInterface $container)
+ * @method Cache|CacheItemPoolInterface __invoke(ContainerInterface $container)
  */
 final class CacheFactory extends AbstractFactory
 {
