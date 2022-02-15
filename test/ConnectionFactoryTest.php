@@ -96,9 +96,9 @@ final class ConnectionFactoryTest extends TestCase
         $factory    = new ConnectionFactory();
         $connection = $factory($this->buildContainer());
 
-        $this->assertSame($this->configuration, $connection->getConfiguration());
-        $this->assertSame($this->eventManger, $connection->getEventManager());
-        $this->assertSame([
+        self::assertSame($this->configuration, $connection->getConfiguration());
+        self::assertSame($this->eventManger, $connection->getEventManager());
+        self::assertSame([
             'driverClass' => PDOSqliteDriver::class,
             'wrapperClass' => null,
             'pdo' => null,
@@ -110,8 +110,8 @@ final class ConnectionFactoryTest extends TestCase
         $factory    = new ConnectionFactory('orm_other');
         $connection = $factory($this->buildContainer('orm_other', 'orm_other', 'orm_other'));
 
-        $this->assertSame($this->configuration, $connection->getConfiguration());
-        $this->assertSame($this->eventManger, $connection->getEventManager());
+        self::assertSame($this->configuration, $connection->getConfiguration());
+        self::assertSame($this->eventManger, $connection->getEventManager());
     }
 
     public function testConfigKeysTakenFromConfig(): void
@@ -122,8 +122,8 @@ final class ConnectionFactoryTest extends TestCase
             'event_manager' => 'orm_bar',
         ]));
 
-        $this->assertSame($this->configuration, $connection->getConfiguration());
-        $this->assertSame($this->eventManger, $connection->getEventManager());
+        self::assertSame($this->configuration, $connection->getConfiguration());
+        self::assertSame($this->eventManger, $connection->getEventManager());
     }
 
     public function testParamsInjection(): void
@@ -133,7 +133,7 @@ final class ConnectionFactoryTest extends TestCase
             'params' => ['username' => 'foo'],
         ]));
 
-        $this->assertSame([
+        self::assertSame([
             'username' => 'foo',
             'driverClass' => PDOSqliteDriver::class,
             'wrapperClass' => null,
@@ -151,7 +151,7 @@ final class ConnectionFactoryTest extends TestCase
             ['doctrine_mapping_types' => ['foo' => 'boolean']]
         ));
 
-        $this->assertTrue($connection->getDatabasePlatform()->hasDoctrineTypeMappingFor('foo'));
+        self::assertTrue($connection->getDatabasePlatform()->hasDoctrineTypeMappingFor('foo'));
     }
 
     public function testCustomTypeDoctrineMappingTypesInjection(): void
@@ -165,7 +165,7 @@ final class ConnectionFactoryTest extends TestCase
             'doctrine_mapping_types' => ['foo' => 'custom_type'],
         ]));
 
-        $this->assertTrue($connection->getDatabasePlatform()->hasDoctrineTypeMappingFor('foo'));
+        self::assertTrue($connection->getDatabasePlatform()->hasDoctrineTypeMappingFor('foo'));
     }
 
     public function testCustomPlatform(): void
@@ -180,7 +180,7 @@ final class ConnectionFactoryTest extends TestCase
 
         $connection = $factory($container);
 
-        $this->assertSame($this->customPlatform, $connection->getDatabasePlatform());
+        self::assertSame($this->customPlatform, $connection->getDatabasePlatform());
     }
 
     /**

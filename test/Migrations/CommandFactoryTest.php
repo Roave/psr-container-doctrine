@@ -40,7 +40,7 @@ final class CommandFactoryTest extends TestCase
 
         $factory = new CommandFactory();
         /** @psalm-suppress ArgumentTypeCoercion */
-        $this->assertInstanceOf($commandClass, $factory($container, $commandClass));
+        self::assertInstanceOf($commandClass, $factory($container, $commandClass));
     }
 
     /**
@@ -68,7 +68,7 @@ final class CommandFactoryTest extends TestCase
 
         $factory = new CommandFactory();
         /** @psalm-suppress ArgumentTypeCoercion */
-        $this->assertInstanceOf($commandClass, $factory($container, $commandClass));
+        self::assertInstanceOf($commandClass, $factory($container, $commandClass));
     }
 
     /**

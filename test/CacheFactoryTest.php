@@ -27,7 +27,7 @@ final class CacheFactoryTest extends TestCase
      */
     public function testExtendsAbstractFactory(): void
     {
-        $this->assertInstanceOf(AbstractFactory::class, new CacheFactory());
+        self::assertInstanceOf(AbstractFactory::class, new CacheFactory());
     }
 
     /**
@@ -51,7 +51,7 @@ final class CacheFactoryTest extends TestCase
         $factory       = new CacheFactory('filesystem');
         $cacheInstance = $factory($container);
 
-        $this->assertInstanceOf(FilesystemCache::class, $cacheInstance);
+        self::assertInstanceOf(FilesystemCache::class, $cacheInstance);
     }
 
     public function testCacheChainContainsInitializedProviders(): void
@@ -76,7 +76,7 @@ final class CacheFactoryTest extends TestCase
         $factory       = new CacheFactory('chain');
         $cacheInstance = $factory($container);
 
-        $this->assertInstanceOf(ChainCache::class, $cacheInstance);
+        self::assertInstanceOf(ChainCache::class, $cacheInstance);
     }
 
     public function testCanInjectWrappedInstances(): void
@@ -109,9 +109,9 @@ final class CacheFactoryTest extends TestCase
         $factory  = new CacheFactory('memcached');
         $instance = $factory($container);
 
-        $this->assertInstanceOf(MemcachedCache::class, $instance);
-        $this->assertSame($wrappedMemcached, $instance->getMemcached());
-        $this->assertSame('foo', $instance->getNamespace());
+        self::assertInstanceOf(MemcachedCache::class, $instance);
+        self::assertSame($wrappedMemcached, $instance->getMemcached());
+        self::assertSame('foo', $instance->getNamespace());
     }
 
     public function testThrowsForMissingConfigKey(): void

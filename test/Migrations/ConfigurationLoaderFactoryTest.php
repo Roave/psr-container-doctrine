@@ -25,7 +25,7 @@ final class ConfigurationLoaderFactoryTest extends TestCase
 
     public function testExtendsAbstractFactory(): void
     {
-        $this->assertInstanceOf(AbstractFactory::class, new ConfigurationLoaderFactory());
+        self::assertInstanceOf(AbstractFactory::class, new ConfigurationLoaderFactory());
     }
 
     public function testConfigValues(): void
@@ -66,16 +66,16 @@ final class ConfigurationLoaderFactoryTest extends TestCase
             );
 
         $migrationsConfiguration = (new ConfigurationLoaderFactory())($container);
-        $this->assertInstanceOf(ConfigurationArray::class, $migrationsConfiguration);
+        self::assertInstanceOf(ConfigurationArray::class, $migrationsConfiguration);
         $configuration = $migrationsConfiguration->getConfiguration();
 
-        $this->assertSame(self::ALL_OR_NOTHING, $configuration->isAllOrNothing());
-        $this->assertSame(self::CHECK_PLATFORM, $configuration->isDatabasePlatformChecked());
+        self::assertSame(self::ALL_OR_NOTHING, $configuration->isAllOrNothing());
+        self::assertSame(self::CHECK_PLATFORM, $configuration->isDatabasePlatformChecked());
         $storageConfiguration = $configuration->getMetadataStorageConfiguration();
-        $this->assertNotNull($storageConfiguration);
+        self::assertNotNull($storageConfiguration);
         assert($storageConfiguration instanceof TableMetadataStorageConfiguration);
-        $this->assertSame(self::TABLE, $storageConfiguration->getTableName());
-        $this->assertSame(self::COLUMN, $storageConfiguration->getVersionColumnName());
-        $this->assertSame(self::COLUMN_LENGTH, $storageConfiguration->getVersionColumnLength());
+        self::assertSame(self::TABLE, $storageConfiguration->getTableName());
+        self::assertSame(self::COLUMN, $storageConfiguration->getVersionColumnName());
+        self::assertSame(self::COLUMN_LENGTH, $storageConfiguration->getVersionColumnLength());
     }
 }

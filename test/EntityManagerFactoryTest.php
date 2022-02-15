@@ -19,7 +19,7 @@ final class EntityManagerFactoryTest extends TestCase
 {
     public function testExtendsAbstractFactory(): void
     {
-        $this->assertInstanceOf(AbstractFactory::class, new EntityManagerFactory());
+        self::assertInstanceOf(AbstractFactory::class, new EntityManagerFactory());
     }
 
     public function testDefaults(): void
@@ -41,8 +41,8 @@ final class EntityManagerFactoryTest extends TestCase
         $factory       = new EntityManagerFactory();
         $entityManager = $factory($container);
 
-        $this->assertSame($connection, $entityManager->getConnection());
-        $this->assertSame($configuration, $entityManager->getConfiguration());
+        self::assertSame($connection, $entityManager->getConnection());
+        self::assertSame($configuration, $entityManager->getConfiguration());
     }
 
     public function testConfigKeyTakenFromSelf(): void
@@ -63,8 +63,8 @@ final class EntityManagerFactoryTest extends TestCase
         $factory       = new EntityManagerFactory('orm_other');
         $entityManager = $factory($container);
 
-        $this->assertSame($connection, $entityManager->getConnection());
-        $this->assertSame($configuration, $entityManager->getConfiguration());
+        self::assertSame($connection, $entityManager->getConnection());
+        self::assertSame($configuration, $entityManager->getConfiguration());
     }
 
     public function testConfigKeyTakenFromConfig(): void
@@ -95,8 +95,8 @@ final class EntityManagerFactoryTest extends TestCase
         $factory       = new EntityManagerFactory();
         $entityManager = $factory($container);
 
-        $this->assertSame($connection, $entityManager->getConnection());
-        $this->assertSame($configuration, $entityManager->getConfiguration());
+        self::assertSame($connection, $entityManager->getConnection());
+        self::assertSame($configuration, $entityManager->getConfiguration());
     }
 
     private function buildConnection(): Connection

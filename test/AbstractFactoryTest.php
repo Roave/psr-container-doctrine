@@ -15,20 +15,20 @@ final class AbstractFactoryTest extends TestCase
     {
         $container = $this->createMock(ContainerInterface::class);
         $factory   = new StubFactory();
-        $this->assertSame('orm_default', $factory($container));
+        self::assertSame('orm_default', $factory($container));
     }
 
     public function testCustomConfigKey(): void
     {
         $container = $this->createMock(ContainerInterface::class);
         $factory   = new StubFactory('orm_other');
-        $this->assertSame('orm_other', $factory($container));
+        self::assertSame('orm_other', $factory($container));
     }
 
     public function testStaticCall(): void
     {
         $container = $this->createMock(ContainerInterface::class);
-        $this->assertSame('orm_other', StubFactory::orm_other($container));
+        self::assertSame('orm_other', StubFactory::orm_other($container));
     }
 
     public function testStaticCallWithoutContainer(): void
@@ -57,7 +57,7 @@ final class AbstractFactoryTest extends TestCase
 
         $actualResult = (new StubFactory())->retrieveConfig($container, $configKey, $section);
 
-        $this->assertSame($expectedResult, $actualResult);
+        self::assertSame($expectedResult, $actualResult);
     }
 
     /**

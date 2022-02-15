@@ -25,7 +25,7 @@ final class EventManagerFactoryTest extends TestCase
         $container    = $this->createMock(ContainerInterface::class);
         $eventManager = $factory($container);
 
-        $this->assertCount(0, $eventManager->getListeners());
+        self::assertCount(0, $eventManager->getListeners());
     }
 
     public function testInvalidInstanceSubscriber(): void
@@ -72,7 +72,7 @@ final class EventManagerFactoryTest extends TestCase
         $factory      = new EventManagerFactory();
         $eventManager = $factory($this->buildContainer(new StubEventSubscriber()));
 
-        $this->assertCount(1, $eventManager->getListeners('foo'));
+        self::assertCount(1, $eventManager->getListeners('foo'));
     }
 
     public function testClassNameSubscriber(): void
@@ -89,7 +89,7 @@ final class EventManagerFactoryTest extends TestCase
         $factory      = new EventManagerFactory();
         $eventManager = $factory($container);
 
-        $this->assertCount(1, $eventManager->getListeners('foo'));
+        self::assertCount(1, $eventManager->getListeners('foo'));
     }
 
     public function testServiceNameSubscriber(): void
@@ -110,8 +110,8 @@ final class EventManagerFactoryTest extends TestCase
         $eventManager = $factory($container);
         $listeners    = $eventManager->getListeners('foo');
 
-        $this->assertCount(1, $listeners);
-        $this->assertSame($eventSubscriber, array_pop($listeners));
+        self::assertCount(1, $listeners);
+        self::assertSame($eventSubscriber, array_pop($listeners));
     }
 
     public function testInvalidTypeListener(): void
@@ -163,7 +163,7 @@ final class EventManagerFactoryTest extends TestCase
             'listener' => new StubEventListener(),
         ]));
 
-        $this->assertCount(1, $eventManager->getListeners(Events::onFlush));
+        self::assertCount(1, $eventManager->getListeners(Events::onFlush));
     }
 
     public function testClassNameListener(): void
@@ -187,7 +187,7 @@ final class EventManagerFactoryTest extends TestCase
         $factory      = new EventManagerFactory();
         $eventManager = $factory($container);
 
-        $this->assertCount(1, $eventManager->getListeners(Events::onFlush));
+        self::assertCount(1, $eventManager->getListeners(Events::onFlush));
     }
 
     public function testServiceNameListener(): void
@@ -215,8 +215,8 @@ final class EventManagerFactoryTest extends TestCase
         $eventManager = $factory($container);
         $listeners    = $eventManager->getListeners(Events::onFlush);
 
-        $this->assertCount(1, $listeners);
-        $this->assertSame($eventListener, array_pop($listeners));
+        self::assertCount(1, $listeners);
+        self::assertSame($eventListener, array_pop($listeners));
     }
 
     /**

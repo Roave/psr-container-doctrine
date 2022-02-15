@@ -47,8 +47,8 @@ final class DriverFactoryTest extends TestCase
         );
 
         $driver = (new DriverFactory())->__invoke($container);
-        $this->assertInstanceOf(FileDriver::class, $driver);
-        $this->assertSame($globalBasename, $driver->getGlobalBasename());
+        self::assertInstanceOf(FileDriver::class, $driver);
+        self::assertSame($globalBasename, $driver->getGlobalBasename());
     }
 
     /**
@@ -73,8 +73,8 @@ final class DriverFactoryTest extends TestCase
         );
 
         $driver = (new DriverFactory())->__invoke($container);
-        $this->assertInstanceOf(FileDriver::class, $driver);
-        $this->assertSame($extension, $driver->getLocator()->getFileExtension());
+        self::assertInstanceOf(FileDriver::class, $driver);
+        self::assertSame($extension, $driver->getLocator()->getFileExtension());
     }
 
     /**
@@ -130,8 +130,8 @@ final class DriverFactoryTest extends TestCase
         );
 
         $driver = (new DriverFactory())->__invoke($container);
-        $this->assertInstanceOf(MappingDriverChain::class, $driver);
-        $this->assertInstanceOf(TestAsset\StubFileDriver::class, $driver->getDefaultDriver());
+        self::assertInstanceOf(MappingDriverChain::class, $driver);
+        self::assertInstanceOf(TestAsset\StubFileDriver::class, $driver->getDefaultDriver());
     }
 
     /**
@@ -182,7 +182,7 @@ final class DriverFactoryTest extends TestCase
         );
 
         $driver = (new DriverFactory())->__invoke($container);
-        $this->assertInstanceOf($driverClass, $driver);
+        self::assertInstanceOf($driverClass, $driver);
     }
 
     /**
