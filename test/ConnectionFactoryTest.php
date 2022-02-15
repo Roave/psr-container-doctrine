@@ -76,7 +76,7 @@ final class ConnectionFactoryTest extends TestCase
                         ExceptionConverter::class,
                     ], true)
                 ) {
-                    /** @psalm-suppress InternalMethod @todo find a better way to add to assertion count... */
+                    /** @todo find a better way to add to assertion count... */
                     $this->addToAssertionCount(1);
 
                     return;
@@ -98,7 +98,6 @@ final class ConnectionFactoryTest extends TestCase
 
         $this->assertSame($this->configuration, $connection->getConfiguration());
         $this->assertSame($this->eventManger, $connection->getEventManager());
-        /** @psalm-suppress InternalMethod */
         $this->assertSame([
             'driverClass' => PDOSqliteDriver::class,
             'wrapperClass' => null,
@@ -134,7 +133,6 @@ final class ConnectionFactoryTest extends TestCase
             'params' => ['username' => 'foo'],
         ]));
 
-        /** @psalm-suppress InternalMethod */
         $this->assertSame([
             'username' => 'foo',
             'driverClass' => PDOSqliteDriver::class,
