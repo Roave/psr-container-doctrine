@@ -30,7 +30,6 @@
         "doctrine/coding-standard": "^8.1",
         "phpunit/phpunit": "^9.4",
         "psalm/plugin-phpunit": "^0.9",
-        "psr/cache": "^1.0",
         "vimeo/psalm": "^3.18"
     },
     "autoload": {
