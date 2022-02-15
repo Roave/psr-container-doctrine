@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace RoaveTest\PsrContainerDoctrine;
 
+use Doctrine\Common\Annotations\PsrCachedReader;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\ORM\Mapping\Driver;
 use Doctrine\Persistence\Mapping\Driver\AnnotationDriver as AbstractAnnotationDriver;
 use Doctrine\Persistence\Mapping\Driver\FileDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
 use PHPUnit\Framework\TestCase;
+use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\DriverFactory;
 use Roave\PsrContainerDoctrine\Exception\OutOfBoundsException;
@@ -193,5 +195,35 @@ final class DriverFactoryTest extends TestCase
         $container->expects($this->exactly($expectedCalls))->method('get')->with('config')->willReturn($config);
 
         return $container;
+    }
+
+    public function testCanProcessCacheItemPoolAnnotationReader(): void
+    {
+        $container = $this->createMock(ContainerInterface::class);
+        $container
+            ->method('has')
+            ->withConsecutive(['config'], ['doctrine.cache.psr'])
+            ->willReturn(true);
+
+        $container
+            ->method('get')
+            ->withConsecutive(['config'], ['doctrine.cache.psr'])
+            ->willReturnOnConsecutiveCalls(
+                [
+                    'doctrine' => [
+                        'driver' => [
+                            'orm_default' => [
+                                'class' => Driver\AnnotationDriver::class,
+                                'cache' => 'psr',
+                            ],
+                        ],
+                    ],
+                ],
+                $this->createMock(CacheItemPoolInterface::class)
+            );
+
+        $driver = (new DriverFactory())->__invoke($container);
+        self::assertInstanceOf(Driver\AnnotationDriver::class, $driver);
+        self::assertInstanceOf(PsrCachedReader::class, $driver->getReader());
     }
 }

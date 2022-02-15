@@ -7,16 +7,24 @@ namespace Roave\PsrContainerDoctrine;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\CachedReader;
+use Doctrine\Common\Annotations\PsrCachedReader;
+use Doctrine\Common\Annotations\Reader;
+use Doctrine\Common\Cache\Cache;
 use Doctrine\ORM\Mapping\Driver\AttributeDriver;
 use Doctrine\Persistence\Mapping\Driver\AnnotationDriver;
 use Doctrine\Persistence\Mapping\Driver\FileDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
+use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
+use Roave\PsrContainerDoctrine\Exception\InvalidArgumentException;
 use Roave\PsrContainerDoctrine\Exception\OutOfBoundsException;
 
 use function array_key_exists;
+use function get_class;
+use function gettype;
 use function is_array;
+use function is_object;
 use function is_subclass_of;
 
 /**
@@ -53,10 +61,7 @@ final class DriverFactory extends AbstractFactory
              * @psalm-suppress UnsafeInstantiation
              */
             $driver = new $config['class'](
-                new CachedReader(
-                    new AnnotationReader(),
-                    $this->retrieveDependency($container, $config['cache'], 'cache', CacheFactory::class)
-                ),
+                $this->createCachedReader($container, $config, new AnnotationReader()),
                 $config['paths']
             );
         } elseif ($config['extension'] !== null && is_subclass_of($config['class'], FileDriver::class)) {
@@ -122,5 +127,36 @@ final class DriverFactory extends AbstractFactory
         AnnotationRegistry::registerLoader('class_exists');
 
         self::$isAnnotationLoaderRegistered = true;
+    }
+
+    /**
+     * @param array<string, mixed> $config
+     */
+    private function createCachedReader(ContainerInterface $container, array $config, Reader $reader): Reader
+    {
+        $cache = $this->retrieveDependency(
+            $container,
+            $config['cache'],
+            'cache',
+            CacheFactory::class
+        );
+
+        if ($cache instanceof Cache) {
+            return new CachedReader(
+                $reader,
+                $cache
+            );
+        }
+
+        if ($cache instanceof CacheItemPoolInterface) {
+            return new PsrCachedReader($reader, $cache);
+        }
+
+        $cacheType = is_object($cache) ? get_class($cache) : gettype($cache);
+        assert($cacheType !== '');
+
+        throw InvalidArgumentException::fromUnsupportedCacheType(
+            $cacheType
+        );
     }
 }
