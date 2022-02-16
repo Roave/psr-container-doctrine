@@ -150,3 +150,61 @@ try {
 
 return \Doctrine\ORM\Tools\Console\ConsoleRunner::createHelperSet($entityManager);
 ```
+
+
+## Get repository in the container.
+
+If you want get repository in the container. You can use `ContainerRepositoryFactory`:
+
+```php
+// config.php
+use Roave\PsrContainerDoctrine\ORM\ContainerRepositoryFactory;
+
+return  [
+    'doctrine' => [
+        'configuration' => [
+            'orm_default' => [
+                // ...
+                'repository_factory' => ContainerRepositoryFactory::class,
+            ],
+        ],
+    ],
+    'dependencies' => [
+        'factories' => [
+            // Add it by Laminas's ReflectionBasedAbstractFactory or custom callback.
+            // ContainerRepositoryFactory::class => ReflectionBasedAbstractFactory::class,
+            ContainerRepositoryFactory::class => function ($container) {
+                return new ContainerRepositoryFactory($container);
+            },
+
+            // Add custom repository factory.
+            FooRepository::class => FooRepositoryFactory::class,
+        ],
+    ],
+];
+```
+
+That can inject some other service by container.
+
+```php
+use Roave\PsrContainerDoctrine\ORM\ContainerRepositoryFactory;
+use Psr\Container\ContainerInterface;
+use Doctrine\ORM\EntityManagerInterface;
+
+$container = require 'config/container.php';
+
+class FooRepository extends \Doctrine\ORM\EntityRepository {
+  public function __construct(
+    private SomeOtherService $service, // Inject some other service.
+    EntityManagerInterface $em,
+    ClassMetadata $class
+  ) {
+    parent::__construct($em, $class);
+  }
+}
+
+$em = $container->get('doctrine.entity_manager.orm_default');
+$repository = $em->getRepository(FooEntity::class);
+
+var_dump($repository instanceof FooRepository); // true
+```
