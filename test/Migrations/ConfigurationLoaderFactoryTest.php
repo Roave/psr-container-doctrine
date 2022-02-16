@@ -77,5 +77,7 @@ final class ConfigurationLoaderFactoryTest extends TestCase
         self::assertSame(self::TABLE, $storageConfiguration->getTableName());
         self::assertSame(self::COLUMN, $storageConfiguration->getVersionColumnName());
         self::assertSame(self::COLUMN_LENGTH, $storageConfiguration->getVersionColumnLength());
+
+        self::assertSame([self::NS => self::DIRECTORY], $configuration->getMigrationDirectories());
     }
 }
