@@ -81,6 +81,10 @@ final class DriverFactory extends AbstractFactory
             $driver->setGlobalBasename($config['global_basename']);
         }
 
+        if (array_key_exists('exclude_paths', $config) && $driver instanceof AnnotationDriver) {
+            $driver->addExcludePaths($config['exclude_paths']);
+        }
+
         if ($driver instanceof MappingDriverChain) {
             if ($config['default_driver'] !== null) {
                 $driver->setDefaultDriver($this->createWithConfig($container, $config['default_driver']));

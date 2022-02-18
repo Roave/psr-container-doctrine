@@ -87,6 +87,7 @@ return [
             'orm_default' => [
                 'class' => null,
                 'paths' => [],
+                'exclude_paths' => null,
                 'extension' => null,
                 'drivers' => [],
                 'global_basename' => null,
