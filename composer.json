@@ -17,17 +17,20 @@
     ],
     "require": {
         "php": "~7.4.0 || ~8.0.0 || ~8.1.0",
+        "doctrine/annotations": "^1.13",
         "doctrine/cache": "^1.0",
         "doctrine/common": "^3.2",
         "doctrine/dbal": "^3.3",
+        "doctrine/event-manager": "^1.1",
         "doctrine/migrations": "^3.4",
         "doctrine/orm": "^2.11",
         "doctrine/persistence": "^2.3",
+        "psr/cache": "^1.0",
         "psr/container": "^1.0 || ^2.0"
     },
     "require-dev": {
-        "doctrine/annotations": "^1.13",
         "doctrine/coding-standard": "^8.1",
+        "maglnet/composer-require-checker": "^3.8",
         "phpunit/phpunit": "^9.4",
         "psalm/plugin-phpunit": "^0.16.1",
         "vimeo/psalm": "^4.20"
