@@ -59,7 +59,7 @@ return [
                 'sql_logger' => null,
                 'middlewares' => [
                     // List of middlewares doctrine will use to decorate the `Driver` component.
-                    // (see https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/architecture.html#middlewares)
+                    // (see https://github.com/doctrine/dbal/blob/3.3.2/docs/en/reference/architecture.rst#middlewares)
                     'app.foo.middleware', // Will be looked up in the container.
                     'app.bar.middleware', // Will be looked up in the container.
                 ],
