@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Roave\PsrContainerDoctrine\Exception;
 
 use Doctrine\Common\Cache\Cache;
+use Doctrine\DBAL\Driver\Middleware;
 use Psr\Cache\CacheItemPoolInterface;
 
 use function get_class;
@@ -23,6 +24,20 @@ final class InvalidArgumentException extends \InvalidArgumentException implement
             sprintf(
                 'Invalid event listener config: must be an array, "%s" given',
                 gettype($listenerConfig)
+            )
+        );
+    }
+
+    /**
+     * @param mixed $middleware
+     */
+    public static function forInvalidMiddleware($middleware): self
+    {
+        return new self(
+            sprintf(
+                'Invalid middleware: must either be a string or an implementation of "%s", "%s" given.',
+                Middleware::class,
+                gettype($middleware)
             )
         );
     }

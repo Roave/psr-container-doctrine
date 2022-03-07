@@ -13,6 +13,10 @@ use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
 use ReflectionProperty;
 use Roave\PsrContainerDoctrine\ConfigurationFactory;
+use Roave\PsrContainerDoctrine\Exception\InvalidArgumentException;
+use stdClass;
+
+use function array_key_exists;
 
 final class ConfigurationFactoryTest extends TestCase
 {
@@ -23,8 +27,7 @@ final class ConfigurationFactoryTest extends TestCase
         $metadataCache  = $this->createMock(CacheItemPoolInterface::class);
         $hydrationCache = $this->createMock(CacheItemPoolInterface::class);
 
-        $container = $this->createMock(ContainerInterface::class);
-        $config    = [
+        $config = [
             'doctrine' => [
                 'configuration' => [
                     'orm_default' => [
@@ -38,17 +41,15 @@ final class ConfigurationFactoryTest extends TestCase
             ],
         ];
 
-        $mappingDriver = $this->createMock(MappingDriver::class);
-
-        $container
-            ->method('has')
-            ->withConsecutive(['config'], ['doctrine.cache.metadata'], ['doctrine.cache.query'], ['doctrine.cache.result'], ['doctrine.cache.hydration'], ['doctrine.driver.orm_default'])
-            ->willReturnOnConsecutiveCalls(true, true, true, true, true, true);
-
-        $container
-            ->method('get')
-            ->withConsecutive(['config'], ['doctrine.cache.metadata'], ['doctrine.cache.query'], ['doctrine.cache.result'], ['doctrine.cache.hydration'], ['doctrine.driver.orm_default'])
-            ->willReturnOnConsecutiveCalls($config, $metadataCache, $queryCache, $resultCache, $hydrationCache, $mappingDriver);
+        $container = $this->buildContainerWithServicesAndDefaultMappingDriver(
+            [
+                'config'                   => $config,
+                'doctrine.cache.metadata'  => $metadataCache,
+                'doctrine.cache.query'     => $queryCache,
+                'doctrine.cache.result'    => $resultCache,
+                'doctrine.cache.hydration' => $hydrationCache,
+            ]
+        );
 
         $configuration = (new ConfigurationFactory())($container);
 
@@ -81,29 +82,37 @@ final class ConfigurationFactoryTest extends TestCase
             ],
         ];
 
-        $container = $this->createStub(ContainerInterface::class);
-        $container
-            ->method('has')
-            ->willReturnMap(
-                [
-                    ['config', true],
-                    ['acme.middleware.bar', true],
-                    ['doctrine.driver.orm_default', true],
-                ]
-            );
-        $container
-            ->method('get')
-            ->willReturnMap(
-                [
-                    ['config', $config],
-                    ['acme.middleware.bar', $middlewareBar],
-                    ['doctrine.driver.orm_default', $this->createStub(MappingDriver::class)],
-                ]
-            );
+        $container = $this->buildContainerWithServicesAndDefaultMappingDriver(
+            [
+                'config'              => $config,
+                'acme.middleware.bar' => $middlewareBar,
+            ]
+        );
 
         $configuration = (new ConfigurationFactory())($container);
 
         self::assertSame([$middlewareFoo, $middlewareBar], $configuration->getMiddlewares());
+    }
+
+    public function testInvalidMiddlewareThrowsException(): void
+    {
+        $invalidValueForAMiddleware = new stdClass();
+        $config                     = [
+            'doctrine' => [
+                'configuration' => [
+                    'orm_default' => [
+                        'middlewares' => [$invalidValueForAMiddleware],
+                    ],
+                ],
+            ],
+        ];
+
+        $container = $this->buildContainerWithServicesAndDefaultMappingDriver(['config' => $config]);
+
+        $subject = new ConfigurationFactory();
+
+        $this->expectException(InvalidArgumentException::class);
+        ($subject)($container);
     }
 
     /**
@@ -117,5 +126,33 @@ final class ConfigurationFactoryTest extends TestCase
         $property->setAccessible(true);
 
         return $property->getValue($object);
+    }
+
+    /**
+     * @param array<string, mixed> $services
+     */
+    private function buildContainerWithServicesAndDefaultMappingDriver(array $services): ContainerInterface
+    {
+        $services['doctrine.driver.orm_default'] = $this->createStub(MappingDriver::class);
+        $container                               = $this->createStub(ContainerInterface::class);
+        $container
+            ->method('has')
+            ->willReturnCallback(
+                static function (string $id) use ($services): bool {
+                    return array_key_exists($id, $services);
+                }
+            );
+        $container
+            ->method('get')
+            ->willReturnCallback(
+            /**
+             * @return mixed
+             */
+                static function (string $id) use ($services) {
+                    return $services[$id];
+                }
+            );
+
+        return $container;
     }
 }
