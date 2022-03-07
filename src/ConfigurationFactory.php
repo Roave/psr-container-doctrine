@@ -173,6 +173,15 @@ final class ConfigurationFactory extends AbstractFactory
             $configuration->setSQLLogger($config['sql_logger']);
         }
 
+        if ($config['middlewares'] !== []) {
+            $middlewares = [];
+            foreach ($config['middlewares'] as $middleware) {
+                $middlewares[] = is_string($middleware) ? $container->get($middleware) : $middleware;
+            }
+
+            $configuration->setMiddlewares($middlewares);
+        }
+
         return $configuration;
     }
 
@@ -212,6 +221,7 @@ final class ConfigurationFactory extends AbstractFactory
                 'regions' => [],
             ],
             'sql_logger' => null,
+            'middlewares' => [],
         ];
     }
 

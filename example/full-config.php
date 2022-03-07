@@ -57,6 +57,7 @@ return [
                     'regions' => [],
                 ],
                 'sql_logger' => null,
+                'middlewares' => [],
             ],
         ],
         'connection' => [

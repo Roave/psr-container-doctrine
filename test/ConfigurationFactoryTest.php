@@ -12,6 +12,7 @@ use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
 use ReflectionProperty;
 use Roave\PsrContainerDoctrine\ConfigurationFactory;
+use Doctrine\DBAL\Driver\Middleware;
 
 final class ConfigurationFactoryTest extends TestCase
 {
@@ -61,6 +62,48 @@ final class ConfigurationFactoryTest extends TestCase
         $secondLevelCacheFactory = $secondLevelCacheConfiguration->getCacheFactory();
         self::assertInstanceOf(DefaultCacheFactory::class, $secondLevelCacheFactory);
         self::assertSame($resultCache, $this->exctractPropertyValue($secondLevelCacheFactory, 'cacheItemPool'));
+    }
+
+    public function testWillSetMiddlewares(): void
+    {
+        $middlewareFoo = $this->createStub(Middleware::class);
+        $middlewareBar = $this->createStub(Middleware::class);
+        $config        = [
+            'doctrine' => [
+                'configuration' => [
+                    'orm_default' => [
+                        'middlewares' => [
+                            $middlewareFoo,
+                            'acme.middleware.bar',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $container = $this->createStub(ContainerInterface::class);
+        $container
+            ->method('has')
+            ->willReturnMap(
+                [
+                    ['config', true],
+                    ['acme.middleware.bar', true],
+                    ['doctrine.driver.orm_default', true],
+                ]
+            );
+        $container
+            ->method('get')
+            ->willReturnMap(
+                [
+                    ['config', $config],
+                    ['acme.middleware.bar', $middlewareBar],
+                    ['doctrine.driver.orm_default', $this->createStub(MappingDriver::class)],
+                ]
+            );
+
+        $configuration = (new ConfigurationFactory())($container);
+
+        self::assertSame([$middlewareFoo, $middlewareBar], $configuration->getMiddlewares());
     }
 
     /**
