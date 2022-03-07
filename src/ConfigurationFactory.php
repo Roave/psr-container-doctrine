@@ -6,16 +6,15 @@ namespace Roave\PsrContainerDoctrine;
 
 use Doctrine\Common\Cache\Cache;
 use Doctrine\Common\Cache\Psr6\CacheAdapter;
-use Doctrine\DBAL\Driver\Middleware;
 use Doctrine\ORM\Cache\CacheConfiguration;
 use Doctrine\ORM\Cache\DefaultCacheFactory;
 use Doctrine\ORM\Cache\RegionsConfiguration;
 use Doctrine\ORM\Configuration;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
-use Roave\PsrContainerDoctrine\Exception\InvalidArgumentException;
 
 use function array_key_exists;
+use function assert;
 use function is_string;
 
 /**
@@ -178,13 +177,8 @@ final class ConfigurationFactory extends AbstractFactory
         if ($config['middlewares'] !== []) {
             $middlewares = [];
             foreach ($config['middlewares'] as $middleware) {
-                if (is_string($middleware)) {
-                    $middlewares[] = $container->get($middleware);
-                } elseif ($middleware instanceof Middleware) {
-                    $middlewares[] = $middleware;
-                } else {
-                    throw InvalidArgumentException::forInvalidMiddleware($middleware);
-                }
+                assert(is_string($middleware), '`middlewares` must contain a list of container id strings');
+                $middlewares[] = $container->get($middleware);
             }
 
             $configuration->setMiddlewares($middlewares);
