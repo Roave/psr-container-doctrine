@@ -14,6 +14,8 @@ use Psr\Container\ContainerInterface;
 use ReflectionProperty;
 use Roave\PsrContainerDoctrine\ConfigurationFactory;
 
+use function in_array;
+
 final class ConfigurationFactoryTest extends TestCase
 {
     public function testWillSetCacheItemPoolCaches(): void
@@ -85,13 +87,19 @@ final class ConfigurationFactoryTest extends TestCase
 
         $container
             ->method('has')
-            ->willReturnMap(
-                [
-                    ['config', true],
-                    ['doctrine.driver.orm_default', true],
-                    ['acme.middleware.foo', true],
-                    ['acme.middleware.bar', true],
-                ]
+            ->willReturnCallback(
+                static function (string $id): bool {
+                    return in_array(
+                        $id,
+                        [
+                            'config',
+                            'doctrine.driver.orm_default',
+                            'acme.middleware.foo',
+                            'acme.middleware.bar',
+                        ],
+                        true,
+                    );
+                }
             );
 
         $container
