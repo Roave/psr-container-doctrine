@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace RoaveTest\PsrContainerDoctrine;
 
+use Doctrine\DBAL\Driver\Middleware;
 use Doctrine\ORM\Cache\CacheConfiguration;
 use Doctrine\ORM\Cache\DefaultCacheFactory;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
@@ -12,7 +13,6 @@ use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
 use ReflectionProperty;
 use Roave\PsrContainerDoctrine\ConfigurationFactory;
-use Doctrine\DBAL\Driver\Middleware;
 
 final class ConfigurationFactoryTest extends TestCase
 {
