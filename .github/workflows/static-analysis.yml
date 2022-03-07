@@ -26,3 +26,13 @@ jobs:
 
       - name: Static Analysis with Psalm
         run: make static-analysis
+
+      - name: Setup PHP with composer require checker
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.4
+          coverage: pcov
+          tools: composer-require-checker
+
+      - name: Run composer require checker
+        run: composer-require-checker check
