@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Doctrine\CustomCacheProvider;
+use App\Doctrine\FooMiddleware;
 use Doctrine\Common\Cache\ApcuCache;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\ChainCache;
@@ -57,7 +58,10 @@ return [
                     'regions' => [],
                 ],
                 'sql_logger' => null,
-                'middlewares' => [],
+                'middlewares' => [
+                    'app.foo.middleware', // Will be looked up in the container.
+                    new FooMiddleware(),  // Will be added as-is (must implement `\Doctrine\DBAL\Driver\Middleware`).
+                ],
             ],
         ],
         'connection' => [
