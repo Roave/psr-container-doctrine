@@ -2,27 +2,36 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 3.5.0 - TBD
+## 3.5.0 - 2022-03-08
 
-### Added
 
-- Nothing.
+-----
 
-### Changed
+### Release Notes for [3.5.0](https://github.com/Roave/psr-container-doctrine/milestone/19)
 
-- Nothing.
+Feature release (minor)
 
-### Deprecated
+### 3.5.0
 
-- Nothing.
+- Total issues resolved: **1**
+- Total pull requests resolved: **3**
+- Total contributors: **4**
 
-### Removed
+#### enhancement
 
-- Nothing.
+ - [68: &#91;Feature&#93; Add support for middlewares](https://github.com/Roave/psr-container-doctrine/pull/68) thanks to @samuelnogueira
 
-### Fixed
+#### bug,enhancement
 
-- Nothing.
+ - [67: Add missing dependencies, configure `maglnet/composer-require-checker`](https://github.com/Roave/psr-container-doctrine/pull/67) thanks to @Gared
+
+#### bug
+
+ - [66: Merge release 3.4.1 into 3.5.x](https://github.com/Roave/psr-container-doctrine/pull/66) thanks to @github-actions[bot]
+
+#### bug,help wanted
+
+ - [51: DriverFactory.php incompatible with doctrine/common: &quot;^3.0&quot;](https://github.com/Roave/psr-container-doctrine/issues/51) thanks to @FBurner
 
 ## 3.4.0 - 2022-02-15
 
