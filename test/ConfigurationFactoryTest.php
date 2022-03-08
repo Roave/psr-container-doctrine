@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace RoaveTest\PsrContainerDoctrine;
 
+use Doctrine\DBAL\Driver\Middleware;
 use Doctrine\ORM\Cache\CacheConfiguration;
 use Doctrine\ORM\Cache\DefaultCacheFactory;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
@@ -12,6 +13,8 @@ use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
 use ReflectionProperty;
 use Roave\PsrContainerDoctrine\ConfigurationFactory;
+
+use function in_array;
 
 final class ConfigurationFactoryTest extends TestCase
 {
@@ -61,6 +64,58 @@ final class ConfigurationFactoryTest extends TestCase
         $secondLevelCacheFactory = $secondLevelCacheConfiguration->getCacheFactory();
         self::assertInstanceOf(DefaultCacheFactory::class, $secondLevelCacheFactory);
         self::assertSame($resultCache, $this->exctractPropertyValue($secondLevelCacheFactory, 'cacheItemPool'));
+    }
+
+    public function testWillSetMiddlewares(): void
+    {
+        $middlewareFoo = $this->createStub(Middleware::class);
+        $middlewareBar = $this->createStub(Middleware::class);
+        $config        = [
+            'doctrine' => [
+                'configuration' => [
+                    'orm_default' => [
+                        'middlewares' => [
+                            'acme.middleware.foo',
+                            'acme.middleware.bar',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $container = $this->createStub(ContainerInterface::class);
+
+        $container
+            ->method('has')
+            ->willReturnCallback(
+                static function (string $id): bool {
+                    return in_array(
+                        $id,
+                        [
+                            'config',
+                            'doctrine.driver.orm_default',
+                            'acme.middleware.foo',
+                            'acme.middleware.bar',
+                        ],
+                        true,
+                    );
+                }
+            );
+
+        $container
+            ->method('get')
+            ->willReturnMap(
+                [
+                    ['config', $config],
+                    ['doctrine.driver.orm_default', $this->createStub(MappingDriver::class)],
+                    ['acme.middleware.foo', $middlewareFoo],
+                    ['acme.middleware.bar', $middlewareBar],
+                ]
+            );
+
+        $configuration = (new ConfigurationFactory())($container);
+
+        self::assertSame([$middlewareFoo, $middlewareBar], $configuration->getMiddlewares());
     }
 
     /**

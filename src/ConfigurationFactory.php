@@ -14,6 +14,7 @@ use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
 
 use function array_key_exists;
+use function assert;
 use function is_string;
 
 /**
@@ -173,6 +174,16 @@ final class ConfigurationFactory extends AbstractFactory
             $configuration->setSQLLogger($config['sql_logger']);
         }
 
+        if ($config['middlewares'] !== []) {
+            $middlewares = [];
+            foreach ($config['middlewares'] as $middleware) {
+                assert(is_string($middleware), '`middlewares` must contain a list of container id strings');
+                $middlewares[] = $container->get($middleware);
+            }
+
+            $configuration->setMiddlewares($middlewares);
+        }
+
         return $configuration;
     }
 
@@ -212,6 +223,7 @@ final class ConfigurationFactory extends AbstractFactory
                 'regions' => [],
             ],
             'sql_logger' => null,
+            'middlewares' => [],
         ];
     }
 
