@@ -9,7 +9,7 @@ unit: ## run unit tests
 	vendor/bin/phpunit
 
 cs: ## verify code style rules
-	vendor/bin/phpcbf
+	vendor/bin/phpcbf || true
 	vendor/bin/phpcs
 
 static-analysis: ## verify that no static analysis issues were introduced

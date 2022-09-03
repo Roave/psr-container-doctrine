@@ -16,5 +16,5 @@ check () {
   fi
 }
 
-check example/laminas-servicemanager.php $'Doctrine\\ORM\\EntityManager\nDoctrine\\ORM\\EntityManager'
-check example/illuminate-container.php $'Doctrine\\ORM\\EntityManager\nDoctrine\\ORM\\EntityManager'
+check example/laminas-servicemanager.php $'Doctrine\\ORM\\EntityManager\nDoctrine\\ORM\\EntityManager\nDoctrine\\ORM\\EntityManager'
+check example/illuminate-container.php $'Doctrine\\ORM\\EntityManager\nDoctrine\\ORM\\EntityManager\nDoctrine\\ORM\\EntityManager'
