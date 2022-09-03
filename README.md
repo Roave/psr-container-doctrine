@@ -145,7 +145,7 @@ foreach ($_SERVER['argv'] as $i => $arg) {
 try {
     $entityManager = $this->container->get('doctrine.entity_manager.'.$em);
 } catch (\Psr\Container\NotFoundExceptionInterface $serviceNotFoundException) {
-    throw new \InvalidArgumentException(sprintf('Missing entity manager with name "%s"', $entityManagerName));
+    throw new \InvalidArgumentException(sprintf('Missing entity manager with name "%s"', $em));
 }
 
 return \Doctrine\ORM\Tools\Console\ConsoleRunner::createHelperSet($entityManager);
