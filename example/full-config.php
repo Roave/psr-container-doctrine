@@ -73,7 +73,7 @@ return [
                 'configuration' => 'orm_default', // Actually defaults to the connection config key, not hard-coded
                 'event_manager' => 'orm_default', // Actually defaults to the connection config key, not hard-coded
                 'params' => [],
-                'doctrine_mapping_types' => [],
+                'doctrine_type_mappings' => [],
                 'doctrine_commented_types' => [],
             ],
         ],
