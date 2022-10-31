@@ -20,9 +20,6 @@ use function is_string;
 /** @method Configuration __invoke(ContainerInterface $container) */
 final class ConfigurationFactory extends AbstractFactory
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function createWithConfig(ContainerInterface $container, string $configKey): Configuration
     {
         $config = $this->retrieveConfig($container, $configKey, 'configuration');

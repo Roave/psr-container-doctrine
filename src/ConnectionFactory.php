@@ -17,9 +17,6 @@ final class ConnectionFactory extends AbstractFactory
 {
     private static bool $areTypesRegistered = false;
 
-    /**
-     * {@inheritdoc}
-     */
     protected function createWithConfig(ContainerInterface $container, string $configKey): Connection
     {
         $this->registerTypes($container);

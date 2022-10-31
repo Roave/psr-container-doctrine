@@ -29,9 +29,6 @@ use function is_string;
 /** @method Cache|CacheItemPoolInterface __invoke(ContainerInterface $container) */
 final class CacheFactory extends AbstractFactory
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function createWithConfig(ContainerInterface $container, string $configKey): Cache|CacheItemPoolInterface
     {
         $config = $this->retrieveConfig($container, $configKey, 'cache');

@@ -20,9 +20,6 @@ use function method_exists;
 /** @method EventManager __invoke(ContainerInterface $container) */
 final class EventManagerFactory extends AbstractFactory
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function createWithConfig(ContainerInterface $container, string $configKey): EventManager
     {
         $config       = $this->retrieveConfig($container, $configKey, 'event_manager');

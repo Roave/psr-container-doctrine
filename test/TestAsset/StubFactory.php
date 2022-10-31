@@ -9,9 +9,6 @@ use Roave\PsrContainerDoctrine\AbstractFactory;
 
 class StubFactory extends AbstractFactory
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function createWithConfig(ContainerInterface $container, string $configKey): string
     {
         return $configKey;

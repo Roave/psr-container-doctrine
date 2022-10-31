@@ -29,9 +29,6 @@ final class DriverFactory extends AbstractFactory
 {
     private static bool $isAnnotationLoaderRegistered = false;
 
-    /**
-     * {@inheritdoc}
-     */
     protected function createWithConfig(ContainerInterface $container, string $configKey): MappingDriver
     {
         $config = $this->retrieveConfig($container, $configKey, 'driver');
