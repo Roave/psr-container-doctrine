@@ -32,7 +32,7 @@ final class DriverFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    protected function createWithConfig(ContainerInterface $container, string $configKey)
+    protected function createWithConfig(ContainerInterface $container, string $configKey): MappingDriver
     {
         $config = $this->retrieveConfig($container, $configKey, 'driver');
 

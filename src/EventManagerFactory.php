@@ -23,7 +23,7 @@ final class EventManagerFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    protected function createWithConfig(ContainerInterface $container, string $configKey)
+    protected function createWithConfig(ContainerInterface $container, string $configKey): EventManager
     {
         $config       = $this->retrieveConfig($container, $configKey, 'event_manager');
         $eventManager = new EventManager();

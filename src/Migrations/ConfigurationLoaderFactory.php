@@ -13,7 +13,7 @@ use Roave\PsrContainerDoctrine\AbstractFactory;
 class ConfigurationLoaderFactory extends AbstractFactory
 {
     /** @inheritDoc */
-    protected function createWithConfig(ContainerInterface $container, string $configKey)
+    protected function createWithConfig(ContainerInterface $container, string $configKey): ConfigurationLoader
     {
         $migrationsConfig = $this->retrieveConfig($container, $configKey, 'migrations');
 

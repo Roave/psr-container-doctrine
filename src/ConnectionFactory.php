@@ -20,7 +20,7 @@ final class ConnectionFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    protected function createWithConfig(ContainerInterface $container, string $configKey)
+    protected function createWithConfig(ContainerInterface $container, string $configKey): Connection
     {
         $this->registerTypes($container);
 

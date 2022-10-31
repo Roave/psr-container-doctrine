@@ -13,7 +13,7 @@ final class EntityManagerFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    protected function createWithConfig(ContainerInterface $container, string $configKey)
+    protected function createWithConfig(ContainerInterface $container, string $configKey): EntityManager
     {
         $config = $this->retrieveConfig($container, $configKey, 'entity_manager');
 
