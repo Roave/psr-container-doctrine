@@ -2,27 +2,38 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 3.6.0 - TBD
+## 3.6.0 - 2022-10-31
 
-### Added
 
-- Nothing.
+-----
 
-### Changed
+### Release Notes for [3.6.0](https://github.com/Roave/psr-container-doctrine/milestone/22)
 
-- Nothing.
+Feature release (minor)
 
-### Deprecated
+### 3.6.0
 
-- Nothing.
+- Total issues resolved: **0**
+- Total pull requests resolved: **6**
+- Total contributors: **2**
 
-### Removed
+#### enhancement,renovate
 
-- Nothing.
+ - [84: Update dependency psr/cache to allow installation of v1, v2 and v3](https://github.com/Roave/psr-container-doctrine/pull/84) thanks to @renovate[bot]
 
-### Fixed
+#### renovate
 
-- Nothing.
+ - [79: Update actions/checkout action to v3](https://github.com/Roave/psr-container-doctrine/pull/79) thanks to @renovate[bot]
+ - [78: Update actions/cache action to v3](https://github.com/Roave/psr-container-doctrine/pull/78) thanks to @renovate[bot]
+ - [77: Update all non-major dependencies](https://github.com/Roave/psr-container-doctrine/pull/77) thanks to @renovate[bot]
+
+#### enhancement
+
+ - [76: Configure Renovate, drop PHP 7 support](https://github.com/Roave/psr-container-doctrine/pull/76) thanks to @renovate[bot]
+
+#### bug,documentation
+
+ - [73: Fix typo](https://github.com/Roave/psr-container-doctrine/pull/73) thanks to @garygitton
 
 ## 3.5.0 - 2022-03-08
 
