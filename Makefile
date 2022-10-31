@@ -16,7 +16,7 @@ static-analysis: ## verify that no static analysis issues were introduced
 
 bc-check: ## check for backwards compatibility breaks
 	mkdir -p /tmp/bc-check
-	composer require -d/tmp/bc-check roave/backward-compatibility-check
+	composer require --no-plugins -d/tmp/bc-check roave/backward-compatibility-check 
 	/tmp/bc-check/vendor/bin/roave-backward-compatibility-check
 	rm -Rf /tmp/bc-check
 

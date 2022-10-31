@@ -16,7 +16,7 @@
         }
     ],
     "require": {
-        "php": "~7.4.0 || ~8.0.0 || ~8.1.0",
+        "php": "~8.0.0 || ~8.1.0",
         "doctrine/annotations": "^1.13",
         "doctrine/cache": "^1.0",
         "doctrine/common": "^3.2",
@@ -32,6 +32,7 @@
         "doctrine/coding-standard": "^8.1",
         "phpunit/phpunit": "^9.4",
         "psalm/plugin-phpunit": "^0.16.1",
+        "symfony/yaml": "^6.0.14",
         "vimeo/psalm": "^4.20"
     },
     "autoload": {
@@ -45,11 +46,14 @@
         }
     },
     "config": {
-        "preferred-install": "dist",
-        "sort-packages": true,
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true,
-            "composer/package-versions-deprecated": true
-        }
+            "composer/package-versions-deprecated": true,
+            "ocramius/package-versions": true
+        },
+        "platform": {
+            "php": "8.0.99"
+        },
+        "sort-packages": true
     }
 }
