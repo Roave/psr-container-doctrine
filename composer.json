@@ -32,7 +32,7 @@
         "doctrine/coding-standard": "^8.2.1",
         "phpunit/phpunit": "^9.5.26",
         "psalm/plugin-phpunit": "^0.17.0",
-        "symfony/yaml": "^6.1.6",
+        "symfony/yaml": "^6.0.14",
         "vimeo/psalm": "^4.29.0"
     },
     "autoload": {
