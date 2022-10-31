@@ -45,11 +45,13 @@
         }
     },
     "config": {
-        "preferred-install": "dist",
-        "sort-packages": true,
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "composer/package-versions-deprecated": true
-        }
+        },
+        "platform": {
+            "php": "7.4.99"
+        },
+        "sort-packages": true
     }
 }
