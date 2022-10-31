@@ -30,7 +30,6 @@
         </InternalClass>
         <DeprecatedClass>
             <errorLevel type="suppress">
-                <!-- We cannot upgrade to doctrine/dbal v2 easily and need to find an alternative -->
                 <referencedClass name="Doctrine\Common\Cache\ApcuCache"/>
                 <referencedClass name="Doctrine\Common\Cache\ArrayCache"/>
                 <referencedClass name="Doctrine\Common\Cache\Cache"/>
@@ -45,7 +44,14 @@
                 <referencedClass name="Doctrine\Common\Cache\ZendDataCache"/>
                 <referencedClass name="Doctrine\Common\Annotations\CachedReader"/>
                 <referencedClass name="Doctrine\ORM\Mapping\Driver\SimplifiedYamlDriver"/>
+                <referencedClass name="Doctrine\Persistence\Mapping\Driver\AnnotationDriver"/>
             </errorLevel>
         </DeprecatedClass>
+        <DeprecatedMethod>
+            <errorLevel type="suppress">
+                <referencedMethod name="Doctrine\DBAL\Configuration::setSQLLogger"/>
+                <referencedMethod name="Doctrine\DBAL\Connection::getEventManager"/>
+            </errorLevel>
+        </DeprecatedMethod>
     </issueHandlers>
 </psalm>
