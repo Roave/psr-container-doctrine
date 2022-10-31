@@ -17,22 +17,16 @@ use Roave\PsrContainerDoctrine\Exception\OutOfBoundsException;
 
 use function extension_loaded;
 
-/**
- * @coversDefaultClass \Roave\PsrContainerDoctrine\CacheFactory
- */
+/** @coversDefaultClass \Roave\PsrContainerDoctrine\CacheFactory */
 final class CacheFactoryTest extends TestCase
 {
-    /**
-     * @covers ::__construct
-     */
+    /** @covers ::__construct */
     public function testExtendsAbstractFactory(): void
     {
         self::assertInstanceOf(AbstractFactory::class, new CacheFactory());
     }
 
-    /**
-     * @covers ::createWithConfig
-     */
+    /** @covers ::createWithConfig */
     public function testFileSystemCacheConstructor(): void
     {
         $container = $this->createContainerMockWithConfig(
@@ -45,7 +39,7 @@ final class CacheFactoryTest extends TestCase
                         ],
                     ],
                 ],
-            ]
+            ],
         );
 
         $factory       = new CacheFactory('filesystem');
@@ -121,7 +115,7 @@ final class CacheFactoryTest extends TestCase
                 'doctrine' => [
                     'cache' => [],
                 ],
-            ]
+            ],
         );
 
         $factory = new CacheFactory('foo');
@@ -130,9 +124,7 @@ final class CacheFactoryTest extends TestCase
         $factory($container);
     }
 
-    /**
-     * @param array<string, mixed> $config
-     */
+    /** @param array<string, mixed> $config */
     private function createContainerMockWithConfig(array $config): ContainerInterface
     {
         $container = $this->createMock(ContainerInterface::class);
@@ -152,7 +144,7 @@ final class CacheFactoryTest extends TestCase
             ->withConsecutive(['config'], [$containerId])
             ->willReturnOnConsecutiveCalls(
                 true,
-                true
+                true,
             );
 
         $cacheItemPool = $this->createMock(CacheItemPoolInterface::class);
@@ -161,7 +153,7 @@ final class CacheFactoryTest extends TestCase
             ->withConsecutive(['config'], [$containerId])
             ->willReturnOnConsecutiveCalls(
                 ['doctrine' => ['cache' => ['foo' => ['class' => $containerId]]]],
-                $cacheItemPool
+                $cacheItemPool,
             );
 
         $factory = new CacheFactory('foo');

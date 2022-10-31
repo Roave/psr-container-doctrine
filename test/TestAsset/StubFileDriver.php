@@ -19,9 +19,7 @@ class StubFileDriver extends FileDriver
 
     // phpcs:disable SlevomatCodingStandard.TypeHints.ParameterTypeHint
 
-    /**
-     * @param string|class-string $className
-     */
+    /** @param string|class-string $className */
     public function loadMetadataForClass($className, ClassMetadata $metadata): void
     {
     }

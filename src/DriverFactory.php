@@ -24,9 +24,7 @@ use function array_key_exists;
 use function is_array;
 use function is_subclass_of;
 
-/**
- * @method MappingDriver __invoke(ContainerInterface $container)
- */
+/** @method MappingDriver __invoke(ContainerInterface $container) */
 final class DriverFactory extends AbstractFactory
 {
     private static bool $isAnnotationLoaderRegistered = false;
@@ -126,16 +124,14 @@ final class DriverFactory extends AbstractFactory
         self::$isAnnotationLoaderRegistered = true;
     }
 
-    /**
-     * @param array<string, mixed> $config
-     */
+    /** @param array<string, mixed> $config */
     private function createCachedReader(ContainerInterface $container, array $config, Reader $reader): PsrCachedReader
     {
         $cache = $this->retrieveDependency(
             $container,
             $config['cache'],
             'cache',
-            CacheFactory::class
+            CacheFactory::class,
         );
 
         if ($cache instanceof Cache) {
@@ -147,7 +143,7 @@ final class DriverFactory extends AbstractFactory
         }
 
         throw InvalidArgumentException::fromUnsupportedCache(
-            $cache
+            $cache,
         );
     }
 }

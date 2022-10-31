@@ -16,8 +16,8 @@ final class DomainException extends \DomainException implements ExceptionInterfa
             sprintf(
                 'Invalid event listener "%s" given: must have a "%s" method',
                 $listenerName,
-                $event
-            )
+                $event,
+            ),
         );
     }
 
@@ -26,8 +26,8 @@ final class DomainException extends \DomainException implements ExceptionInterfa
         return new self(
             sprintf(
                 'Invalid event listener "%s" given, must be a dependency name, class name or an object',
-                $listenerName
-            )
+                $listenerName,
+            ),
         );
     }
 
@@ -37,8 +37,8 @@ final class DomainException extends \DomainException implements ExceptionInterfa
             sprintf(
                 'Invalid event subscriber "%s" given, must be a dependency name, class name or an instance implementing %s',
                 $subscriberName,
-                EventSubscriber::class
-            )
+                EventSubscriber::class,
+            ),
         );
     }
 
@@ -47,8 +47,8 @@ final class DomainException extends \DomainException implements ExceptionInterfa
         return new self(
             sprintf(
                 'Requested class "%s" is not a valid doctrine migrations command',
-                $command
-            )
+                $command,
+            ),
         );
     }
 }

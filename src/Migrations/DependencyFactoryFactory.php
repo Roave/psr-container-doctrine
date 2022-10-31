@@ -23,13 +23,13 @@ final class DependencyFactoryFactory extends AbstractFactory
                 $container,
                 $configKey,
                 'entity_manager',
-                EntityManagerFactory::class
-            )
+                EntityManagerFactory::class,
+            ),
         );
 
         return DependencyFactory::fromEntityManager(
             $container->get(ConfigurationLoader::class),
-            $entityManagerLoader
+            $entityManagerLoader,
         );
     }
 

@@ -23,7 +23,7 @@ final class DependencyFactoryFactoryTest extends TestCase
                 [
                     [ConfigurationLoader::class, true],
                     ['doctrine.entity_manager.orm_default', true],
-                ]
+                ],
             );
 
         $entityManager = $this->createMock(EntityManagerInterface::class);
@@ -32,7 +32,7 @@ final class DependencyFactoryFactoryTest extends TestCase
                 [
                     [ConfigurationLoader::class, new ConfigurationArray([])],
                     ['doctrine.entity_manager.orm_default', $entityManager],
-                ]
+                ],
             );
 
         $factory           = new DependencyFactoryFactory();

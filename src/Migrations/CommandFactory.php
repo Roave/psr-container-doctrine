@@ -18,9 +18,7 @@ class CommandFactory extends AbstractFactory
     /** @psalm-var class-string<DoctrineCommand>|'' */
     private string $requestedName = '';
 
-    /**
-     * @psalm-param class-string<DoctrineCommand>|'' $requestedName
-     */
+    /** @psalm-param class-string<DoctrineCommand>|'' $requestedName */
     public function __invoke(ContainerInterface $container, string $requestedName = ''): DoctrineCommand
     {
         if (! is_a($requestedName, DoctrineCommand::class, true)) {
@@ -42,9 +40,7 @@ class CommandFactory extends AbstractFactory
 
         assert($this->requestedName !== '');
 
-        /**
-         * @psalm-suppress UnsafeInstantiation
-         */
+        /** @psalm-suppress UnsafeInstantiation */
         return new $this->requestedName($dependencyFactory);
     }
 

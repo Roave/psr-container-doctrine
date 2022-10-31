@@ -7,9 +7,7 @@ namespace Roave\PsrContainerDoctrine;
 use Doctrine\ORM\EntityManager;
 use Psr\Container\ContainerInterface;
 
-/**
- * @method EntityManager __invoke(ContainerInterface $container)
- */
+/** @method EntityManager __invoke(ContainerInterface $container) */
 final class EntityManagerFactory extends AbstractFactory
 {
     /**
@@ -24,14 +22,14 @@ final class EntityManagerFactory extends AbstractFactory
                 $container,
                 $config['connection'],
                 'connection',
-                ConnectionFactory::class
+                ConnectionFactory::class,
             ),
             $this->retrieveDependency(
                 $container,
                 $config['configuration'],
                 'configuration',
-                ConfigurationFactory::class
-            )
+                ConfigurationFactory::class,
+            ),
         );
     }
 

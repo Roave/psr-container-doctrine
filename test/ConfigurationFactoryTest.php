@@ -99,7 +99,7 @@ final class ConfigurationFactoryTest extends TestCase
                         ],
                         true,
                     );
-                }
+                },
             );
 
         $container
@@ -110,7 +110,7 @@ final class ConfigurationFactoryTest extends TestCase
                     ['doctrine.driver.orm_default', $this->createStub(MappingDriver::class)],
                     ['acme.middleware.foo', $middlewareFoo],
                     ['acme.middleware.bar', $middlewareBar],
-                ]
+                ],
             );
 
         $configuration = (new ConfigurationFactory())($container);
@@ -118,12 +118,8 @@ final class ConfigurationFactoryTest extends TestCase
         self::assertSame([$middlewareFoo, $middlewareBar], $configuration->getMiddlewares());
     }
 
-    /**
-     * @param non-empty-string $propertyName
-     *
-     * @return mixed
-     */
-    private function exctractPropertyValue(object $object, string $propertyName)
+    /** @param non-empty-string $propertyName */
+    private function exctractPropertyValue(object $object, string $propertyName): mixed
     {
         $property = new ReflectionProperty($object, $propertyName);
         $property->setAccessible(true);

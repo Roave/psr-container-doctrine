@@ -13,11 +13,11 @@ $container = new Container(new InjectionFactory(new Resolver(new Reflector())));
 // Standard config keys
 $container->set(
     'doctrine.entity_manager.orm_default',
-    $container->lazy(new EntityManagerFactory(), $container)
+    $container->lazy(new EntityManagerFactory(), $container),
 );
 
 // Custom config keys
 $container->set(
     'doctrine.entity_manager.orm_other',
-    $container->lazy(new EntityManagerFactory('orm_other'), $container)
+    $container->lazy(new EntityManagerFactory('orm_other'), $container),
 );

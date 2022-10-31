@@ -44,7 +44,7 @@ final class AbstractFactoryTest extends TestCase
      *
      * @dataProvider configProvider
      */
-    public function testRetrieveConfig(string $configKey, string $section, array $expectedResult, ?array $config = null): void
+    public function testRetrieveConfig(string $configKey, string $section, array $expectedResult, array|null $config = null): void
     {
         $container = $this->createMock(ContainerInterface::class);
 
@@ -60,9 +60,7 @@ final class AbstractFactoryTest extends TestCase
         self::assertSame($expectedResult, $actualResult);
     }
 
-    /**
-     * @return array<string, mixed>
-     */
+    /** @return array<string, mixed> */
     public function configProvider(): array
     {
         return [

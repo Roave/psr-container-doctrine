@@ -11,16 +11,13 @@ use Roave\PsrContainerDoctrine\Exception\DomainException;
 use Roave\PsrContainerDoctrine\Exception\InvalidArgumentException;
 
 use function class_exists;
-use function get_class;
 use function gettype;
 use function is_array;
 use function is_object;
 use function is_string;
 use function method_exists;
 
-/**
- * @method EventManager __invoke(ContainerInterface $container)
- */
+/** @method EventManager __invoke(ContainerInterface $container) */
 final class EventManagerFactory extends AbstractFactory
 {
     /**
@@ -33,7 +30,7 @@ final class EventManagerFactory extends AbstractFactory
 
         foreach ($config['subscribers'] as $subscriber) {
             if (is_object($subscriber)) {
-                $subscriberName = get_class($subscriber);
+                $subscriberName = $subscriber::class;
             } elseif (! is_string($subscriber)) {
                 $subscriberName = gettype($subscriber);
             } elseif ($container->has($subscriber)) {
@@ -41,7 +38,7 @@ final class EventManagerFactory extends AbstractFactory
                 $subscriberName = $subscriber;
             } elseif (class_exists($subscriber)) {
                 $subscriber     = new $subscriber();
-                $subscriberName = get_class($subscriber);
+                $subscriberName = $subscriber::class;
             } else {
                 $subscriberName = $subscriber;
             }
@@ -62,14 +59,14 @@ final class EventManagerFactory extends AbstractFactory
             $listenerName = $listener;
 
             if (is_object($listener)) {
-                $listenerName = get_class($listener);
+                $listenerName = $listener::class;
             } elseif (! is_string($listener)) {
                 $listenerName = gettype($listener);
             } elseif ($container->has($listener)) {
                 $listener = $container->get($listener);
             } elseif (class_exists($listener)) {
                 $listener     = new $listener();
-                $listenerName = get_class($listener);
+                $listenerName = $listener::class;
             }
 
             if (! is_object($listener)) {
