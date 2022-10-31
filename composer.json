@@ -17,23 +17,23 @@
     ],
     "require": {
         "php": "~8.0.0 || ~8.1.0",
-        "doctrine/annotations": "^1.13",
-        "doctrine/cache": "^1.0",
-        "doctrine/common": "^3.2",
-        "doctrine/dbal": "^3.3",
-        "doctrine/event-manager": "^1.1",
-        "doctrine/migrations": "^3.4",
-        "doctrine/orm": "^2.11",
-        "doctrine/persistence": "^2.3",
-        "psr/cache": "^1.0",
+        "doctrine/annotations": "^1.13.3",
+        "doctrine/cache": "^1.13.0",
+        "doctrine/common": "^3.4.3",
+        "doctrine/dbal": "^3.5.1",
+        "doctrine/event-manager": "^1.2.0",
+        "doctrine/migrations": "^3.5.2",
+        "doctrine/orm": "^2.13.3",
+        "doctrine/persistence": "^2.5.5",
+        "psr/cache": "^1.0.1",
         "psr/container": "^1.0 || ^2.0"
     },
     "require-dev": {
-        "doctrine/coding-standard": "^8.1",
-        "phpunit/phpunit": "^9.4",
-        "psalm/plugin-phpunit": "^0.16.1",
-        "symfony/yaml": "^6.0.14",
-        "vimeo/psalm": "^4.20"
+        "doctrine/coding-standard": "^8.2.1",
+        "phpunit/phpunit": "^9.5.26",
+        "psalm/plugin-phpunit": "^0.17.0",
+        "symfony/yaml": "^6.1.6",
+        "vimeo/psalm": "^4.29.0"
     },
     "autoload": {
         "psr-4": {
