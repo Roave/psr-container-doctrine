@@ -47,7 +47,8 @@
     "config": {
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true,
-            "composer/package-versions-deprecated": true
+            "composer/package-versions-deprecated": true,
+            "ocramius/package-versions": true
         },
         "platform": {
             "php": "7.4.99"
