@@ -23,16 +23,16 @@
         "doctrine/dbal": "^3.5.1",
         "doctrine/event-manager": "^1.2.0",
         "doctrine/migrations": "^3.5.2",
-        "doctrine/orm": "^2.13.3",
+        "doctrine/orm": "^2.13.4",
         "doctrine/persistence": "^2.5.5",
         "psr/cache": "^1.0.1 || ^2.0.0 || ^3.0.0",
         "psr/container": "^1.0 || ^2.0"
     },
     "require-dev": {
         "doctrine/coding-standard": "^8.2.1",
-        "phpunit/phpunit": "^9.5.26",
+        "phpunit/phpunit": "^9.5.27",
         "psalm/plugin-phpunit": "^0.18.4",
-        "symfony/yaml": "^6.0.14",
+        "symfony/yaml": "^6.2.0",
         "vimeo/psalm": "^5.1.0"
     },
     "autoload": {
