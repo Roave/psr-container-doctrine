@@ -16,7 +16,7 @@
         }
     ],
     "require": {
-        "php": "~8.0.0 || ~8.1.0",
+        "php": "~8.0.0 || ~8.1.0 || ~8.2.0",
         "doctrine/annotations": "^1.13.3",
         "doctrine/cache": "^1.13.0",
         "doctrine/common": "^3.4.3",
