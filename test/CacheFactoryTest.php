@@ -8,7 +8,6 @@ use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\ChainCache;
 use Doctrine\Common\Cache\FilesystemCache;
 use Doctrine\Common\Cache\MemcachedCache;
-use Memcached;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
@@ -86,7 +85,8 @@ final class CacheFactoryTest extends TestCase
             $this->markTestSkipped('Extension memcached is not loaded');
         }
 
-        $wrappedMemcached = $this->createMock(Memcached::class);
+        /** @psalm-suppress ArgumentTypeCoercion \Memcached needs to be imported otherwise */
+        $wrappedMemcached = $this->createMock('Memcached');
 
         $config = [
             'doctrine' => [
