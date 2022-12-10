@@ -29,6 +29,7 @@
         "psr/container": "^1.0 || ^2.0"
     },
     "require-dev": {
+        "ext-memcached": "*",
         "doctrine/coding-standard": "^8.2.1",
         "phpunit/phpunit": "^9.5.26",
         "psalm/plugin-phpunit": "^0.18.4",
