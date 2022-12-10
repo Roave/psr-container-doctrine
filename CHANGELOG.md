@@ -2,27 +2,29 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 3.7.0 - TBD
+## 3.7.0 - 2022-12-10
 
-### Added
 
-- Nothing.
+-----
 
-### Changed
+### Release Notes for [3.7.0](https://github.com/Roave/psr-container-doctrine/milestone/24)
 
-- Nothing.
+Feature release (minor)
 
-### Deprecated
+### 3.7.0
 
-- Nothing.
+- Total issues resolved: **0**
+- Total pull requests resolved: **3**
+- Total contributors: **2**
 
-### Removed
+#### enhancement
 
-- Nothing.
+ - [89: Support PHP 8.2, drop support for PHP 8.0, upgrade to vimeo/psalm v5](https://github.com/Roave/psr-container-doctrine/pull/89) thanks to @internalsystemerror
 
-### Fixed
+#### duplicate,enhancement,renovate
 
-- Nothing.
+ - [88: Update dependency php to ~8.0.0 || ~8.1.0 || ~8.2.0](https://github.com/Roave/psr-container-doctrine/pull/88) thanks to @renovate[bot]
+ - [87: Update dependency vimeo/psalm to v5](https://github.com/Roave/psr-container-doctrine/pull/87) thanks to @renovate[bot]
 
 ## 3.6.0 - 2022-10-31
 
