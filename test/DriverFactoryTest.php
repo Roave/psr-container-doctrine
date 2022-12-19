@@ -80,7 +80,7 @@ final class DriverFactoryTest extends TestCase
     /**
      * @return string[][]
      *
-     * @psalm-return list<list<class-string<FileDriver>>>
+     * @psalm-return list<array{class-string<FileDriver>}>
      */
     public function simplifiedDriverClassProvider(): array
     {
@@ -137,7 +137,7 @@ final class DriverFactoryTest extends TestCase
     /**
      * @return string[][]
      *
-     * @psalm-return list<list<class-string<AbstractAnnotationDriver>>>
+     * @psalm-return list<array{class-string<AbstractAnnotationDriver>}>
      */
     public function annotationDriverClassProvider(): array
     {
