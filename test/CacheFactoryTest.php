@@ -85,6 +85,7 @@ final class CacheFactoryTest extends TestCase
             $this->markTestSkipped('Extension memcached is not loaded');
         }
 
+        /** @psalm-suppress ArgumentTypeCoercion \Memcached needs to be imported otherwise */
         $wrappedMemcached = $this->createMock('Memcached');
 
         $config = [
