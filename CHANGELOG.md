@@ -2,27 +2,28 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 3.8.0 - TBD
+## 3.8.0 - 2022-12-27
 
-### Added
 
-- Nothing.
+-----
 
-### Changed
+### Release Notes for [3.8.0](https://github.com/Roave/psr-container-doctrine/milestone/26)
 
-- Nothing.
+Feature release (minor)
 
-### Deprecated
+### 3.8.0
 
-- Nothing.
+- Total issues resolved: **0**
+- Total pull requests resolved: **2**
+- Total contributors: **1**
 
-### Removed
+#### enhancement,renovate
 
-- Nothing.
+ - [94: Adjusted factory logic to call the new `doctrine/orm:2.14.0` `EntityManager` constructor](https://github.com/Roave/psr-container-doctrine/pull/94) thanks to @renovate[bot]
 
-### Fixed
+#### renovate
 
-- Nothing.
+ - [91: Update dependency vimeo/psalm to ^5.3.0](https://github.com/Roave/psr-container-doctrine/pull/91) thanks to @renovate[bot]
 
 ## 3.7.0 - 2022-12-10
 
