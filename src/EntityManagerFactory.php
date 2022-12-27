@@ -19,7 +19,7 @@ final class EntityManagerFactory extends AbstractFactory
     {
         $config = $this->retrieveConfig($container, $configKey, 'entity_manager');
 
-        return EntityManager::create(
+        return new EntityManager(
             $this->retrieveDependency(
                 $container,
                 $config['connection'],
