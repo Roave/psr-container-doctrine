@@ -30,18 +30,6 @@
         </InternalClass>
         <DeprecatedClass>
             <errorLevel type="suppress">
-                <referencedClass name="Doctrine\Common\Cache\ApcuCache"/>
-                <referencedClass name="Doctrine\Common\Cache\ArrayCache"/>
-                <referencedClass name="Doctrine\Common\Cache\Cache"/>
-                <referencedClass name="Doctrine\Common\Cache\CacheProvider"/>
-                <referencedClass name="Doctrine\Common\Cache\ChainCache"/>
-                <referencedClass name="Doctrine\Common\Cache\FilesystemCache"/>
-                <referencedClass name="Doctrine\Common\Cache\MemcachedCache"/>
-                <referencedClass name="Doctrine\Common\Cache\PhpFileCache"/>
-                <referencedClass name="Doctrine\Common\Cache\PredisCache"/>
-                <referencedClass name="Doctrine\Common\Cache\RedisCache"/>
-                <referencedClass name="Doctrine\Common\Cache\WinCacheCache"/>
-                <referencedClass name="Doctrine\Common\Cache\ZendDataCache"/>
                 <referencedClass name="Doctrine\Common\Annotations\CachedReader"/>
                 <referencedClass name="Doctrine\ORM\Mapping\Driver\SimplifiedYamlDriver"/>
                 <referencedClass name="Doctrine\Persistence\Mapping\Driver\AnnotationDriver"/>

@@ -19,7 +19,6 @@ return [
             ],
             'my_entity' => [
                 'class' => XmlDriver::class,
-                'cache' => 'array',
                 'paths' => __DIR__ . '/doctrine',
             ],
         ],
