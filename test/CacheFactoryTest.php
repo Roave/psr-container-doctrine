@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace RoaveTest\PsrContainerDoctrine;
 
+use Doctrine\Common\Cache\Cache;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
@@ -11,7 +12,6 @@ use Roave\PsrContainerDoctrine\AbstractFactory;
 use Roave\PsrContainerDoctrine\CacheFactory;
 use Roave\PsrContainerDoctrine\Exception\InvalidArgumentException;
 use Roave\PsrContainerDoctrine\Exception\OutOfBoundsException;
-use RoaveTest\PsrContainerDoctrine\TestAsset\StubCache;
 use stdClass;
 
 /**
@@ -110,7 +110,8 @@ final class CacheFactoryTest extends TestCase
 
     public function testCanInstantiateCacheItemPoolFromClassName(): void
     {
-        $className = StubCache::class;
+        $mock      = $this->createMock(Cache::class);
+        $className = $mock::class;
 
         $container = $this->createMock(ContainerInterface::class);
         $container
