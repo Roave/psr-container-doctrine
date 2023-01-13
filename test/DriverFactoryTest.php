@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace RoaveTest\PsrContainerDoctrine;
 
 use Doctrine\Common\Annotations\PsrCachedReader;
+use Doctrine\Common\Cache\Cache;
 use Doctrine\ORM\Mapping\Driver;
 use Doctrine\Persistence\Mapping\Driver\FileDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
@@ -14,7 +15,6 @@ use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\DriverFactory;
 use Roave\PsrContainerDoctrine\Exception\InvalidArgumentException;
 use Roave\PsrContainerDoctrine\Exception\OutOfBoundsException;
-use RoaveTest\PsrContainerDoctrine\TestAsset\StubCache;
 
 final class DriverFactoryTest extends TestCase
 {
@@ -183,7 +183,7 @@ final class DriverFactoryTest extends TestCase
                     ],
                 ],
             ],
-            'doctrine.cache.default' => new StubCache(),
+            'doctrine.cache.default' => $this->createMock(Cache::class),
         ];
         $container = $this->createMock(ContainerInterface::class);
         $container->method('has')->willReturnCallback(
