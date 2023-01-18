@@ -11,6 +11,7 @@ jobs:
         dependencies:
           - 'locked'
           - 'latest'
+          - 'lowest'
 
     name: PHP ${{ matrix.php-version }}
 
@@ -40,6 +41,10 @@ jobs:
       - name: Install dependencies (latest)
         if: ${{ matrix.dependencies == 'latest' }}
         run: composer update --no-interaction
+
+      - name: Install dependencies (lowest)
+        if: ${{ matrix.dependencies == 'lowest' }}
+        run: composer update --prefer-lowest --no-interaction
 
       - name: Setup problem matchers for PHP
         run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
