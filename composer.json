@@ -22,7 +22,7 @@
         "doctrine/common": "^3.4.3",
         "doctrine/dbal": "^3.5.3",
         "doctrine/event-manager": "^1.2.0",
-        "doctrine/migrations": "^3.5.3",
+        "doctrine/migrations": "^3.5.4",
         "doctrine/orm": "^2.14.1",
         "doctrine/persistence": "^2.5.6",
         "psr/cache": "^1.0.1 || ^2.0.0 || ^3.0.0",
