@@ -21,7 +21,7 @@
         "doctrine/cache": "^1.13.0",
         "doctrine/common": "^3.4.3",
         "doctrine/dbal": "^3.5.3",
-        "doctrine/event-manager": "^1.2.0",
+        "doctrine/event-manager": "^2.0.0",
         "doctrine/migrations": "^3.5.5",
         "doctrine/orm": "^2.14.1",
         "doctrine/persistence": "^2.5.6",
