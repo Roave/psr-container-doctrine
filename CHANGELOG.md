@@ -2,27 +2,34 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 3.9.0 - TBD
+## 3.9.0 - 2023-01-31
 
-### Added
 
-- Nothing.
+-----
 
-### Changed
+### Release Notes for [3.9.0](https://github.com/Roave/psr-container-doctrine/milestone/28)
 
-- Nothing.
+Feature release (minor)
 
-### Deprecated
+### 3.9.0
 
-- Nothing.
+- Total issues resolved: **0**
+- Total pull requests resolved: **5**
+- Total contributors: **2**
 
-### Removed
+#### enhancement
 
-- Nothing.
+ - [95: Add doctrine/annotations:v2, doctrine/event-manager:v2 and doctrine/persistence:v3 support](https://github.com/Roave/psr-container-doctrine/pull/95) thanks to @Slamdunk
 
-### Fixed
+#### renovate
 
-- Nothing.
+ - [93: Update all non-major dependencies](https://github.com/Roave/psr-container-doctrine/pull/93) thanks to @renovate[bot]
+
+#### duplicate,enhancement,renovate
+
+ - [92: Update dependency doctrine/annotations to v2 - autoclosed](https://github.com/Roave/psr-container-doctrine/pull/92) thanks to @renovate[bot]
+ - [83: Update dependency doctrine/persistence to v3 - autoclosed](https://github.com/Roave/psr-container-doctrine/pull/83) thanks to @renovate[bot]
+ - [82: Update dependency doctrine/event-manager to v2](https://github.com/Roave/psr-container-doctrine/pull/82) thanks to @renovate[bot]
 
 ## 3.8.0 - 2022-12-27
 
