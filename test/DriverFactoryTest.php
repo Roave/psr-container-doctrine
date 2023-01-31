@@ -7,7 +7,6 @@ namespace RoaveTest\PsrContainerDoctrine;
 use Doctrine\Common\Annotations\PsrCachedReader;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\ORM\Mapping\Driver;
-use Doctrine\Persistence\Mapping\Driver\AnnotationDriver as AbstractAnnotationDriver;
 use Doctrine\Persistence\Mapping\Driver\FileDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
 use PHPUnit\Framework\TestCase;
@@ -137,7 +136,7 @@ final class DriverFactoryTest extends TestCase
     /**
      * @return string[][]
      *
-     * @psalm-return list<array{class-string<AbstractAnnotationDriver>}>
+     * @psalm-return list<array{class-string<Driver\CompatibilityAnnotationDriver>}>
      */
     public function annotationDriverClassProvider(): array
     {
@@ -148,7 +147,7 @@ final class DriverFactoryTest extends TestCase
     }
 
     /**
-     * @psalm-param class-string<AbstractAnnotationDriver> $driverClass
+     * @psalm-param class-string<Driver\CompatibilityAnnotationDriver> $driverClass
      * @dataProvider annotationDriverClassProvider
      */
     public function testItSupportsAnnotationDrivers(string $driverClass): void

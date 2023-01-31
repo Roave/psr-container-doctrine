@@ -25,7 +25,7 @@ final class EventManagerFactoryTest extends TestCase
         $container    = $this->createMock(ContainerInterface::class);
         $eventManager = $factory($container);
 
-        self::assertCount(0, $eventManager->getListeners());
+        self::assertCount(0, $eventManager->getAllListeners());
     }
 
     public function testInvalidInstanceSubscriber(): void

@@ -11,7 +11,7 @@ use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Cache\Cache;
 use Doctrine\Common\Cache\Psr6\CacheAdapter;
 use Doctrine\ORM\Mapping\Driver\AttributeDriver;
-use Doctrine\Persistence\Mapping\Driver\AnnotationDriver;
+use Doctrine\ORM\Mapping\Driver\CompatibilityAnnotationDriver;
 use Doctrine\Persistence\Mapping\Driver\FileDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
@@ -23,6 +23,7 @@ use Roave\PsrContainerDoctrine\Exception\OutOfBoundsException;
 use function array_key_exists;
 use function is_array;
 use function is_subclass_of;
+use function method_exists;
 
 /**
  * @method MappingDriver __invoke(ContainerInterface $container)
@@ -49,7 +50,7 @@ final class DriverFactory extends AbstractFactory
         if (
             $config['class'] !== AttributeDriver::class
             && ! is_subclass_of($config['class'], AttributeDriver::class)
-            && is_subclass_of($config['class'], AnnotationDriver::class)
+            && is_subclass_of($config['class'], CompatibilityAnnotationDriver::class)
         ) {
             $this->registerAnnotationLoader();
 
@@ -117,8 +118,9 @@ final class DriverFactory extends AbstractFactory
             return;
         }
 
-        /** @psalm-suppress DeprecatedMethod */
-        AnnotationRegistry::registerLoader('class_exists');
+        if (method_exists(AnnotationRegistry::class, 'registerLoader')) {
+            AnnotationRegistry::registerLoader('class_exists');
+        }
 
         self::$isAnnotationLoaderRegistered = true;
     }
