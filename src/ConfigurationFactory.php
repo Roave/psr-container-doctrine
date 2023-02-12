@@ -12,6 +12,7 @@ use Doctrine\ORM\Cache\RegionsConfiguration;
 use Doctrine\ORM\Configuration;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
+use Roave\PsrContainerDoctrine\Cache\NullCache;
 
 use function array_key_exists;
 use function assert;
@@ -50,61 +51,53 @@ final class ConfigurationFactory extends AbstractFactory
             $configuration->addFilter($name, $className);
         }
 
-        if (isset($config['metadata_cache'])) {
-            $metadataCache = $this->retrieveDependency(
-                $container,
-                $config['metadata_cache'],
-                'cache',
-                CacheFactory::class,
-            );
+        $metadataCache = $this->retrieveDependency(
+            $container,
+            $config['metadata_cache'],
+            'cache',
+            CacheFactory::class,
+        );
 
-            $this->processCacheImplementation(
-                $metadataCache,
-                $configuration->setMetadataCache(...),
-            );
-        }
+        $this->processCacheImplementation(
+            $metadataCache,
+            $configuration->setMetadataCache(...),
+        );
 
-        if (isset($config['query_cache'])) {
-            $queryCache = $this->retrieveDependency(
-                $container,
-                $config['query_cache'],
-                'cache',
-                CacheFactory::class,
-            );
+        $queryCache = $this->retrieveDependency(
+            $container,
+            $config['query_cache'],
+            'cache',
+            CacheFactory::class,
+        );
 
-            $this->processCacheImplementation(
-                $queryCache,
-                $configuration->setQueryCache(...),
-            );
-        }
+        $this->processCacheImplementation(
+            $queryCache,
+            $configuration->setQueryCache(...),
+        );
 
-        if (isset($config['result_cache'])) {
-            $resultCache = $this->retrieveDependency(
-                $container,
-                $config['result_cache'],
-                'cache',
-                CacheFactory::class,
-            );
+        $resultCache = $this->retrieveDependency(
+            $container,
+            $config['result_cache'],
+            'cache',
+            CacheFactory::class,
+        );
 
-            $this->processCacheImplementation(
-                $resultCache,
-                $configuration->setResultCache(...),
-            );
-        }
+        $this->processCacheImplementation(
+            $resultCache,
+            $configuration->setResultCache(...),
+        );
 
-        if (isset($config['hydration_cache'])) {
-            $hydrationCache = $this->retrieveDependency(
-                $container,
-                $config['hydration_cache'],
-                'cache',
-                CacheFactory::class,
-            );
+        $hydrationCache = $this->retrieveDependency(
+            $container,
+            $config['hydration_cache'],
+            'cache',
+            CacheFactory::class,
+        );
 
-            $this->processCacheImplementation(
-                $hydrationCache,
-                $configuration->setHydrationCache(...),
-            );
-        }
+        $this->processCacheImplementation(
+            $hydrationCache,
+            $configuration->setHydrationCache(...),
+        );
 
         $configuration->setMetadataDriverImpl($this->retrieveDependency(
             $container,
@@ -201,10 +194,10 @@ final class ConfigurationFactory extends AbstractFactory
     protected function getDefaultConfig(string $configKey): array
     {
         return [
-            'metadata_cache' => null,
-            'query_cache' => null,
-            'result_cache' => null,
-            'hydration_cache' => null,
+            'metadata_cache' => NullCache::class,
+            'query_cache' => NullCache::class,
+            'result_cache' => NullCache::class,
+            'hydration_cache' => NullCache::class,
             'driver' => $configKey,
             'auto_generate_proxy_classes' => true,
             'proxy_dir' => 'data/cache/DoctrineEntityProxy',

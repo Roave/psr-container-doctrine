@@ -8,6 +8,7 @@ use Doctrine\Common\Cache\Cache;
 use Doctrine\Common\Cache\CacheProvider;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
+use Roave\PsrContainerDoctrine\Cache\NullCache;
 use Roave\PsrContainerDoctrine\Exception\InvalidArgumentException;
 use Roave\PsrContainerDoctrine\Exception\OutOfBoundsException;
 
@@ -49,6 +50,12 @@ final class CacheFactory extends AbstractFactory
      */
     protected function getDefaultConfig(string $configKey): array
     {
+        if ($configKey === NullCache::class) {
+            return [
+                'class' => NullCache::class,
+            ];
+        }
+
         return [];
     }
 }
