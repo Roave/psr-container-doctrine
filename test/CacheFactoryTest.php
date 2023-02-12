@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\AbstractFactory;
+use Roave\PsrContainerDoctrine\Cache\NullCache;
 use Roave\PsrContainerDoctrine\CacheFactory;
 use Roave\PsrContainerDoctrine\Exception\InvalidArgumentException;
 use Roave\PsrContainerDoctrine\Exception\OutOfBoundsException;
@@ -156,5 +157,26 @@ final class CacheFactoryTest extends TestCase
 
         $factory = new CacheFactory('foo');
         $factory($container);
+    }
+
+    public function testCanInstantiateBundledNullCacheWithoutConfig(): void
+    {
+        $bundledClassName = NullCache::class;
+
+        $container = $this->createMock(ContainerInterface::class);
+        $container
+            ->method('has')
+            ->willReturnMap([
+                ['config', true],
+                [$bundledClassName, false],
+            ]);
+
+        $container
+            ->method('get')
+            ->with('config')
+            ->willReturn([]);
+
+        $factory = new CacheFactory($bundledClassName);
+        self::assertInstanceOf($bundledClassName, $factory($container));
     }
 }
