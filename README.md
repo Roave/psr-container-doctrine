@@ -102,35 +102,73 @@ You can find a full list of available commands in [example/full-config.php](exam
 
 ## Using the Doctrine CLI
 
-In order to be able to use the CLI tool of Doctrine, you need to set-up a ```cli-config.php``` file in your project
-directory. That file is generally quite short, and should look something like this for you:
+In order to be able to use the CLI tool of Doctrine, you need to create a ```bin/doctrine``` file in your project
+directory. This sets up the command line application and enables you to add custom commands. It's nearly identical to 
+the file described in [Setting Up the Console](https://www.doctrine-project.org/projects/doctrine-orm/en/current/reference/tools.html#setting-up-the-console)
+but pulls `EntityManagerInterface` from your container:
 
 ```php
+#!/usr/bin/env php
 <?php
+
+declare(strict_types=1);
+
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Tools\Console\ConsoleRunner;
+use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
+use Psr\Container\ContainerInterface;
+
+require 'vendor/autoload.php';
+
+/** @var ContainerInterface $container */
 $container = require 'config/container.php';
 
-return \Doctrine\ORM\Tools\Console\ConsoleRunner::createHelperSet(
-    $container->get('doctrine.entity_manager.orm_default')
+/** @var EntityManagerInterface $entityManager */
+$entityManager = $container->get('doctrine.entity_manager.orm_default');
+
+$commands = [
+    // If you want to add your own custom console commands,
+    // you can do so here.
+];
+
+ConsoleRunner::run(
+    new SingleManagerProvider($entityManager),
+    $commands
 );
+
 ```
 
-After that, you can simply invoke ```php vendor/bin/doctrine```.
+After that, invoke ```php bin/doctrine list``` to see the available commands. 
 
 ### Multiple connections
 
 It gets a little trickier when you have multiple entity managers. Doctrine itself has no way to handle that itself, so
-a possible way would be to have two separate directories with two unique ```cli-config.php``` files. You then invoke the
-doctrine CLI from each respective directory. Since the CLI is looking for the config file in the current working
-directory, it will then always use the one from the directory you are currently in.
+a possible way would be to have two copies of the command above, named after the manager they work with and each pulling 
+different entity managers from the container - for instance ```bin/doctrine-default``` and ```bin/doctrine-customer```.
 
-The following code can be used for multiple connections, but it got the drawback, that you won't see the `--em=...`
-option within the help section of each command.
+The following code can be used for multiple connections, but it has a drawback: you won't see the `--em=...` option 
+within the help section of each command.
 
 ```php
+#!/usr/bin/env php
 <?php
+
+declare(strict_types=1);
+
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Tools\Console\ConsoleRunner;
+use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
+use InvalidArgumentException;
+use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
+use Symfony\Component\Console\Input\ArgvInput;
+
+require 'vendor/autoload.php';
+
+/** @var ContainerInterface $container */
 $container = require 'config/container.php';
 
-$input = new \Symfony\Component\Console\Input\ArgvInput();
+$input = new ArgvInput();
 
 /** @var string $em */
 $em = $input->getParameterOption('--em', 'orm_default');
@@ -144,9 +182,18 @@ foreach ($_SERVER['argv'] as $i => $arg) {
 
 try {
     $entityManager = $this->container->get('doctrine.entity_manager.'.$em);
-} catch (\Psr\Container\NotFoundExceptionInterface $serviceNotFoundException) {
-    throw new \InvalidArgumentException(sprintf('Missing entity manager with name "%s"', $em));
+} catch (NotFoundExceptionInterface $serviceNotFoundException) {
+    throw new InvalidArgumentException(sprintf('Missing entity manager with name "%s"', $em));
 }
 
-return \Doctrine\ORM\Tools\Console\ConsoleRunner::createHelperSet($entityManager);
+$commands = [
+    // If you want to add your own custom console commands,
+    // you can do so here.
+];
+
+ConsoleRunner::run(
+    new SingleManagerProvider($entityManager),
+    $commands
+);
+
 ```
