@@ -10,7 +10,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@2.24.0
+        uses: shivammathur/setup-php@2.26.0
         with:
           php-version: 8.1
           coverage: pcov
