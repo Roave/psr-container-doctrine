@@ -18,7 +18,9 @@ abstract class AbstractFactory
     {
     }
 
-    public function __invoke(ContainerInterface $container): mixed
+    /** @return mixed */
+    // phpcs:ignore SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
+    public function __invoke(ContainerInterface $container)
     {
         return $this->createWithConfig($container, $this->configKey);
     }
@@ -37,9 +39,12 @@ abstract class AbstractFactory
      *
      * @param mixed[] $arguments
      *
+     * @return mixed
+     *
      * @throws Exception\InvalidArgumentException
      */
-    public static function __callStatic(string $name, array $arguments): mixed
+    // phpcs:ignore SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
+    public static function __callStatic(string $name, array $arguments)
     {
         if (! array_key_exists(0, $arguments) || ! $arguments[0] instanceof ContainerInterface) {
             throw new Exception\InvalidArgumentException(sprintf(
@@ -90,8 +95,11 @@ abstract class AbstractFactory
      * registering factories which they are not going to access themselves at all, and thus minimized configuration.
      *
      * @psalm-param class-string<AbstractFactory> $factoryClassName
+     *
+     * @return mixed
      */
-    protected function retrieveDependency(ContainerInterface $container, string $configKey, string $section, string $factoryClassName): mixed
+    // phpcs:ignore SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
+    protected function retrieveDependency(ContainerInterface $container, string $configKey, string $section, string $factoryClassName)
     {
         $containerKey = sprintf('doctrine.%s.%s', $section, $configKey);
 
