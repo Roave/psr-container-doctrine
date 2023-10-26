@@ -17,8 +17,9 @@ use stdClass;
 final class CommandFactoryTest extends TestCase
 {
     /**
-     * @dataProvider commandClassProvider
      * @psalm-param class-string $commandClass
+     *
+     * @dataProvider commandClassProvider
      */
     public function testReturnsCommandWhenContainerHasDependencyFactory(string $commandClass): void
     {
@@ -28,14 +29,14 @@ final class CommandFactoryTest extends TestCase
             ->willReturnMap(
                 [
                     [DependencyFactory::class, true],
-                ]
+                ],
             );
         $container->expects($this->once())
             ->method('get')
             ->willReturnMap(
                 [
                     [DependencyFactory::class, $this->createMock(DependencyFactory::class)],
-                ]
+                ],
             );
 
         $factory = new CommandFactory();
@@ -44,8 +45,9 @@ final class CommandFactoryTest extends TestCase
     }
 
     /**
-     * @dataProvider commandClassProvider
      * @psalm-param class-string $commandClass
+     *
+     * @dataProvider commandClassProvider
      */
     public function testReturnsCommandWhenContainerHasNoDependencyFactory(string $commandClass): void
     {
@@ -55,7 +57,7 @@ final class CommandFactoryTest extends TestCase
                 [
                     [DependencyFactory::class, false],
                     ['doctrine.entity_manager.orm_default', true],
-                ]
+                ],
             );
         $container->method('get')
             ->willReturnMap(
@@ -63,7 +65,7 @@ final class CommandFactoryTest extends TestCase
                     [DependencyFactory::class, $this->createMock(DependencyFactory::class)],
                     [ConfigurationLoader::class, $this->createMock(ConfigurationLoader::class)],
                     ['doctrine.entity_manager.orm_default', $this->createMock(EntityManagerInterface::class)],
-                ]
+                ],
             );
 
         $factory = new CommandFactory();
@@ -71,9 +73,7 @@ final class CommandFactoryTest extends TestCase
         self::assertInstanceOf($commandClass, $factory($container, $commandClass));
     }
 
-    /**
-     * @return array<array<class-string>>
-     */
+    /** @return array<array<class-string>> */
     public function commandClassProvider(): array
     {
         return [

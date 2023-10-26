@@ -13,18 +13,12 @@ use function sprintf;
 /** @internal */
 abstract class AbstractFactory
 {
-    private string $configKey;
-
     /** @internal */
-    final public function __construct(string $configKey = 'orm_default')
+    final public function __construct(private string $configKey = 'orm_default')
     {
-        $this->configKey = $configKey;
     }
 
-    /**
-     * @return mixed
-     */
-    public function __invoke(ContainerInterface $container)
+    public function __invoke(ContainerInterface $container): mixed
     {
         return $this->createWithConfig($container, $this->configKey);
     }
@@ -43,16 +37,14 @@ abstract class AbstractFactory
      *
      * @param mixed[] $arguments
      *
-     * @return mixed
-     *
      * @throws Exception\InvalidArgumentException
      */
-    public static function __callStatic(string $name, array $arguments)
+    public static function __callStatic(string $name, array $arguments): mixed
     {
         if (! array_key_exists(0, $arguments) || ! $arguments[0] instanceof ContainerInterface) {
             throw new Exception\InvalidArgumentException(sprintf(
                 'The first argument must be of type %s',
-                ContainerInterface::class
+                ContainerInterface::class,
             ));
         }
 
@@ -64,6 +56,7 @@ abstract class AbstractFactory
      *
      * @return mixed
      */
+    // phpcs:ignore SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
     abstract protected function createWithConfig(ContainerInterface $container, string $configKey);
 
     /**
@@ -94,13 +87,11 @@ abstract class AbstractFactory
      * Retrieves a dependency through the container.
      *
      * If the container does not know about the dependency, it is pulled from a fresh factory. This saves the user from
-     * registering factories which they are not gonna access themself at all, and thus minimized configuration.
-     *
-     * @return mixed
+     * registering factories which they are not going to access themselves at all, and thus minimized configuration.
      *
      * @psalm-param class-string<AbstractFactory> $factoryClassName
      */
-    protected function retrieveDependency(ContainerInterface $container, string $configKey, string $section, string $factoryClassName)
+    protected function retrieveDependency(ContainerInterface $container, string $configKey, string $section, string $factoryClassName): mixed
     {
         $containerKey = sprintf('doctrine.%s.%s', $section, $configKey);
 

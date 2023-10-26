@@ -160,7 +160,7 @@ final class EventManagerFactoryTest extends TestCase
         $this->expectException(DomainException::class);
         $this->expectExceptionMessage(sprintf(
             'Invalid event listener "%s" given: must have a "foo" method',
-            StubEventListener::class
+            StubEventListener::class,
         ));
         $factory($container);
     }
@@ -192,8 +192,8 @@ final class EventManagerFactoryTest extends TestCase
                     [
                         'events' => Events::onFlush,
                         'listener' => StubEventListener::class,
-                    ]
-                )
+                    ],
+                ),
             );
 
         $factory      = new EventManagerFactory();
@@ -221,7 +221,7 @@ final class EventManagerFactoryTest extends TestCase
                         [
                             'events' => Events::onFlush,
                             'listener' => StubEventListener::class,
-                        ]
+                        ],
                     ),
                 ],
                 [StubEventListener::class, $eventListener],
@@ -235,10 +235,7 @@ final class EventManagerFactoryTest extends TestCase
         self::assertSame($eventListener, array_pop($listeners));
     }
 
-    /**
-     * @param mixed $subscriber
-     */
-    private function buildContainer($subscriber): ContainerInterface
+    private function buildContainer(mixed $subscriber): ContainerInterface
     {
         $container = $this->createMock(ContainerInterface::class);
         $container->method('has')->with('config')->willReturn(true);
@@ -251,16 +248,13 @@ final class EventManagerFactoryTest extends TestCase
                         ],
                     ],
                 ],
-            ]
+            ],
         );
 
         return $container;
     }
 
-    /**
-     * @param mixed $listener
-     */
-    private function buildContainerWithListener($listener): ContainerInterface
+    private function buildContainerWithListener(mixed $listener): ContainerInterface
     {
         $container = $this->createMock(ContainerInterface::class);
         $container->method('has')->with('config')->willReturn(true);
@@ -269,12 +263,8 @@ final class EventManagerFactoryTest extends TestCase
         return $container;
     }
 
-    /**
-     * @param mixed $subscriber
-     *
-     * @return array<string, mixed>
-     */
-    private function getConfigForSubscriber($subscriber): array
+    /** @return array<string, mixed> */
+    private function getConfigForSubscriber(mixed $subscriber): array
     {
         return [
             'doctrine' => [
@@ -287,12 +277,8 @@ final class EventManagerFactoryTest extends TestCase
         ];
     }
 
-    /**
-     * @param mixed $listener
-     *
-     * @return array<string, mixed>
-     */
-    private function getConfigForListener($listener): array
+    /** @return array<string, mixed> */
+    private function getConfigForListener(mixed $listener): array
     {
         return [
             'doctrine' => [

@@ -9,7 +9,7 @@ use Doctrine\Common\EventSubscriber;
 class StubEventSubscriber implements EventSubscriber
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getSubscribedEvents(): array
     {

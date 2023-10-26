@@ -55,14 +55,14 @@ final class ConfigurationLoaderFactoryTest extends TestCase
             ->willReturnMap(
                 [
                     ['config', true],
-                ]
+                ],
             );
 
         $container->method('get')
             ->willReturnMap(
                 [
                     ['config', $config],
-                ]
+                ],
             );
 
         $migrationsConfiguration = (new ConfigurationLoaderFactory())($container);

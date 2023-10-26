@@ -10,7 +10,7 @@ use Roave\PsrContainerDoctrine\AbstractFactory;
 class StubFactory extends AbstractFactory
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function createWithConfig(ContainerInterface $container, string $configKey)
     {
@@ -20,7 +20,7 @@ class StubFactory extends AbstractFactory
     // phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod.Found
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function retrieveConfig(ContainerInterface $container, string $configKey, string $section): array
     {
@@ -30,7 +30,7 @@ class StubFactory extends AbstractFactory
     // phpcs:enable
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function getDefaultConfig(string $configKey): array
     {

@@ -12,15 +12,13 @@ use Psr\Container\ContainerInterface;
 
 use function is_string;
 
-/**
- * @method Connection __invoke(ContainerInterface $container)
- */
+/** @method Connection __invoke(ContainerInterface $container) */
 final class ConnectionFactory extends AbstractFactory
 {
     private static bool $areTypesRegistered = false;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function createWithConfig(ContainerInterface $container, string $configKey)
     {
@@ -43,14 +41,14 @@ final class ConnectionFactory extends AbstractFactory
                 $container,
                 $config['configuration'],
                 'configuration',
-                ConfigurationFactory::class
+                ConfigurationFactory::class,
             ),
             $this->retrieveDependency(
                 $container,
                 $config['event_manager'],
                 'event_manager',
-                EventManagerFactory::class
-            )
+                EventManagerFactory::class,
+            ),
         );
         $platform   = $connection->getDatabasePlatform();
 
@@ -66,7 +64,7 @@ final class ConnectionFactory extends AbstractFactory
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function getDefaultConfig(string $configKey): array
     {
