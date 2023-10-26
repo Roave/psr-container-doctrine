@@ -30,13 +30,18 @@ final class EntityManagerFactoryTest extends TestCase
         $container = $this->createMock(ContainerInterface::class);
         $container->expects($this->exactly(3))
             ->method('has')
-            ->withConsecutive(['config'], ['doctrine.connection.orm_default'], ['doctrine.configuration.orm_default'])
-            ->willReturnOnConsecutiveCalls(false, true, true);
+            ->willReturnMap([
+                ['config', false],
+                ['doctrine.connection.orm_default', true],
+                ['doctrine.configuration.orm_default', true],
+            ]);
 
         $container->expects($this->exactly(2))
             ->method('get')
-            ->withConsecutive(['doctrine.connection.orm_default'], ['doctrine.configuration.orm_default'])
-            ->willReturnOnConsecutiveCalls($connection, $configuration);
+            ->willReturnMap([
+                ['doctrine.connection.orm_default', $connection],
+                ['doctrine.configuration.orm_default', $configuration],
+            ]);
 
         $factory       = new EntityManagerFactory();
         $entityManager = $factory($container);
@@ -53,12 +58,17 @@ final class EntityManagerFactoryTest extends TestCase
         $container = $this->createMock(ContainerInterface::class);
         $container->expects($this->exactly(3))
             ->method('has')
-            ->withConsecutive(['config'], ['doctrine.connection.orm_other'], ['doctrine.configuration.orm_other'])
-            ->willReturnOnConsecutiveCalls(false, true, true);
+            ->willReturnMap([
+                ['config', false],
+                ['doctrine.connection.orm_other', true],
+                ['doctrine.configuration.orm_other', true],
+            ]);
         $container->expects($this->exactly(2))
             ->method('get')
-            ->withConsecutive(['doctrine.connection.orm_other'], ['doctrine.configuration.orm_other'])
-            ->willReturnOnConsecutiveCalls($connection, $configuration);
+            ->willReturnMap([
+                ['doctrine.connection.orm_other', $connection],
+                ['doctrine.configuration.orm_other', $configuration],
+            ]);
 
         $factory       = new EntityManagerFactory('orm_other');
         $entityManager = $factory($container);
@@ -85,12 +95,18 @@ final class EntityManagerFactoryTest extends TestCase
         $container = $this->createMock(ContainerInterface::class);
         $container->expects($this->exactly(3))
             ->method('has')
-            ->withConsecutive(['config'], ['doctrine.connection.orm_foo'], ['doctrine.configuration.orm_bar'])
-            ->willReturnOnConsecutiveCalls(true, true, true);
+            ->willReturnMap([
+                ['config', true],
+                ['doctrine.connection.orm_foo', true],
+                ['doctrine.configuration.orm_bar', true],
+            ]);
         $container->expects($this->exactly(3))
             ->method('get')
-            ->withConsecutive(['config'], ['doctrine.connection.orm_foo'], ['doctrine.configuration.orm_bar'])
-            ->willReturnOnConsecutiveCalls($config, $connection, $configuration);
+            ->willReturnMap([
+                ['config', $config],
+                ['doctrine.connection.orm_foo', $connection],
+                ['doctrine.configuration.orm_bar', $configuration],
+            ]);
 
         $factory       = new EntityManagerFactory();
         $entityManager = $factory($container);

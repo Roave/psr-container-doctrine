@@ -44,13 +44,25 @@ final class ConfigurationFactoryTest extends TestCase
 
         $container
             ->method('has')
-            ->withConsecutive(['config'], ['doctrine.cache.metadata'], ['doctrine.cache.query'], ['doctrine.cache.result'], ['doctrine.cache.hydration'], ['doctrine.driver.orm_default'])
-            ->willReturnOnConsecutiveCalls(true, true, true, true, true, true);
+            ->willReturnMap([
+                ['config', true],
+                ['doctrine.cache.metadata', true],
+                ['doctrine.cache.query', true],
+                ['doctrine.cache.result', true],
+                ['doctrine.cache.hydration', true],
+                ['doctrine.driver.orm_default', true],
+            ]);
 
         $container
             ->method('get')
-            ->withConsecutive(['config'], ['doctrine.cache.metadata'], ['doctrine.cache.query'], ['doctrine.cache.result'], ['doctrine.cache.hydration'], ['doctrine.driver.orm_default'])
-            ->willReturnOnConsecutiveCalls($config, $metadataCache, $queryCache, $resultCache, $hydrationCache, $mappingDriver);
+            ->willReturnMap([
+                ['config', $config],
+                ['doctrine.cache.metadata', $metadataCache],
+                ['doctrine.cache.query', $queryCache],
+                ['doctrine.cache.result', $resultCache],
+                ['doctrine.cache.hydration', $hydrationCache],
+                ['doctrine.driver.orm_default', $mappingDriver],
+            ]);
 
         $configuration = (new ConfigurationFactory())($container);
 

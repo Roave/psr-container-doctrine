@@ -201,25 +201,29 @@ final class DriverFactoryTest extends TestCase
         $container = $this->createMock(ContainerInterface::class);
         $container
             ->method('has')
-            ->withConsecutive(['config'], ['doctrine.cache.psr'])
-            ->willReturn(true);
+            ->willReturnMap([
+                ['config', true],
+                ['doctrine.cache.psr', true],
+            ]);
 
         $container
             ->method('get')
-            ->withConsecutive(['config'], ['doctrine.cache.psr'])
-            ->willReturnOnConsecutiveCalls(
+            ->willReturnMap([
                 [
-                    'doctrine' => [
-                        'driver' => [
-                            'orm_default' => [
-                                'class' => Driver\AnnotationDriver::class,
-                                'cache' => 'psr',
+                    'config',
+                    [
+                        'doctrine' => [
+                            'driver' => [
+                                'orm_default' => [
+                                    'class' => Driver\AnnotationDriver::class,
+                                    'cache' => 'psr',
+                                ],
                             ],
                         ],
                     ],
                 ],
-                $this->createMock(CacheItemPoolInterface::class)
-            );
+                ['doctrine.cache.psr', $this->createMock(CacheItemPoolInterface::class)],
+            ]);
 
         $driver = (new DriverFactory())->__invoke($container);
         self::assertInstanceOf(Driver\AnnotationDriver::class, $driver);

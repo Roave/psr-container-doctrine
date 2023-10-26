@@ -69,8 +69,13 @@ final class CacheFactoryTest extends TestCase
 
         $container = $this->createMock(ContainerInterface::class);
         $container->method('has')
-            ->withConsecutive(['config'], ['config'], [ArrayCache::class], ['config'], [ArrayCache::class])
-            ->willReturnOnConsecutiveCalls(true, true, false, true, false);
+            ->willReturnMap([
+                ['config', true],
+                ['config', true],
+                [ArrayCache::class, false],
+                ['config', true],
+                [ArrayCache::class, false],
+            ]);
         $container->method('get')->with('config')->willReturn($config);
 
         $factory       = new CacheFactory('chain');
@@ -102,8 +107,10 @@ final class CacheFactoryTest extends TestCase
 
         $container = $this->createMock(ContainerInterface::class);
         $container->method('has')
-            ->withConsecutive(['config'], [MemcachedCache::class])
-            ->willReturnOnConsecutiveCalls(true, false);
+            ->willReturnMap([
+                ['config', true],
+                [MemcachedCache::class, false],
+            ]);
         $container->expects($this->once())->method('get')->with('config')->willReturn($config);
 
         $factory  = new CacheFactory('memcached');
@@ -149,20 +156,18 @@ final class CacheFactoryTest extends TestCase
         $container = $this->createMock(ContainerInterface::class);
         $container
             ->method('has')
-            ->withConsecutive(['config'], [$containerId])
-            ->willReturnOnConsecutiveCalls(
-                true,
-                true
-            );
+            ->willReturnMap([
+                ['config', true],
+                [$containerId, true],
+            ]);
 
         $cacheItemPool = $this->createMock(CacheItemPoolInterface::class);
         $container
             ->method('get')
-            ->withConsecutive(['config'], [$containerId])
-            ->willReturnOnConsecutiveCalls(
-                ['doctrine' => ['cache' => ['foo' => ['class' => $containerId]]]],
-                $cacheItemPool
-            );
+            ->willReturnMap([
+                ['config', ['doctrine' => ['cache' => ['foo' => ['class' => $containerId]]]]],
+                [$containerId, $cacheItemPool],
+            ]);
 
         $factory = new CacheFactory('foo');
         self::assertSame($cacheItemPool, $factory($container));
