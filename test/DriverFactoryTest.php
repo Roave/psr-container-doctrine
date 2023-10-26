@@ -42,7 +42,7 @@ final class DriverFactoryTest extends TestCase
                         ],
                     ],
                 ],
-            ]
+            ],
         );
 
         $driver = (new DriverFactory())->__invoke($container);
@@ -52,6 +52,7 @@ final class DriverFactoryTest extends TestCase
 
     /**
      * @psalm-param class-string<FileDriver> $driverClass
+     *
      * @dataProvider simplifiedDriverClassProvider
      */
     public function testItSupportsSettingExtensionInDriversUsingSymfonyFileLocator(string $driverClass): void
@@ -68,7 +69,7 @@ final class DriverFactoryTest extends TestCase
                         ],
                     ],
                 ],
-            ]
+            ],
         );
 
         $driver = (new DriverFactory())->__invoke($container);
@@ -78,7 +79,6 @@ final class DriverFactoryTest extends TestCase
 
     /**
      * @return string[][]
-     *
      * @psalm-return list<array{class-string<FileDriver>}>
      */
     public function simplifiedDriverClassProvider(): array
@@ -101,7 +101,7 @@ final class DriverFactoryTest extends TestCase
                     ],
                 ],
             ],
-            1
+            1,
         );
 
         $driver = (new DriverFactory())->__invoke($container);
@@ -125,7 +125,7 @@ final class DriverFactoryTest extends TestCase
                     ],
                 ],
             ],
-            2
+            2,
         );
 
         $driver = (new DriverFactory())->__invoke($container);
@@ -135,7 +135,6 @@ final class DriverFactoryTest extends TestCase
 
     /**
      * @return string[][]
-     *
      * @psalm-return list<array{class-string<Driver\CompatibilityAnnotationDriver>}>
      */
     public function annotationDriverClassProvider(): array
@@ -148,6 +147,7 @@ final class DriverFactoryTest extends TestCase
 
     /**
      * @psalm-param class-string<Driver\CompatibilityAnnotationDriver> $driverClass
+     *
      * @dataProvider annotationDriverClassProvider
      */
     public function testItSupportsAnnotationDrivers(string $driverClass): void
@@ -169,24 +169,20 @@ final class DriverFactoryTest extends TestCase
         $container->method('has')->willReturnCallback(
             static function (string $id) use ($services): bool {
                 return isset($services[$id]);
-            }
+            },
         );
         $container->method('get')->willReturnCallback(
-            /**
-             * @return object|array
-             */
+            /** @return object|array */
             static function (string $id) use ($services) {
                 return $services[$id];
-            }
+            },
         );
 
         $driver = (new DriverFactory())->__invoke($container);
         self::assertInstanceOf($driverClass, $driver);
     }
 
-    /**
-     * @param array<string, mixed> $config
-     */
+    /** @param array<string, mixed> $config */
     private function createContainerMockWithConfig(array $config, int $expectedCalls = 1): ContainerInterface
     {
         $container = $this->createMock(ContainerInterface::class);

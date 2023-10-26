@@ -26,13 +26,11 @@ use function assert;
 use function is_array;
 use function is_string;
 
-/**
- * @method Cache|CacheItemPoolInterface __invoke(ContainerInterface $container)
- */
+/** @method Cache|CacheItemPoolInterface __invoke(ContainerInterface $container) */
 final class CacheFactory extends AbstractFactory
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function createWithConfig(ContainerInterface $container, string $configKey)
     {
@@ -64,7 +62,7 @@ final class CacheFactory extends AbstractFactory
                     function ($provider) use ($container): CacheProvider {
                         return $this->createWithConfig($container, $provider);
                     },
-                    is_array($config['providers']) ? $config['providers'] : []
+                    is_array($config['providers']) ? $config['providers'] : [],
                 );
                 $cache     = new ChainCache($providers);
                 break;
@@ -89,7 +87,7 @@ final class CacheFactory extends AbstractFactory
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function getDefaultConfig(string $configKey): array
     {

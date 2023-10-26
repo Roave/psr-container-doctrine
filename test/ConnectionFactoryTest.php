@@ -49,7 +49,7 @@ final class ConnectionFactoryTest extends TestCase
             static function (string $id): bool {
                 // Return false for config, true for anything else
                 return $id !== 'config';
-            }
+            },
         );
         $container->method('get')->willReturnCallback(
             function (string $id) {
@@ -58,7 +58,7 @@ final class ConnectionFactoryTest extends TestCase
                 }
 
                 return $this->eventManger;
-            }
+            },
         );
 
         // This is actually quite tricky. We cannot really test the pure defaults, as that would require a MySQL
@@ -148,7 +148,7 @@ final class ConnectionFactoryTest extends TestCase
             'orm_default',
             'orm_default',
             'orm_default',
-            ['doctrine_mapping_types' => ['foo' => 'boolean']]
+            ['doctrine_mapping_types' => ['foo' => 'boolean']],
         ));
 
         self::assertTrue($connection->getDatabasePlatform()->hasDoctrineTypeMappingFor('foo'));
@@ -183,14 +183,12 @@ final class ConnectionFactoryTest extends TestCase
         self::assertSame($this->customPlatform, $connection->getDatabasePlatform());
     }
 
-    /**
-     * @param array<string, mixed> $config
-     */
+    /** @param array<string, mixed> $config */
     private function buildContainer(
         string $ownKey = 'orm_default',
         string $configurationKey = 'orm_default',
         string $eventManagerKey = 'orm_default',
-        array $config = []
+        array $config = [],
     ): ContainerInterface {
         $container = $this->createMock(ContainerInterface::class);
         $container->method('has')->willReturn(true);
@@ -223,7 +221,7 @@ final class ConnectionFactoryTest extends TestCase
                     default:
                         $this->fail(sprintf('Unexpected call: Container::get(%s)', $id));
                 }
-            }
+            },
         );
 
         return $container;

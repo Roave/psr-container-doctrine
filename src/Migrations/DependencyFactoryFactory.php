@@ -14,7 +14,7 @@ use Roave\PsrContainerDoctrine\EntityManagerFactory;
 final class DependencyFactoryFactory extends AbstractFactory
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function createWithConfig(ContainerInterface $container, string $configKey)
     {
@@ -23,18 +23,18 @@ final class DependencyFactoryFactory extends AbstractFactory
                 $container,
                 $configKey,
                 'entity_manager',
-                EntityManagerFactory::class
-            )
+                EntityManagerFactory::class,
+            ),
         );
 
         return DependencyFactory::fromEntityManager(
             $container->get(ConfigurationLoader::class),
-            $entityManagerLoader
+            $entityManagerLoader,
         );
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function getDefaultConfig(string $configKey): array
     {

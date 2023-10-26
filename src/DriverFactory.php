@@ -25,15 +25,13 @@ use function is_array;
 use function is_subclass_of;
 use function method_exists;
 
-/**
- * @method MappingDriver __invoke(ContainerInterface $container)
- */
+/** @method MappingDriver __invoke(ContainerInterface $container) */
 final class DriverFactory extends AbstractFactory
 {
     private static bool $isAnnotationLoaderRegistered = false;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function createWithConfig(ContainerInterface $container, string $configKey)
     {
@@ -54,24 +52,18 @@ final class DriverFactory extends AbstractFactory
         ) {
             $this->registerAnnotationLoader();
 
-            /**
-             * @psalm-suppress UnsafeInstantiation
-             */
+            /** @psalm-suppress UnsafeInstantiation */
             $driver = new $config['class'](
                 $this->createCachedReader($container, $config, new AnnotationReader()),
                 $config['paths']
             );
         } elseif ($config['extension'] !== null && is_subclass_of($config['class'], FileDriver::class)) {
-            /**
-             * @psalm-suppress UnsafeInstantiation
-             */
+            /** @psalm-suppress UnsafeInstantiation */
             $driver = new $config['class']($config['paths'], $config['extension']);
         }
 
         if (! isset($driver)) {
-            /**
-             * @psalm-suppress UnsafeInstantiation
-             */
+            /** @psalm-suppress UnsafeInstantiation */
             $driver = new $config['class']($config['paths']);
         }
 
@@ -97,7 +89,7 @@ final class DriverFactory extends AbstractFactory
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function getDefaultConfig(string $configKey): array
     {
@@ -125,16 +117,14 @@ final class DriverFactory extends AbstractFactory
         self::$isAnnotationLoaderRegistered = true;
     }
 
-    /**
-     * @param array<string, mixed> $config
-     */
+    /** @param array<string, mixed> $config */
     private function createCachedReader(ContainerInterface $container, array $config, Reader $reader): PsrCachedReader
     {
         $cache = $this->retrieveDependency(
             $container,
             $config['cache'],
             'cache',
-            CacheFactory::class
+            CacheFactory::class,
         );
 
         if ($cache instanceof Cache) {
@@ -146,7 +136,7 @@ final class DriverFactory extends AbstractFactory
         }
 
         throw InvalidArgumentException::fromUnsupportedCache(
-            $cache
+            $cache,
         );
     }
 }

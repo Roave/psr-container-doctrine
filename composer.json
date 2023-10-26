@@ -29,7 +29,7 @@
         "psr/container": "^1.0 || ^2.0"
     },
     "require-dev": {
-        "doctrine/coding-standard": "^8.2.1",
+        "doctrine/coding-standard": "^12.0.0",
         "phpunit/phpunit": "^9.6.13",
         "psalm/plugin-phpunit": "^0.18.4",
         "symfony/yaml": "^6.3.3",

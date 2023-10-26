@@ -17,13 +17,11 @@ use function array_key_exists;
 use function assert;
 use function is_string;
 
-/**
- * @method Configuration __invoke(ContainerInterface $container)
- */
+/** @method Configuration __invoke(ContainerInterface $container) */
 final class ConfigurationFactory extends AbstractFactory
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function createWithConfig(ContainerInterface $container, string $configKey)
     {
@@ -56,46 +54,46 @@ final class ConfigurationFactory extends AbstractFactory
             $container,
             $config['metadata_cache'],
             'cache',
-            CacheFactory::class
+            CacheFactory::class,
         );
 
         $this->processCacheImplementation(
             $configuration,
             $metadataCache,
-            [$configuration, 'setMetadataCache']
+            [$configuration, 'setMetadataCache'],
         );
 
         $queryCache = $this->retrieveDependency(
             $container,
             $config['query_cache'],
             'cache',
-            CacheFactory::class
+            CacheFactory::class,
         );
 
         $this->processCacheImplementation(
             $configuration,
             $queryCache,
-            [$configuration, 'setQueryCache']
+            [$configuration, 'setQueryCache'],
         );
 
         $resultCache = $this->retrieveDependency(
             $container,
             $config['result_cache'],
             'cache',
-            CacheFactory::class
+            CacheFactory::class,
         );
 
         $this->processCacheImplementation(
             $configuration,
             $resultCache,
-            [$configuration, 'setResultCache']
+            [$configuration, 'setResultCache'],
         );
 
         $hydrationCache = $this->retrieveDependency(
             $container,
             $config['hydration_cache'],
             'cache',
-            CacheFactory::class
+            CacheFactory::class,
         );
 
         $this->processCacheImplementation(
@@ -108,7 +106,7 @@ final class ConfigurationFactory extends AbstractFactory
             $container,
             $config['driver'],
             'driver',
-            DriverFactory::class
+            DriverFactory::class,
         ));
 
         if (is_string($config['naming_strategy'])) {
@@ -142,7 +140,7 @@ final class ConfigurationFactory extends AbstractFactory
         if ($config['second_level_cache']['enabled']) {
             $regionsConfig = new RegionsConfiguration(
                 $config['second_level_cache']['default_lifetime'],
-                $config['second_level_cache']['default_lock_lifetime']
+                $config['second_level_cache']['default_lock_lifetime'],
             );
 
             foreach ($config['second_level_cache']['regions'] as $regionName => $regionConfig) {
@@ -157,6 +155,7 @@ final class ConfigurationFactory extends AbstractFactory
                 $regionsConfig->setLockLifetime($regionName, $regionConfig['lock_lifetime']);
             }
 
+            /** @psalm-suppress PossiblyInvalidArgument */
             $cacheFactory = new DefaultCacheFactory($regionsConfig, $resultCache);
             $cacheFactory->setFileLockRegionDirectory($config['second_level_cache']['file_lock_region_directory']);
 
@@ -188,7 +187,7 @@ final class ConfigurationFactory extends AbstractFactory
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function getDefaultConfig(string $configKey): array
     {
@@ -227,14 +226,11 @@ final class ConfigurationFactory extends AbstractFactory
         ];
     }
 
-    /**
-     * @param CacheItemPoolInterface|Cache          $cache
-     * @param callable(CacheItemPoolInterface):void $setCacheOnConfiguration
-     */
+    /** @param callable(CacheItemPoolInterface):void $setCacheOnConfiguration */
     private function processCacheImplementation(
         Configuration $configuration,
-        $cache,
-        callable $setCacheOnConfiguration
+        CacheItemPoolInterface|Cache $cache,
+        callable $setCacheOnConfiguration,
     ): void {
         if ($cache instanceof Cache) {
             $cache = CacheAdapter::wrap($cache);
