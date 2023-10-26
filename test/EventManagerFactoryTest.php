@@ -53,8 +53,10 @@ final class EventManagerFactoryTest extends TestCase
         $container = $this->createMock(ContainerInterface::class);
         $container->expects($this->exactly(2))
             ->method('has')
-            ->withConsecutive(['config'], ['NonExistentClass'])
-            ->willReturnOnConsecutiveCalls(true, false);
+            ->willReturnMap([
+                ['config', true],
+                ['NonExistentClass', false],
+            ]);
         $container->expects($this->once())
             ->method('get')
             ->with('config')
@@ -80,8 +82,10 @@ final class EventManagerFactoryTest extends TestCase
         $container = $this->createMock(ContainerInterface::class);
         $container->expects($this->exactly(2))
             ->method('has')
-            ->withConsecutive(['config'], [StubEventSubscriber::class])
-            ->willReturnOnConsecutiveCalls(true, false);
+            ->willReturnMap([
+                ['config', true],
+                [StubEventSubscriber::class, false],
+            ]);
         $container->method('get')
             ->with('config')
             ->willReturn($this->getConfigForSubscriber(StubEventSubscriber::class));
@@ -99,12 +103,16 @@ final class EventManagerFactoryTest extends TestCase
         $container = $this->createMock(ContainerInterface::class);
         $container->expects($this->exactly(2))
             ->method('has')
-            ->withConsecutive(['config'], [StubEventSubscriber::class])
-            ->willReturnOnConsecutiveCalls(true, true);
+            ->willReturnMap([
+                ['config', true],
+                [StubEventSubscriber::class, true],
+            ]);
         $container->expects($this->exactly(2))
             ->method('get')
-            ->withConsecutive(['config'], [StubEventSubscriber::class])
-            ->willReturnOnConsecutiveCalls($this->getConfigForSubscriber(StubEventSubscriber::class), $eventSubscriber);
+            ->willReturnMap([
+                ['config', $this->getConfigForSubscriber(StubEventSubscriber::class)],
+                [StubEventSubscriber::class, $eventSubscriber],
+            ]);
 
         $factory      = new EventManagerFactory();
         $eventManager = $factory($container);
@@ -127,8 +135,10 @@ final class EventManagerFactoryTest extends TestCase
         $container = $this->createMock(ContainerInterface::class);
         $container->expects($this->exactly(2))
             ->method('has')
-            ->withConsecutive(['config'], ['NonExistentClass'])
-            ->willReturn(true, false);
+            ->willReturnMap([
+                ['config', true],
+                ['NonExistentClass', false],
+            ]);
         $container->method('get')
             ->with('config')
             ->willReturn($this->getConfigForListener(['listener' => 'NonExistentClass']));
@@ -171,8 +181,10 @@ final class EventManagerFactoryTest extends TestCase
         $container = $this->createMock(ContainerInterface::class);
         $container->expects($this->exactly(2))
             ->method('has')
-            ->withConsecutive(['config'], [StubEventListener::class])
-            ->willReturn(true, false);
+            ->willReturnMap([
+                ['config', true],
+                [StubEventListener::class, false],
+            ]);
         $container->method('get')
             ->with('config')
             ->willReturn(
@@ -197,19 +209,23 @@ final class EventManagerFactoryTest extends TestCase
         $container = $this->createMock(ContainerInterface::class);
         $container->expects($this->exactly(2))
             ->method('has')
-            ->withConsecutive(['config'], [StubEventListener::class])
-            ->willReturn(true, true);
+            ->willReturnMap([
+                ['config', true],
+                [StubEventListener::class, true],
+            ]);
         $container->method('get')
-            ->withConsecutive(['config'], [StubEventListener::class])
-            ->willReturn(
-                $this->getConfigForListener(
-                    [
-                        'events' => Events::onFlush,
-                        'listener' => StubEventListener::class,
-                    ]
-                ),
-                $eventListener
-            );
+            ->willReturnMap([
+                [
+                    'config',
+                    $this->getConfigForListener(
+                        [
+                            'events' => Events::onFlush,
+                            'listener' => StubEventListener::class,
+                        ]
+                    ),
+                ],
+                [StubEventListener::class, $eventListener],
+            ]);
 
         $factory      = new EventManagerFactory();
         $eventManager = $factory($container);
