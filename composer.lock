@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "70c8a285967a8f2d1856263926c6913c",
+    "content-hash": "dd8c00e620c0bb5728559189e8134889",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2420,63 +2420,6 @@
             "time": "2021-03-30T17:13:30+00:00"
         },
         {
-            "name": "aura/di",
-            "version": "4.2.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/auraphp/Aura.Di.git",
-                "reference": "faf49669dae6b422f298803f25ef12997906f2e9"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/auraphp/Aura.Di/zipball/faf49669dae6b422f298803f25ef12997906f2e9",
-                "reference": "faf49669dae6b422f298803f25ef12997906f2e9",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.4 || ^8.0",
-                "psr/container": "^1.1.1 || ^2.0.2"
-            },
-            "provide": {
-                "psr/container-implementation": "^1.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^9.5",
-                "producer/producer": "^2.3",
-                "roave/security-advisories": "dev-master"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Aura\\Di\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Aura.Di Contributors",
-                    "homepage": "https://github.com/auraphp/Aura.Di/contributors"
-                }
-            ],
-            "description": "A serializable dependency injection container with constructor and setter injection, interface and trait awareness, configuration inheritance, and much more.",
-            "homepage": "https://github.com/auraphp/Aura.Di",
-            "keywords": [
-                "container",
-                "dependency injection",
-                "dependency injection container",
-                "di",
-                "di container"
-            ],
-            "support": {
-                "issues": "https://github.com/auraphp/Aura.Di/issues",
-                "source": "https://github.com/auraphp/Aura.Di/tree/4.2.1"
-            },
-            "time": "2022-01-04T21:37:03+00:00"
-        },
-        {
             "name": "composer/package-versions-deprecated",
             "version": "1.11.99.5",
             "source": {
@@ -3347,58 +3290,6 @@
                 }
             ],
             "time": "2023-09-19T10:15:21+00:00"
-        },
-        {
-            "name": "mouf/pimple-interop",
-            "version": "v1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/moufmouf/pimple-interop.git",
-                "reference": "88f3983aa8ac80d9a19025ee311f5662929ab9a7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/moufmouf/pimple-interop/zipball/88f3983aa8ac80d9a19025ee311f5662929ab9a7",
-                "reference": "88f3983aa8ac80d9a19025ee311f5662929ab9a7",
-                "shasum": ""
-            },
-            "require": {
-                "container-interop/container-interop": "~1.0",
-                "pimple/pimple": "~1.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~3.7"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Interop\\Container\\Pimple": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "David Négrier",
-                    "email": "d.negrier@thecodingmachine.com",
-                    "homepage": "http://mouf-php.com"
-                }
-            ],
-            "description": "This project is a very simple extension to the Pimple microframework. It adds to Pimple compatibility with the container-interop APIs.",
-            "homepage": "http://mouf-php.com",
-            "keywords": [
-                "container-interop",
-                "dependency injection",
-                "di",
-                "pimple"
-            ],
-            "support": {
-                "issues": "https://github.com/moufmouf/pimple-interop/issues",
-                "source": "https://github.com/moufmouf/pimple-interop/tree/v1.0.0"
-            },
-            "time": "2014-08-24T17:16:10+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -4313,56 +4204,6 @@
                 }
             ],
             "time": "2023-10-26T07:21:45+00:00"
-        },
-        {
-            "name": "pimple/pimple",
-            "version": "v1.1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/silexphp/Pimple.git",
-                "reference": "2019c145fe393923f3441b23f29bbdfaa5c58c4d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/silexphp/Pimple/zipball/2019c145fe393923f3441b23f29bbdfaa5c58c4d",
-                "reference": "2019c145fe393923f3441b23f29bbdfaa5c58c4d",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.1.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Pimple": "lib/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                }
-            ],
-            "description": "Pimple is a simple Dependency Injection Container for PHP 5.3",
-            "homepage": "http://pimple.sensiolabs.org",
-            "keywords": [
-                "container",
-                "dependency injection"
-            ],
-            "support": {
-                "issues": "https://github.com/silexphp/Pimple/issues",
-                "source": "https://github.com/silexphp/Pimple/tree/v1.1.1"
-            },
-            "time": "2013-11-22T08:30:29+00:00"
         },
         {
             "name": "psalm/plugin-phpunit",
@@ -5942,5 +5783,5 @@
     "platform-overrides": {
         "php": "8.1.99"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }
