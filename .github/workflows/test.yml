@@ -54,3 +54,6 @@ jobs:
 
       - name: Test with PHPUnit
         run: make unit
+
+      - name: Test examples
+        run: make check-example
