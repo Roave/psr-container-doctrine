@@ -2,27 +2,41 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 3.10.0 - TBD
+## 3.10.0 - 2023-10-27
 
-### Added
 
-- Nothing.
+-----
 
-### Changed
+### Release Notes for [3.10.0](https://github.com/Roave/psr-container-doctrine/milestone/30)
 
-- Nothing.
+Feature release (minor)
 
-### Deprecated
+### 3.10.0
 
-- Nothing.
+- Total issues resolved: **0**
+- Total pull requests resolved: **9**
+- Total contributors: **4**
 
-### Removed
+#### renovate
 
-- Nothing.
+ - [109: Update dependency laminas/laminas-servicemanager to ^3.22.1](https://github.com/Roave/psr-container-doctrine/pull/109) thanks to @renovate[bot]
+ - [106: Update actions/checkout action to v4](https://github.com/Roave/psr-container-doctrine/pull/106) thanks to @renovate[bot]
+ - [105: Update dependency doctrine/coding-standard to v12](https://github.com/Roave/psr-container-doctrine/pull/105) thanks to @renovate[bot]
+ - [99: Update all non-major dependencies](https://github.com/Roave/psr-container-doctrine/pull/99) thanks to @renovate[bot]
+ - [98: Update dependency phpunit/phpunit to v10](https://github.com/Roave/psr-container-doctrine/pull/98) thanks to @renovate[bot]
 
-### Fixed
+#### bug,documentation,enhancement
 
-- Nothing.
+ - [108: Make the full config example functional, and test it](https://github.com/Roave/psr-container-doctrine/pull/108) thanks to @Slamdunk
+
+#### documentation,enhancement
+
+ - [107: &#91;Feature&#93; Define schema assets filter in configuration](https://github.com/Roave/psr-container-doctrine/pull/107) thanks to @Slamdunk
+ - [101:  &#91;Feature&#93; Define schema assets filter in configuration (continue)](https://github.com/Roave/psr-container-doctrine/pull/101) thanks to @e-vil-dev
+
+#### documentation
+
+ - [104: Update CLI documentation to add `bin/doctrine`](https://github.com/Roave/psr-container-doctrine/pull/104) thanks to @kynx
 
 ## 3.9.0 - 2023-01-31
 
