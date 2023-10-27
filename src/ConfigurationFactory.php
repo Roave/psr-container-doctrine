@@ -133,6 +133,10 @@ final class ConfigurationFactory extends AbstractFactory
             $configuration->setEntityListenerResolver($config['entity_listener_resolver']);
         }
 
+        if (is_string($config['schema_assets_filter'])) {
+            $configuration->setSchemaAssetsFilter($container->get($config['schema_assets_filter']));
+        }
+
         if ($config['default_repository_class_name'] !== null) {
             $configuration->setDefaultRepositoryClassName($config['default_repository_class_name']);
         }
@@ -214,6 +218,7 @@ final class ConfigurationFactory extends AbstractFactory
             'repository_factory' => null,
             'class_metadata_factory_name' => null,
             'entity_listener_resolver' => null,
+            'schema_assets_filter' => null,
             'second_level_cache' => [
                 'enabled' => false,
                 'default_lifetime' => 3600,

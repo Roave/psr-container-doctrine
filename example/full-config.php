@@ -16,6 +16,7 @@ use Doctrine\Common\Cache\WinCacheCache;
 use Doctrine\Common\Cache\XcacheCache;
 use Doctrine\Common\Cache\ZendDataCache;
 use Doctrine\DBAL\Driver\PDOMySql\Driver;
+use Doctrine\DBAL\Schema\AbstractAsset;
 use Doctrine\Migrations\Configuration\Migration\ConfigurationLoader;
 use Doctrine\Migrations\DependencyFactory;
 use Doctrine\Migrations\Tools\Console\Command;
@@ -63,6 +64,7 @@ return [
                     'app.foo.middleware', // Will be looked up in the container.
                     'app.bar.middleware', // Will be looked up in the container.
                 ],
+                'schema_assets_filter' => 'my_schema_assets_filter',
             ],
         ],
         'connection' => [
@@ -193,6 +195,22 @@ return [
 
             DependencyFactory::class => DependencyFactoryFactory::class,
             ConfigurationLoader::class => ConfigurationLoaderFactory::class,
+
+            'my_schema_assets_filter' => static function (): callable {
+                /**
+                 * Filter out assets (table, sequence) by name from Schema
+                 * because ones have no mapping and this cause unwanted create|drop statements in migration
+                 * generated with migrations:diff command when compare ORM schema and schema introspected from database
+                 */
+                return static fn (AbstractAsset|string $asset): bool => ! in_array(
+                    $asset instanceof AbstractAsset ? $asset->getName() : $asset,
+                    [
+                        'sequence_to_generate_value',
+                        'table_without_doctrine_mapping',
+                    ],
+                    true,
+                );
+            },
         ],
     ],
 ];

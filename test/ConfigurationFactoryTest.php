@@ -13,6 +13,7 @@ use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
 use ReflectionProperty;
 use Roave\PsrContainerDoctrine\ConfigurationFactory;
+use TypeError;
 
 use function in_array;
 
@@ -130,12 +131,94 @@ final class ConfigurationFactoryTest extends TestCase
         self::assertSame([$middlewareFoo, $middlewareBar], $configuration->getMiddlewares());
     }
 
+    public function testWillSetSchemaAssetsFilterByContainerId(): void
+    {
+        $testFilter = static fn (): bool => true;
+        $config     = [
+            'doctrine' => [
+                'configuration' => [
+                    'orm_default' => ['schema_assets_filter' => 'testFilterContainerId'],
+                ],
+            ],
+        ];
+
+        $container = $this->createStub(ContainerInterface::class);
+
+        $container
+            ->method('has')
+            ->willReturnCallback(
+                static fn (string $id) => in_array(
+                    $id,
+                    [
+                        'config',
+                        'doctrine.driver.orm_default',
+                        'testFilterContainerId',
+                    ],
+                    true,
+                ),
+            );
+
+        $container
+            ->method('get')
+            ->willReturnMap(
+                [
+                    ['config', $config],
+                    ['doctrine.driver.orm_default', $this->createStub(MappingDriver::class)],
+                    ['testFilterContainerId', $testFilter],
+                ],
+            );
+
+        $configuration = (new ConfigurationFactory())($container);
+
+        self::assertSame($testFilter, $configuration->getSchemaAssetsFilter());
+    }
+
+    public function testMistypeInSchemaAssetsFilterResolvedContainerId(): void
+    {
+        $testFilter = ['misconfig' => 'resolved service is not callable'];
+        $config     = [
+            'doctrine' => [
+                'configuration' => [
+                    'orm_default' => ['schema_assets_filter' => 'testFilterContainerId'],
+                ],
+            ],
+        ];
+
+        $container = $this->createStub(ContainerInterface::class);
+
+        $container
+            ->method('has')
+            ->willReturnCallback(
+                static fn (string $id) => in_array(
+                    $id,
+                    [
+                        'config',
+                        'doctrine.driver.orm_default',
+                        'testFilterContainerId',
+                    ],
+                    true,
+                ),
+            );
+
+        $container
+            ->method('get')
+            ->willReturnMap(
+                [
+                    ['config', $config],
+                    ['doctrine.driver.orm_default', $this->createStub(MappingDriver::class)],
+                    ['testFilterContainerId', $testFilter],
+                ],
+            );
+
+        $this->expectException(TypeError::class);
+        $this->expectExceptionMessage('Doctrine\DBAL\Configuration::setSchemaAssetsFilter(): Argument #1 ($callable) must be of type ?callable, array given');
+
+        (new ConfigurationFactory())($container);
+    }
+
     /** @param non-empty-string $propertyName */
     private function exctractPropertyValue(object $object, string $propertyName): mixed
     {
-        $property = new ReflectionProperty($object, $propertyName);
-        $property->setAccessible(true);
-
-        return $property->getValue($object);
+        return (new ReflectionProperty($object, $propertyName))->getValue($object);
     }
 }
