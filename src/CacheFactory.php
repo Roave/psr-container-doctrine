@@ -37,7 +37,7 @@ final class CacheFactory extends AbstractFactory
         $config = $this->retrieveConfig($container, $configKey, 'cache');
 
         if (! array_key_exists('class', $config)) {
-            throw OutOfBoundsException::forMissingConfigKey('class');
+            throw OutOfBoundsException::forMissingConfigKey('doctrine.cache.' . $configKey . '.class');
         }
 
         $instance = null;

@@ -38,7 +38,7 @@ final class DriverFactory extends AbstractFactory
         $config = $this->retrieveConfig($container, $configKey, 'driver');
 
         if (! array_key_exists('class', $config)) {
-            throw OutOfBoundsException::forMissingConfigKey('class');
+            throw OutOfBoundsException::forMissingConfigKey('doctrine.driver.' . $configKey . '.class');
         }
 
         if (! is_array($config['paths'])) {

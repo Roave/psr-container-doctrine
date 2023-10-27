@@ -23,7 +23,7 @@ final class DriverFactoryTest extends TestCase
         $factory   = new DriverFactory();
 
         $this->expectException(OutOfBoundsException::class);
-        $this->expectExceptionMessage('Missing "class" config key');
+        $this->expectExceptionMessage('Missing "doctrine.driver.orm_default.class" config key');
 
         $factory($container);
     }
