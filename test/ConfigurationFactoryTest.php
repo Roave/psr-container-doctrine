@@ -13,6 +13,7 @@ use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
 use ReflectionProperty;
 use Roave\PsrContainerDoctrine\ConfigurationFactory;
+use TypeError;
 
 use function in_array;
 
@@ -209,7 +210,8 @@ final class ConfigurationFactoryTest extends TestCase
                 ],
             );
 
-        self::expectError();
+        $this->expectException(TypeError::class);
+        $this->expectExceptionMessage('Doctrine\DBAL\Configuration::setSchemaAssetsFilter(): Argument #1 ($callable) must be of type ?callable, array given');
 
         (new ConfigurationFactory())($container);
     }
@@ -217,9 +219,6 @@ final class ConfigurationFactoryTest extends TestCase
     /** @param non-empty-string $propertyName */
     private function exctractPropertyValue(object $object, string $propertyName): mixed
     {
-        $property = new ReflectionProperty($object, $propertyName);
-        $property->setAccessible(true);
-
-        return $property->getValue($object);
+        return (new ReflectionProperty($object, $propertyName))->getValue($object);
     }
 }
