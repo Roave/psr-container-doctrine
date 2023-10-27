@@ -7,6 +7,7 @@
   <coverage/>
   <testsuite name="psr-container-doctrine Test Suite">
     <directory>./test</directory>
+    <exclude>./test/example</exclude>
   </testsuite>
   <source>
     <include>

@@ -1,12 +1,11 @@
 {
     "name": "roave/psr-container-doctrine",
-    "type": "library",
     "description": "Doctrine Factories for PSR-11 Containers",
-    "homepage": "https://github.com/Roave/psr-container-doctrine",
-    "license" : "BSD-2-Clause",
+    "license": "BSD-2-Clause",
+    "type": "library",
     "authors": [
         {
-            "name":     "Ben Scholzen",
+            "name": "Ben Scholzen",
             "homepage": "https://github.com/dasprid"
         },
         {
@@ -15,6 +14,7 @@
             "homepage": "https://github.com/asgrim"
         }
     ],
+    "homepage": "https://github.com/Roave/psr-container-doctrine",
     "require": {
         "php": "~8.1.0 || ~8.2.0",
         "doctrine/annotations": "^1.14.2 || ^2.0",
@@ -29,7 +29,10 @@
         "psr/container": "^1.0 || ^2.0"
     },
     "require-dev": {
+        "ext-sqlite3": "*",
         "doctrine/coding-standard": "^12.0.0",
+        "illuminate/container": "^10.29",
+        "laminas/laminas-servicemanager": "^3.15",
         "phpunit/phpunit": "^10.4.2",
         "psalm/plugin-phpunit": "^0.18.4",
         "symfony/yaml": "^6.3.3",
@@ -47,8 +50,8 @@
     },
     "config": {
         "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true,
             "composer/package-versions-deprecated": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
             "ocramius/package-versions": true
         },
         "platform": {

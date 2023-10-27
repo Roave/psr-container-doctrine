@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Doctrine\CustomCacheProvider;
 use Doctrine\Common\Cache\ApcuCache;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\ChainCache;
@@ -15,13 +14,20 @@ use Doctrine\Common\Cache\RedisCache;
 use Doctrine\Common\Cache\WinCacheCache;
 use Doctrine\Common\Cache\XcacheCache;
 use Doctrine\Common\Cache\ZendDataCache;
-use Doctrine\DBAL\Driver\PDOMySql\Driver;
+use Doctrine\DBAL\Driver as DbalDriver;
+use Doctrine\DBAL\Driver\Middleware;
+use Doctrine\DBAL\Driver\SQLite3\Driver;
 use Doctrine\DBAL\Schema\AbstractAsset;
 use Doctrine\Migrations\Configuration\Migration\ConfigurationLoader;
 use Doctrine\Migrations\DependencyFactory;
 use Doctrine\Migrations\Tools\Console\Command;
-use Roave\PsrContainerDoctrine\ConfigurationLoaderFactory;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Mapping\ClassMetadataFactory;
+use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Roave\PsrContainerDoctrine\EntityManagerFactory;
 use Roave\PsrContainerDoctrine\Migrations\CommandFactory;
+use Roave\PsrContainerDoctrine\Migrations\ConfigurationLoaderFactory;
 use Roave\PsrContainerDoctrine\Migrations\DependencyFactoryFactory;
 
 return [
@@ -33,7 +39,7 @@ return [
                 'query_cache' => 'array',
                 'hydration_cache' => 'array',
                 'driver' => 'orm_default', // Actually defaults to the configuration config key, not hard-coded
-                'auto_generate_proxy_classes' => true,
+                'generate_proxies' => true,
                 'proxy_dir' => 'data/cache/DoctrineEntityProxy',
                 'proxy_namespace' => 'DoctrineEntityProxy',
                 'entity_namespaces' => [],
@@ -46,9 +52,9 @@ return [
                 'custom_hydration_modes' => [],
                 'naming_strategy' => null,
                 'quote_strategy' => null,
-                'default_repository_class_name' => null,
+                'default_repository_class_name' => EntityRepository::class,
                 'repository_factory' => null,
-                'class_metadata_factory_name' => null,
+                'class_metadata_factory_name' => ClassMetadataFactory::class,
                 'entity_listener_resolver' => null,
                 'second_level_cache' => [
                     'enabled' => false,
@@ -57,25 +63,21 @@ return [
                     'file_lock_region_directory' => '',
                     'regions' => [],
                 ],
-                'sql_logger' => null,
-                'middlewares' => [
-                    // List of middlewares doctrine will use to decorate the `Driver` component.
-                    // (see https://github.com/doctrine/dbal/blob/3.3.2/docs/en/reference/architecture.rst#middlewares)
-                    'app.foo.middleware', // Will be looked up in the container.
-                    'app.bar.middleware', // Will be looked up in the container.
-                ],
+                // List of middlewares doctrine will use to decorate the `Driver` component.
+                // (see https://github.com/doctrine/dbal/blob/3.3.2/docs/en/reference/architecture.rst#middlewares)
+                'middlewares' => ['app.foo.middleware'],
                 'schema_assets_filter' => 'my_schema_assets_filter',
             ],
         ],
         'connection' => [
             'orm_default' => [
                 'driver_class' => Driver::class,
-                'wrapper_class' => null,
+//                'wrapper_class' => null,
                 'pdo' => null,
                 'configuration' => 'orm_default', // Actually defaults to the connection config key, not hard-coded
                 'event_manager' => 'orm_default', // Actually defaults to the connection config key, not hard-coded
                 'params' => [],
-                'doctrine_mapping_types' => [],
+                'doctrine_type_mappings' => [],
                 'doctrine_commented_types' => [],
             ],
         ],
@@ -88,17 +90,17 @@ return [
         'event_manager' => [
             'orm_default' => [
                 'subscribers' => [],
-                'listeners' => [],
             ],
         ],
         'driver' => [
             'orm_default' => [
-                'class' => null,
-                'paths' => [],
+                'class' => AnnotationDriver::class,
+                'paths' => [
+                    __DIR__ . '/Entity/', // If this config is is src/App/ConfigProvider.php
+                ],
                 'extension' => null,
                 'drivers' => [],
-                'global_basename' => null,
-                'default_driver' => null,
+                'cache' => 'array',
             ],
         ],
         'cache' => [
@@ -152,9 +154,9 @@ return [
                 'class' => ZendDataCache::class,
                 'namespace' => 'psr-container-doctrine',
             ],
-            'my_cache_provider' => [
-                'class' => CustomCacheProvider::class, //The class is looked up in the container
-            ],
+            // 'my_cache_provider' => [
+            //     'class' => CustomCacheProvider::class, //The class is looked up in the container
+            // ],
             'chain' => [
                 'class' => ChainCache::class,
                 'providers' => ['array', 'redis'], // you can use any provider listed above
@@ -193,6 +195,7 @@ return [
             Command\UpToDateCommand::class => CommandFactory::class,
             Command\VersionCommand::class => CommandFactory::class,
 
+            EntityManagerInterface::class => EntityManagerFactory::class,
             DependencyFactory::class => DependencyFactoryFactory::class,
             ConfigurationLoader::class => ConfigurationLoaderFactory::class,
 
@@ -210,6 +213,15 @@ return [
                     ],
                     true,
                 );
+            },
+
+            'app.foo.middleware' => static function (): Middleware {
+                return new class implements Middleware {
+                    public function wrap(DbalDriver $driver): DbalDriver
+                    {
+                        return $driver;
+                    }
+                };
             },
         ],
     ],

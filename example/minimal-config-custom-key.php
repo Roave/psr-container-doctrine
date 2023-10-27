@@ -8,12 +8,12 @@ use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
 return [
     'doctrine' => [
         'connection' => [
-            'orm_default' => [
+            'orm_custom_key' => [
                 'params' => ['url' => 'sqlite::memory:'],
             ],
         ],
         'driver' => [
-            'orm_default' => [
+            'orm_custom_key' => [
                 'class' => MappingDriverChain::class,
                 'drivers' => ['My\Entity' => 'my_entity'],
             ],
