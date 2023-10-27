@@ -13,6 +13,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\DriverFactory;
+use Roave\PsrContainerDoctrine\Exception\InvalidArgumentException;
 use Roave\PsrContainerDoctrine\Exception\OutOfBoundsException;
 
 final class DriverFactoryTest extends TestCase
@@ -24,6 +25,25 @@ final class DriverFactoryTest extends TestCase
 
         $this->expectException(OutOfBoundsException::class);
         $this->expectExceptionMessage('Missing "doctrine.driver.orm_default.class" config key');
+
+        $factory($container);
+    }
+
+    public function testNonObjectClassKeyWillReturnInvalidArgumentException(): void
+    {
+        $container = $this->createContainerMockWithConfig(
+            [
+                'doctrine' => [
+                    'driver' => [
+                        'orm_default' => ['class' => 'not_a_class'],
+                    ],
+                ],
+            ],
+        );
+        $factory   = new DriverFactory();
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Configured class "not_a_class" on key "doctrine.driver.orm_default.class" does not exists');
 
         $factory($container);
     }

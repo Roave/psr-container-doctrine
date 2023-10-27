@@ -21,7 +21,9 @@ use Roave\PsrContainerDoctrine\Exception\InvalidArgumentException;
 use Roave\PsrContainerDoctrine\Exception\OutOfBoundsException;
 
 use function array_key_exists;
+use function class_exists;
 use function is_array;
+use function is_string;
 use function is_subclass_of;
 use function method_exists;
 
@@ -39,6 +41,10 @@ final class DriverFactory extends AbstractFactory
 
         if (! array_key_exists('class', $config)) {
             throw OutOfBoundsException::forMissingConfigKey('doctrine.driver.' . $configKey . '.class');
+        }
+
+        if (! is_string($config['class']) || ! class_exists($config['class'])) {
+            throw new InvalidArgumentException('Configured class "' . $config['class'] . '" on key "doctrine.driver.' . $configKey . '.class" does not exists');
         }
 
         if (! is_array($config['paths'])) {
