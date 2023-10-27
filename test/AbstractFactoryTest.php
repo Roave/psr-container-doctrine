@@ -61,7 +61,7 @@ final class AbstractFactoryTest extends TestCase
     }
 
     /** @return array<string, mixed> */
-    public function configProvider(): array
+    public static function configProvider(): array
     {
         return [
             'no-config' => ['foo', 'bar', [], null],
