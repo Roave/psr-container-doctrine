@@ -1,2 +1,4 @@
+/example/composer.lock
+/example/vendor
 /vendor
 .phpunit.result.cache

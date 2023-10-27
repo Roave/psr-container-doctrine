@@ -16,6 +16,7 @@ static-analysis: ## verify that no static analysis issues were introduced
 	vendor/bin/psalm
 
 check-example:
+	composer update --working-dir=example
 	test/example/check-example.sh
 
 bc-check: ## check for backwards compatibility breaks
