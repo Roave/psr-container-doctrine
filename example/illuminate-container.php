@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Illuminate\Container\Container;
 use Roave\PsrContainerDoctrine\EntityManagerFactory;
 
+require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/../vendor/autoload.php';
 
 // Standard config keys

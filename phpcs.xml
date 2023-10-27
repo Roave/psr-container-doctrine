@@ -1,6 +1,11 @@
 <?xml version="1.0"?>
-<ruleset name="psr-container-doctrine">
+<ruleset
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="vendor/squizlabs/php_codesniffer/phpcs.xsd"
+        name="psr-container-doctrine"
+>
     <file>./example</file>
+    <exclude-pattern>./example/vendor</exclude-pattern>
     <file>./src</file>
     <file>./test</file>
     <rule ref="Doctrine">
@@ -10,4 +15,3 @@
         <exclude name="SlevomatCodingStandard.Classes.SuperfluousInterfaceNaming.SuperfluousSuffix"/>
     </rule>
 </ruleset>
-
