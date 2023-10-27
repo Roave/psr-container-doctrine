@@ -69,7 +69,6 @@ final class DriverFactory extends AbstractFactory
         }
 
         if (! isset($driver)) {
-            /** @psalm-suppress UnsafeInstantiation */
             $driver = new $config['class']($config['paths']);
         }
 
