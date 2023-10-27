@@ -30,7 +30,7 @@
     },
     "require-dev": {
         "doctrine/coding-standard": "^12.0.0",
-        "phpunit/phpunit": "^9.6.13",
+        "phpunit/phpunit": "^10.4.2",
         "psalm/plugin-phpunit": "^0.18.4",
         "symfony/yaml": "^6.3.3",
         "vimeo/psalm": "^5.15.0"
