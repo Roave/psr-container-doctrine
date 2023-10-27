@@ -81,7 +81,7 @@ final class DriverFactoryTest extends TestCase
      * @return string[][]
      * @psalm-return list<array{class-string<FileDriver>}>
      */
-    public function simplifiedDriverClassProvider(): array
+    public static function simplifiedDriverClassProvider(): array
     {
         return [
             [ Driver\SimplifiedXmlDriver::class ],
@@ -137,7 +137,7 @@ final class DriverFactoryTest extends TestCase
      * @return string[][]
      * @psalm-return list<array{class-string<Driver\CompatibilityAnnotationDriver>}>
      */
-    public function annotationDriverClassProvider(): array
+    public static function annotationDriverClassProvider(): array
     {
         return [
             [ Driver\AttributeDriver::class ],

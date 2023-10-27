@@ -74,7 +74,7 @@ final class CommandFactoryTest extends TestCase
     }
 
     /** @return array<array<class-string>> */
-    public function commandClassProvider(): array
+    public static function commandClassProvider(): array
     {
         return [
             [Command\CurrentCommand::class],
