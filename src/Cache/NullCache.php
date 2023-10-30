@@ -9,10 +9,7 @@ use Psr\Cache\CacheItemPoolInterface;
 
 final class NullCache implements CacheItemPoolInterface
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function getItem($key): CacheItemInterface
+    public function getItem(string $key): CacheItemInterface
     {
         return new NullCacheItem($key);
     }
@@ -27,10 +24,7 @@ final class NullCache implements CacheItemPoolInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function hasItem($key): bool
+    public function hasItem(string $key): bool
     {
         return false;
     }
@@ -40,10 +34,7 @@ final class NullCache implements CacheItemPoolInterface
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function deleteItem($key): bool
+    public function deleteItem(string $key): bool
     {
         return true;
     }

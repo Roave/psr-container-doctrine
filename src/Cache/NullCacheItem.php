@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Roave\PsrContainerDoctrine\Cache;
 
+use DateInterval;
+use DateTimeInterface;
 use Psr\Cache\CacheItemInterface;
 
 final class NullCacheItem implements CacheItemInterface
@@ -33,18 +35,12 @@ final class NullCacheItem implements CacheItemInterface
         return $this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function expiresAt($expiration): static
+    public function expiresAt(DateTimeInterface|null $expiration): static
     {
         return $this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function expiresAfter($time): static
+    public function expiresAfter(int|DateInterval|null $time): static
     {
         return $this;
     }
