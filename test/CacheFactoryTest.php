@@ -4,18 +4,16 @@ declare(strict_types=1);
 
 namespace RoaveTest\PsrContainerDoctrine;
 
-use Doctrine\Common\Cache\ArrayCache;
-use Doctrine\Common\Cache\ChainCache;
-use Doctrine\Common\Cache\FilesystemCache;
-use Doctrine\Common\Cache\MemcachedCache;
+use Doctrine\Common\Cache\Cache;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\AbstractFactory;
+use Roave\PsrContainerDoctrine\Cache\NullCache;
 use Roave\PsrContainerDoctrine\CacheFactory;
+use Roave\PsrContainerDoctrine\Exception\InvalidArgumentException;
 use Roave\PsrContainerDoctrine\Exception\OutOfBoundsException;
-
-use function extension_loaded;
+use stdClass;
 
 /** @coversDefaultClass \Roave\PsrContainerDoctrine\CacheFactory */
 final class CacheFactoryTest extends TestCase
@@ -27,94 +25,6 @@ final class CacheFactoryTest extends TestCase
     }
 
     /** @covers ::createWithConfig */
-    public function testFileSystemCacheConstructor(): void
-    {
-        $container = $this->createContainerMockWithConfig(
-            [
-                'doctrine' => [
-                    'cache' => [
-                        'filesystem' => [
-                            'class' => FilesystemCache::class,
-                            'directory' => 'test',
-                        ],
-                    ],
-                ],
-            ],
-        );
-
-        $factory       = new CacheFactory('filesystem');
-        $cacheInstance = $factory($container);
-
-        self::assertInstanceOf(FilesystemCache::class, $cacheInstance);
-    }
-
-    public function testCacheChainContainsInitializedProviders(): void
-    {
-        $config = [
-            'doctrine' => [
-                'cache' => [
-                    'chain' => [
-                        'class'     => ChainCache::class,
-                        'providers' => ['array', 'array'],
-                    ],
-                ],
-            ],
-        ];
-
-        $container = $this->createMock(ContainerInterface::class);
-        $container->method('has')
-            ->willReturnMap([
-                ['config', true],
-                ['config', true],
-                [ArrayCache::class, false],
-                ['config', true],
-                [ArrayCache::class, false],
-            ]);
-        $container->method('get')->with('config')->willReturn($config);
-
-        $factory       = new CacheFactory('chain');
-        $cacheInstance = $factory($container);
-
-        self::assertInstanceOf(ChainCache::class, $cacheInstance);
-    }
-
-    public function testCanInjectWrappedInstances(): void
-    {
-        if (! extension_loaded('memcached')) {
-            $this->markTestSkipped('Extension memcached is not loaded');
-        }
-
-        /** @psalm-suppress ArgumentTypeCoercion \Memcached needs to be imported otherwise */
-        $wrappedMemcached = $this->createMock('Memcached');
-
-        $config = [
-            'doctrine' => [
-                'cache' => [
-                    'memcached' => [
-                        'class'     => MemcachedCache::class,
-                        'instance'  => $wrappedMemcached,
-                        'namespace' => 'foo',
-                    ],
-                ],
-            ],
-        ];
-
-        $container = $this->createMock(ContainerInterface::class);
-        $container->method('has')
-            ->willReturnMap([
-                ['config', true],
-                [MemcachedCache::class, false],
-            ]);
-        $container->expects($this->once())->method('get')->with('config')->willReturn($config);
-
-        $factory  = new CacheFactory('memcached');
-        $instance = $factory($container);
-
-        self::assertInstanceOf(MemcachedCache::class, $instance);
-        self::assertSame($wrappedMemcached, $instance->getMemcached());
-        self::assertSame('foo', $instance->getNamespace());
-    }
-
     public function testThrowsForMissingConfigKey(): void
     {
         $container = $this->createContainerMockWithConfig(
@@ -163,5 +73,102 @@ final class CacheFactoryTest extends TestCase
 
         $factory = new CacheFactory('foo');
         self::assertSame($cacheItemPool, $factory($container));
+    }
+
+    public function testThrowsWhenRetrieveFromContainerUnexpectedReturnType(): void
+    {
+        $containerId = 'ContainerId';
+
+        $container = $this->createMock(ContainerInterface::class);
+        $container
+            ->method('has')
+            ->willReturnMap([
+                ['config', true],
+                [$containerId, true],
+            ]);
+
+        $unsupportedReturnType = $this->createMock(stdClass::class);
+        $container
+            ->method('get')
+            ->willReturnMap([
+                ['config', ['doctrine' => ['cache' => ['foo' => ['class' => $containerId]]]]],
+                [$containerId, $unsupportedReturnType],
+            ]);
+
+        self::expectExceptionObject(InvalidArgumentException::fromUnsupportedCache($unsupportedReturnType));
+
+        $factory = new CacheFactory('foo');
+        $factory($container);
+    }
+
+    public function testCanInstantiateCacheItemPoolFromClassName(): void
+    {
+        $mock      = $this->createMock(Cache::class);
+        $className = $mock::class;
+
+        $container = $this->createMock(ContainerInterface::class);
+        $container
+            ->method('has')
+            ->willReturnMap([
+                ['config', true],
+                [$className, false],
+            ]);
+
+        $container
+            ->method('get')
+            ->with('config')
+            ->willReturn(
+                ['doctrine' => ['cache' => ['foo' => ['class' => $className]]]],
+            );
+
+        $factory = new CacheFactory('foo');
+        self::assertInstanceOf($className, $factory($container));
+    }
+
+    public function testThrowsWhenInstantiateUnexpectedReturnType(): void
+    {
+        $mock      = $this->createMock(stdClass::class);
+        $className = $mock::class;
+
+        $container = $this->createMock(ContainerInterface::class);
+        $container
+            ->method('has')
+            ->willReturnMap([
+                ['config', true],
+                [$className, false],
+            ]);
+
+        $container
+            ->method('get')
+            ->with('config')
+            ->willReturn(
+                ['doctrine' => ['cache' => ['foo' => ['class' => $className]]]],
+            );
+
+        self::expectExceptionObject(InvalidArgumentException::fromUnsupportedCache($mock));
+
+        $factory = new CacheFactory('foo');
+        $factory($container);
+    }
+
+    public function testCanInstantiateBundledNullCacheWithoutConfig(): void
+    {
+        $bundledClassName = NullCache::class;
+
+        $container = $this->createMock(ContainerInterface::class);
+        $container
+            ->method('has')
+            ->willReturnMap([
+                ['config', true],
+                [$bundledClassName, false],
+            ]);
+
+        $container
+            ->method('get')
+            ->with('config')
+            ->willReturn([]);
+
+        $factory = new CacheFactory($bundledClassName);
+        self::assertInstanceOf($bundledClassName, $factory($container));
     }
 }

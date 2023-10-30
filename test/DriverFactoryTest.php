@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace RoaveTest\PsrContainerDoctrine;
 
 use Doctrine\Common\Annotations\PsrCachedReader;
-use Doctrine\Common\Cache\ArrayCache;
+use Doctrine\Common\Cache\Cache;
 use Doctrine\ORM\Mapping\Driver;
 use Doctrine\Persistence\Mapping\Driver\FileDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
@@ -183,7 +183,7 @@ final class DriverFactoryTest extends TestCase
                     ],
                 ],
             ],
-            'doctrine.cache.default' => new ArrayCache(),
+            'doctrine.cache.default' => $this->createMock(Cache::class),
         ];
         $container = $this->createMock(ContainerInterface::class);
         $container->method('has')->willReturnCallback(

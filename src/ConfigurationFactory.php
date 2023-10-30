@@ -12,6 +12,7 @@ use Doctrine\ORM\Cache\RegionsConfiguration;
 use Doctrine\ORM\Configuration;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
+use Roave\PsrContainerDoctrine\Cache\NullCache;
 
 use function array_key_exists;
 use function assert;
@@ -58,9 +59,8 @@ final class ConfigurationFactory extends AbstractFactory
         );
 
         $this->processCacheImplementation(
-            $configuration,
             $metadataCache,
-            [$configuration, 'setMetadataCache'],
+            $configuration->setMetadataCache(...),
         );
 
         $queryCache = $this->retrieveDependency(
@@ -71,9 +71,8 @@ final class ConfigurationFactory extends AbstractFactory
         );
 
         $this->processCacheImplementation(
-            $configuration,
             $queryCache,
-            [$configuration, 'setQueryCache'],
+            $configuration->setQueryCache(...),
         );
 
         $resultCache = $this->retrieveDependency(
@@ -84,9 +83,8 @@ final class ConfigurationFactory extends AbstractFactory
         );
 
         $this->processCacheImplementation(
-            $configuration,
             $resultCache,
-            [$configuration, 'setResultCache'],
+            $configuration->setResultCache(...),
         );
 
         $hydrationCache = $this->retrieveDependency(
@@ -97,9 +95,8 @@ final class ConfigurationFactory extends AbstractFactory
         );
 
         $this->processCacheImplementation(
-            $configuration,
             $hydrationCache,
-            [$configuration, 'setHydrationCache'],
+            $configuration->setHydrationCache(...),
         );
 
         $configuration->setMetadataDriverImpl($this->retrieveDependency(
@@ -141,7 +138,8 @@ final class ConfigurationFactory extends AbstractFactory
             $configuration->setDefaultRepositoryClassName($config['default_repository_class_name']);
         }
 
-        if ($config['second_level_cache']['enabled']) {
+        $resultCache = $configuration->getResultCache();
+        if ($config['second_level_cache']['enabled'] && $resultCache) {
             $regionsConfig = new RegionsConfiguration(
                 $config['second_level_cache']['default_lifetime'],
                 $config['second_level_cache']['default_lock_lifetime'],
@@ -159,7 +157,6 @@ final class ConfigurationFactory extends AbstractFactory
                 $regionsConfig->setLockLifetime($regionName, $regionConfig['lock_lifetime']);
             }
 
-            /** @psalm-suppress PossiblyInvalidArgument */
             $cacheFactory = new DefaultCacheFactory($regionsConfig, $resultCache);
             $cacheFactory->setFileLockRegionDirectory($config['second_level_cache']['file_lock_region_directory']);
 
@@ -196,10 +193,10 @@ final class ConfigurationFactory extends AbstractFactory
     protected function getDefaultConfig(string $configKey): array
     {
         return [
-            'metadata_cache' => 'array',
-            'query_cache' => 'array',
-            'result_cache' => 'array',
-            'hydration_cache' => 'array',
+            'metadata_cache' => NullCache::class,
+            'query_cache' => NullCache::class,
+            'result_cache' => NullCache::class,
+            'hydration_cache' => NullCache::class,
             'driver' => $configKey,
             'auto_generate_proxy_classes' => true,
             'proxy_dir' => 'data/cache/DoctrineEntityProxy',
@@ -233,7 +230,6 @@ final class ConfigurationFactory extends AbstractFactory
 
     /** @param callable(CacheItemPoolInterface):void $setCacheOnConfiguration */
     private function processCacheImplementation(
-        Configuration $configuration,
         CacheItemPoolInterface|Cache $cache,
         callable $setCacheOnConfiguration,
     ): void {
