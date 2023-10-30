@@ -157,7 +157,6 @@ final class ConfigurationFactory extends AbstractFactory
                 $regionsConfig->setLockLifetime($regionName, $regionConfig['lock_lifetime']);
             }
 
-            /** @psalm-suppress PossiblyInvalidArgument */
             $cacheFactory = new DefaultCacheFactory($regionsConfig, $resultCache);
             $cacheFactory->setFileLockRegionDirectory($config['second_level_cache']['file_lock_region_directory']);
 
@@ -232,7 +231,7 @@ final class ConfigurationFactory extends AbstractFactory
     /** @param callable(CacheItemPoolInterface):void $setCacheOnConfiguration */
     private function processCacheImplementation(
         CacheItemPoolInterface|Cache $cache,
-        callable $setCacheOnConfiguration
+        callable $setCacheOnConfiguration,
     ): void {
         if ($cache instanceof Cache) {
             $cache = CacheAdapter::wrap($cache);

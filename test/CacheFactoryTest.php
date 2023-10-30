@@ -24,9 +24,7 @@ final class CacheFactoryTest extends TestCase
         self::assertInstanceOf(AbstractFactory::class, new CacheFactory());
     }
 
-    /**
-     * @covers ::createWithConfig
-     */
+    /** @covers ::createWithConfig */
     public function testThrowsForMissingConfigKey(): void
     {
         $container = $this->createContainerMockWithConfig(
@@ -120,7 +118,7 @@ final class CacheFactoryTest extends TestCase
             ->method('get')
             ->with('config')
             ->willReturn(
-                ['doctrine' => ['cache' => ['foo' => ['class' => $className]]]]
+                ['doctrine' => ['cache' => ['foo' => ['class' => $className]]]],
             );
 
         $factory = new CacheFactory('foo');
@@ -144,7 +142,7 @@ final class CacheFactoryTest extends TestCase
             ->method('get')
             ->with('config')
             ->willReturn(
-                ['doctrine' => ['cache' => ['foo' => ['class' => $className]]]]
+                ['doctrine' => ['cache' => ['foo' => ['class' => $className]]]],
             );
 
         self::expectExceptionObject(InvalidArgumentException::fromUnsupportedCache($mock));

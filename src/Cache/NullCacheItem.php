@@ -34,7 +34,7 @@ final class NullCacheItem implements CacheItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function expiresAt($expiration): static
     {
@@ -42,7 +42,7 @@ final class NullCacheItem implements CacheItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function expiresAfter($time): static
     {

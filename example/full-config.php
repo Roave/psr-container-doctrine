@@ -9,7 +9,6 @@ use Doctrine\DBAL\Schema\AbstractAsset;
 use Doctrine\Migrations\Configuration\Migration\ConfigurationLoader;
 use Doctrine\Migrations\DependencyFactory;
 use Doctrine\Migrations\Tools\Console\Command;
-use Psr\Container\ContainerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadataFactory;
@@ -100,8 +99,6 @@ return [
             ],
             'filesystem' => [
                 'class' => FilesystemAdapter::class,
-                'directory' => 'data/cache/DoctrineCache',
-                'namespace' => 'psr-container-doctrine',
             ],
             // 'my_cache_provider' => [
             //     'class' => CustomCacheProvider::class, //The class is looked up in the container
@@ -168,13 +165,11 @@ return [
                 };
             },
 
-            FilesystemAdapter::class => static function (ContainerInterface $container): FilesystemAdapter {
-                $config = $container->get('config');
-                $params = $config['doctrine']['cache']['filesystem'];
-
+            FilesystemAdapter::class => static function (): FilesystemAdapter {
                 return new FilesystemAdapter(
-                    $params['namespace'],
-                    $params['directory'],
+                    'psr-container-doctrine',
+                    3600,
+                    __DIR__ . '/data/cache/DoctrineCache',
                 );
             },
         ],
