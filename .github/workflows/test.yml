@@ -13,8 +13,6 @@ jobs:
           - 'latest'
           - 'lowest'
 
-    name: PHP ${{ matrix.php-version }}
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
