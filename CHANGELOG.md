@@ -2,27 +2,28 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 4.1.0 - TBD
+## 4.1.0 - 2023-11-21
 
-### Added
 
-- Nothing.
+-----
 
-### Changed
+### Release Notes for [4.1.0](https://github.com/Roave/psr-container-doctrine/milestone/34)
 
-- Nothing.
+Feature release (minor)
 
-### Deprecated
+### 4.1.0
 
-- Nothing.
+- Total issues resolved: **0**
+- Total pull requests resolved: **2**
+- Total contributors: **2**
 
-### Removed
+#### enhancement
 
-- Nothing.
+ - [113: Add PHP 8.3 support, drop PHP &lt; 8.2](https://github.com/Roave/psr-container-doctrine/pull/113) thanks to @Slamdunk
 
-### Fixed
+#### renovate
 
-- Nothing.
+ - [111: Update dependency doctrine/orm to ^2.17.0](https://github.com/Roave/psr-container-doctrine/pull/111) thanks to @renovate[bot]
 
 ## 3.11.0 - TBD
 
