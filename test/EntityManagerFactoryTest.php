@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace RoaveTest\PsrContainerDoctrine;
 
-use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Configuration;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
@@ -24,7 +23,7 @@ final class EntityManagerFactoryTest extends TestCase
 
     public function testDefaults(): void
     {
-        $connection    = $this->buildConnection();
+        $connection    = $this->createMock(Connection::class);
         $configuration = $this->buildConfiguration();
 
         $container = $this->createMock(ContainerInterface::class);
@@ -52,7 +51,7 @@ final class EntityManagerFactoryTest extends TestCase
 
     public function testConfigKeyTakenFromSelf(): void
     {
-        $connection    = $this->buildConnection();
+        $connection    = $this->createMock(Connection::class);
         $configuration = $this->buildConfiguration();
 
         $container = $this->createMock(ContainerInterface::class);
@@ -79,7 +78,7 @@ final class EntityManagerFactoryTest extends TestCase
 
     public function testConfigKeyTakenFromConfig(): void
     {
-        $connection    = $this->buildConnection();
+        $connection    = $this->createMock(Connection::class);
         $configuration = $this->buildConfiguration();
         $config        = [
             'doctrine' => [
@@ -113,15 +112,6 @@ final class EntityManagerFactoryTest extends TestCase
 
         self::assertSame($connection, $entityManager->getConnection());
         self::assertSame($configuration, $entityManager->getConfiguration());
-    }
-
-    private function buildConnection(): Connection
-    {
-        $eventManager = $this->createMock(EventManager::class);
-        $connection   = $this->createPartialMock(Connection::class, ['getEventManager']);
-        $connection->method('getEventManager')->willReturn($eventManager);
-
-        return $connection;
     }
 
     private function buildConfiguration(): Configuration

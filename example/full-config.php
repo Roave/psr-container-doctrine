@@ -12,7 +12,7 @@ use Doctrine\Migrations\Tools\Console\Command;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadataFactory;
-use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Doctrine\ORM\Mapping\Driver\AttributeDriver;
 use Roave\PsrContainerDoctrine\EntityManagerFactory;
 use Roave\PsrContainerDoctrine\Migrations\CommandFactory;
 use Roave\PsrContainerDoctrine\Migrations\ConfigurationLoaderFactory;
@@ -37,8 +37,6 @@ return [
                 'string_functions' => [],
                 'numeric_functions' => [],
                 'filters' => [],
-                'named_queries' => [],
-                'named_native_queries' => [],
                 'custom_hydration_modes' => [],
                 'naming_strategy' => null,
                 'quote_strategy' => null,
@@ -65,10 +63,8 @@ return [
 //                'wrapper_class' => null,
                 'pdo' => null,
                 'configuration' => 'orm_default', // Actually defaults to the connection config key, not hard-coded
-                'event_manager' => 'orm_default', // Actually defaults to the connection config key, not hard-coded
-                'params' => [],
+                'params' => ['serverVersion' => 'mariadb-11.0'],
                 'doctrine_type_mappings' => [],
-                'doctrine_commented_types' => [],
             ],
         ],
         'entity_manager' => [
@@ -77,14 +73,9 @@ return [
                 'configuration' => 'orm_default', // Actually defaults to the entity manager config key, not hard-coded
             ],
         ],
-        'event_manager' => [
-            'orm_default' => [
-                'subscribers' => [],
-            ],
-        ],
         'driver' => [
             'orm_default' => [
-                'class' => AnnotationDriver::class,
+                'class' => AttributeDriver::class,
                 'paths' => [
                     __DIR__ . '/Entity/', // If this config is is src/App/ConfigProvider.php
                 ],

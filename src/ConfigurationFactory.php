@@ -4,13 +4,10 @@ declare(strict_types=1);
 
 namespace Roave\PsrContainerDoctrine;
 
-use Doctrine\Common\Cache\Cache;
-use Doctrine\Common\Cache\Psr6\CacheAdapter;
 use Doctrine\ORM\Cache\CacheConfiguration;
 use Doctrine\ORM\Cache\DefaultCacheFactory;
 use Doctrine\ORM\Cache\RegionsConfiguration;
 use Doctrine\ORM\Configuration;
-use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\Cache\NullCache;
 
@@ -37,14 +34,8 @@ final class ConfigurationFactory extends AbstractFactory
         $configuration->setCustomStringFunctions($config['string_functions']);
         $configuration->setCustomNumericFunctions($config['numeric_functions']);
         $configuration->setCustomHydrationModes($config['custom_hydration_modes']);
-        $configuration->setClassMetadataFactoryName($config['class_metadata_factory_name']);
-
-        foreach ($config['named_queries'] as $name => $dql) {
-            $configuration->addNamedQuery($name, $dql);
-        }
-
-        foreach ($config['named_native_queries'] as $name => $query) {
-            $configuration->addNamedNativeQuery($name, $query['sql'], $query['rsm']);
+        if ($config['class_metadata_factory_name'] !== null) {
+            $configuration->setClassMetadataFactoryName($config['class_metadata_factory_name']);
         }
 
         foreach ($config['filters'] as $name => $className) {
@@ -58,10 +49,7 @@ final class ConfigurationFactory extends AbstractFactory
             CacheFactory::class,
         );
 
-        $this->processCacheImplementation(
-            $metadataCache,
-            $configuration->setMetadataCache(...),
-        );
+        $configuration->setMetadataCache($metadataCache);
 
         $queryCache = $this->retrieveDependency(
             $container,
@@ -70,10 +58,7 @@ final class ConfigurationFactory extends AbstractFactory
             CacheFactory::class,
         );
 
-        $this->processCacheImplementation(
-            $queryCache,
-            $configuration->setQueryCache(...),
-        );
+        $configuration->setQueryCache($queryCache);
 
         $resultCache = $this->retrieveDependency(
             $container,
@@ -82,10 +67,7 @@ final class ConfigurationFactory extends AbstractFactory
             CacheFactory::class,
         );
 
-        $this->processCacheImplementation(
-            $resultCache,
-            $configuration->setResultCache(...),
-        );
+        $configuration->setResultCache($resultCache);
 
         $hydrationCache = $this->retrieveDependency(
             $container,
@@ -94,10 +76,7 @@ final class ConfigurationFactory extends AbstractFactory
             CacheFactory::class,
         );
 
-        $this->processCacheImplementation(
-            $hydrationCache,
-            $configuration->setHydrationCache(...),
-        );
+        $configuration->setHydrationCache($hydrationCache);
 
         $configuration->setMetadataDriverImpl($this->retrieveDependency(
             $container,
@@ -168,12 +147,6 @@ final class ConfigurationFactory extends AbstractFactory
             $configuration->setSecondLevelCacheConfiguration($cacheConfiguration);
         }
 
-        if (is_string($config['sql_logger'])) {
-            $configuration->setSQLLogger($container->get($config['sql_logger']));
-        } elseif ($config['sql_logger'] !== null) {
-            $configuration->setSQLLogger($config['sql_logger']);
-        }
-
         if ($config['middlewares'] !== []) {
             $middlewares = [];
             foreach ($config['middlewares'] as $middleware) {
@@ -206,8 +179,6 @@ final class ConfigurationFactory extends AbstractFactory
             'string_functions' => [],
             'numeric_functions' => [],
             'filters' => [],
-            'named_queries' => [],
-            'named_native_queries' => [],
             'custom_hydration_modes' => [],
             'naming_strategy' => null,
             'quote_strategy' => null,
@@ -226,17 +197,5 @@ final class ConfigurationFactory extends AbstractFactory
             'sql_logger' => null,
             'middlewares' => [],
         ];
-    }
-
-    /** @param callable(CacheItemPoolInterface):void $setCacheOnConfiguration */
-    private function processCacheImplementation(
-        CacheItemPoolInterface|Cache $cache,
-        callable $setCacheOnConfiguration,
-    ): void {
-        if ($cache instanceof Cache) {
-            $cache = CacheAdapter::wrap($cache);
-        }
-
-        $setCacheOnConfiguration($cache);
     }
 }

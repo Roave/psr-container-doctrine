@@ -31,10 +31,6 @@ final class ConnectionFactory extends AbstractFactory
             'pdo' => is_string($config['pdo']) ? $container->get($config['pdo']) : $config['pdo'],
         ];
 
-        if (isset($params['platform'])) {
-            $params['platform'] = $container->get($params['platform']);
-        }
-
         $connection = DriverManager::getConnection(
             $params,
             $this->retrieveDependency(
@@ -43,21 +39,11 @@ final class ConnectionFactory extends AbstractFactory
                 'configuration',
                 ConfigurationFactory::class,
             ),
-            $this->retrieveDependency(
-                $container,
-                $config['event_manager'],
-                'event_manager',
-                EventManagerFactory::class,
-            ),
         );
         $platform   = $connection->getDatabasePlatform();
 
         foreach ($config['doctrine_mapping_types'] as $dbType => $doctrineType) {
             $platform->registerDoctrineTypeMapping($dbType, $doctrineType);
-        }
-
-        foreach ($config['doctrine_commented_types'] as $doctrineType) {
-            $platform->markDoctrineTypeCommented($doctrineType);
         }
 
         return $connection;
@@ -73,10 +59,8 @@ final class ConnectionFactory extends AbstractFactory
             'wrapper_class' => null,
             'pdo' => null,
             'configuration' => $configKey,
-            'event_manager' => $configKey,
             'params' => [],
             'doctrine_mapping_types' => [],
-            'doctrine_commented_types' => [],
         ];
     }
 

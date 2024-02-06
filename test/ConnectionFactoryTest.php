@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace RoaveTest\PsrContainerDoctrine;
 
-use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Driver\AbstractMySQLDriver;
 use Doctrine\DBAL\Driver\API\MySQL\ExceptionConverter;
 use Doctrine\DBAL\Driver\PDO\MySQL\Driver as PDOMySQLDriver;
 use Doctrine\DBAL\Driver\PDO\SQLite\Driver as PDOSqliteDriver;
 use Doctrine\DBAL\Exception\ConnectionException;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\BooleanType;
 use Doctrine\ORM\Configuration;
 use PHPUnit\Framework\TestCase;
@@ -26,15 +24,9 @@ final class ConnectionFactoryTest extends TestCase
 {
     private Configuration $configuration;
 
-    private EventManager $eventManger;
-
-    private AbstractPlatform $customPlatform;
-
     public function setUp(): void
     {
-        $this->configuration  = $this->createMock(Configuration::class);
-        $this->eventManger    = $this->createMock(EventManager::class);
-        $this->customPlatform = $this->createMock(AbstractPlatform::class);
+        $this->configuration = $this->createMock(Configuration::class);
     }
 
     public function testDefaultsThroughException(): void
@@ -52,12 +44,8 @@ final class ConnectionFactoryTest extends TestCase
             },
         );
         $container->method('get')->willReturnCallback(
-            function (string $id) {
-                if ($id === 'doctrine.configuration.orm_default') {
-                    return $this->configuration;
-                }
-
-                return $this->eventManger;
+            function () {
+                return $this->configuration;
             },
         );
 
@@ -97,7 +85,6 @@ final class ConnectionFactoryTest extends TestCase
         $connection = $factory($this->buildContainer());
 
         self::assertSame($this->configuration, $connection->getConfiguration());
-        self::assertSame($this->eventManger, $connection->getEventManager());
         self::assertSame([
             'driverClass' => PDOSqliteDriver::class,
             'wrapperClass' => null,
@@ -108,28 +95,23 @@ final class ConnectionFactoryTest extends TestCase
     public function testConfigKeysTakenFromSelf(): void
     {
         $factory    = new ConnectionFactory('orm_other');
-        $connection = $factory($this->buildContainer('orm_other', 'orm_other', 'orm_other'));
+        $connection = $factory($this->buildContainer('orm_other', 'orm_other'));
 
         self::assertSame($this->configuration, $connection->getConfiguration());
-        self::assertSame($this->eventManger, $connection->getEventManager());
     }
 
     public function testConfigKeysTakenFromConfig(): void
     {
         $factory    = new ConnectionFactory('orm_other');
-        $connection = $factory($this->buildContainer('orm_other', 'orm_foo', 'orm_bar', [
-            'configuration' => 'orm_foo',
-            'event_manager' => 'orm_bar',
-        ]));
+        $connection = $factory($this->buildContainer('orm_other', 'orm_foo', ['configuration' => 'orm_foo']));
 
         self::assertSame($this->configuration, $connection->getConfiguration());
-        self::assertSame($this->eventManger, $connection->getEventManager());
     }
 
     public function testParamsInjection(): void
     {
         $factory    = new ConnectionFactory();
-        $connection = $factory($this->buildContainer('orm_default', 'orm_default', 'orm_default', [
+        $connection = $factory($this->buildContainer('orm_default', 'orm_default', [
             'params' => ['username' => 'foo'],
         ]));
 
@@ -147,7 +129,6 @@ final class ConnectionFactoryTest extends TestCase
         $connection = $factory($this->buildContainer(
             'orm_default',
             'orm_default',
-            'orm_default',
             ['doctrine_mapping_types' => ['foo' => 'boolean']],
         ));
 
@@ -158,36 +139,19 @@ final class ConnectionFactoryTest extends TestCase
     {
         $factory  = new ConnectionFactory();
         $property = (new ReflectionObject($factory))->getProperty('areTypesRegistered');
-        $property->setAccessible(true);
         $property->setValue($factory, false);
 
-        $connection = $factory($this->buildContainer('orm_default', 'orm_default', 'orm_default', [
+        $connection = $factory($this->buildContainer('orm_default', 'orm_default', [
             'doctrine_mapping_types' => ['foo' => 'custom_type'],
         ]));
 
         self::assertTrue($connection->getDatabasePlatform()->hasDoctrineTypeMappingFor('foo'));
     }
 
-    public function testCustomPlatform(): void
-    {
-        $factory = new ConnectionFactory();
-
-        $config = [
-            'params' => ['platform' => 'custom.platform'],
-        ];
-
-        $container = $this->buildContainer('orm_default', 'orm_default', 'orm_default', $config);
-
-        $connection = $factory($container);
-
-        self::assertSame($this->customPlatform, $connection->getDatabasePlatform());
-    }
-
     /** @param array<string, mixed> $config */
     private function buildContainer(
         string $ownKey = 'orm_default',
         string $configurationKey = 'orm_default',
-        string $eventManagerKey = 'orm_default',
         array $config = [],
     ): ContainerInterface {
         $container = $this->createMock(ContainerInterface::class);
@@ -204,19 +168,13 @@ final class ConnectionFactoryTest extends TestCase
         ];
 
         $container->method('get')->willReturnCallback(
-            function (string $id) use ($mockConfig, $configurationKey, $eventManagerKey) {
+            function (string $id) use ($mockConfig, $configurationKey) {
                 switch ($id) {
                     case 'config':
                         return $mockConfig;
 
                     case sprintf('doctrine.configuration.%s', $configurationKey):
                         return $this->configuration;
-
-                    case sprintf('doctrine.event_manager.%s', $eventManagerKey):
-                        return $this->eventManger;
-
-                    case 'custom.platform':
-                        return $this->customPlatform;
 
                     default:
                         $this->fail(sprintf('Unexpected call: Container::get(%s)', $id));

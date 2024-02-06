@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace RoaveTest\PsrContainerDoctrine;
 
-use Doctrine\Common\Annotations\PsrCachedReader;
-use Doctrine\Common\Cache\Cache;
 use Doctrine\ORM\Mapping\Driver;
 use Doctrine\Persistence\Mapping\Driver\FileDriver;
+use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemPoolInterface;
@@ -105,7 +104,6 @@ final class DriverFactoryTest extends TestCase
     {
         return [
             [ Driver\SimplifiedXmlDriver::class ],
-            [ Driver\SimplifiedYamlDriver::class ],
         ];
     }
 
@@ -155,18 +153,17 @@ final class DriverFactoryTest extends TestCase
 
     /**
      * @return string[][]
-     * @psalm-return list<array{class-string<Driver\CompatibilityAnnotationDriver>}>
+     * @psalm-return list<array{class-string<MappingDriver>}>
      */
     public static function annotationDriverClassProvider(): array
     {
         return [
             [ Driver\AttributeDriver::class ],
-            [ Driver\AnnotationDriver::class ],
         ];
     }
 
     /**
-     * @psalm-param class-string<Driver\CompatibilityAnnotationDriver> $driverClass
+     * @psalm-param class-string<MappingDriver> $driverClass
      *
      * @dataProvider annotationDriverClassProvider
      */
@@ -183,7 +180,7 @@ final class DriverFactoryTest extends TestCase
                     ],
                 ],
             ],
-            'doctrine.cache.default' => $this->createMock(Cache::class),
+            'doctrine.cache.default' => $this->createMock(CacheItemPoolInterface::class),
         ];
         $container = $this->createMock(ContainerInterface::class);
         $container->method('has')->willReturnCallback(
@@ -210,39 +207,5 @@ final class DriverFactoryTest extends TestCase
         $container->expects($this->exactly($expectedCalls))->method('get')->with('config')->willReturn($config);
 
         return $container;
-    }
-
-    public function testCanProcessCacheItemPoolAnnotationReader(): void
-    {
-        $container = $this->createMock(ContainerInterface::class);
-        $container
-            ->method('has')
-            ->willReturnMap([
-                ['config', true],
-                ['doctrine.cache.psr', true],
-            ]);
-
-        $container
-            ->method('get')
-            ->willReturnMap([
-                [
-                    'config',
-                    [
-                        'doctrine' => [
-                            'driver' => [
-                                'orm_default' => [
-                                    'class' => Driver\AnnotationDriver::class,
-                                    'cache' => 'psr',
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-                ['doctrine.cache.psr', $this->createMock(CacheItemPoolInterface::class)],
-            ]);
-
-        $driver = (new DriverFactory())->__invoke($container);
-        self::assertInstanceOf(Driver\AnnotationDriver::class, $driver);
-        self::assertInstanceOf(PsrCachedReader::class, $driver->getReader());
     }
 }
