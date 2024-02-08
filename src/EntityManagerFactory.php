@@ -7,13 +7,10 @@ namespace Roave\PsrContainerDoctrine;
 use Doctrine\ORM\EntityManager;
 use Psr\Container\ContainerInterface;
 
-/** @method EntityManager __invoke(ContainerInterface $container) */
+/** @extends AbstractFactory<EntityManager> */
 final class EntityManagerFactory extends AbstractFactory
 {
-    /**
-     * {@inheritDoc}
-     */
-    protected function createWithConfig(ContainerInterface $container, string $configKey)
+    protected function createWithConfig(ContainerInterface $container, string $configKey): EntityManager
     {
         $config = $this->retrieveConfig($container, $configKey, 'entity_manager');
 

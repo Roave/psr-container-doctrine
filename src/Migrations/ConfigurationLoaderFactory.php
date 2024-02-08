@@ -9,18 +9,19 @@ use Doctrine\Migrations\Configuration\Migration\ConfigurationLoader;
 use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\AbstractFactory;
 
-/** @method ConfigurationLoader __invoke(ContainerInterface $container) */
-class ConfigurationLoaderFactory extends AbstractFactory
+/** @extends AbstractFactory<ConfigurationLoader> */
+final class ConfigurationLoaderFactory extends AbstractFactory
 {
-    /** @inheritDoc */
-    protected function createWithConfig(ContainerInterface $container, string $configKey)
+    protected function createWithConfig(ContainerInterface $container, string $configKey): ConfigurationLoader
     {
         $migrationsConfig = $this->retrieveConfig($container, $configKey, 'migrations');
 
         return new ConfigurationArray($migrationsConfig);
     }
 
-    /** @inheritDoc */
+    /**
+     * {@inheritDoc}
+     */
     protected function getDefaultConfig(string $configKey): array
     {
         return [

@@ -12,15 +12,12 @@ use Psr\Container\ContainerInterface;
 
 use function is_string;
 
-/** @method Connection __invoke(ContainerInterface $container) */
+/** @extends AbstractFactory<Connection> */
 final class ConnectionFactory extends AbstractFactory
 {
     private static bool $areTypesRegistered = false;
 
-    /**
-     * {@inheritDoc}
-     */
-    protected function createWithConfig(ContainerInterface $container, string $configKey)
+    protected function createWithConfig(ContainerInterface $container, string $configKey): Connection
     {
         $this->registerTypes($container);
 

@@ -15,13 +15,10 @@ use function array_key_exists;
 use function assert;
 use function is_string;
 
-/** @method Configuration __invoke(ContainerInterface $container) */
+/** @extends AbstractFactory<Configuration> */
 final class ConfigurationFactory extends AbstractFactory
 {
-    /**
-     * {@inheritDoc}
-     */
-    protected function createWithConfig(ContainerInterface $container, string $configKey)
+    protected function createWithConfig(ContainerInterface $container, string $configKey): Configuration
     {
         $config = $this->retrieveConfig($container, $configKey, 'configuration');
 

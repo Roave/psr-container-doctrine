@@ -10,7 +10,7 @@ use Roave\PsrContainerDoctrine\Cache\NullCache;
 
 use function array_shift;
 
-class NullCacheTest extends TestCase
+final class NullCacheTest extends TestCase
 {
     private NullCache $cache;
 

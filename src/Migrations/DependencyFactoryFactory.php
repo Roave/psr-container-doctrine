@@ -11,12 +11,10 @@ use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\AbstractFactory;
 use Roave\PsrContainerDoctrine\EntityManagerFactory;
 
+/** @extends AbstractFactory<DependencyFactory> */
 final class DependencyFactoryFactory extends AbstractFactory
 {
-    /**
-     * {@inheritDoc}
-     */
-    protected function createWithConfig(ContainerInterface $container, string $configKey)
+    protected function createWithConfig(ContainerInterface $container, string $configKey): DependencyFactory
     {
         $entityManagerLoader = new ExistingEntityManager(
             $this->retrieveDependency(

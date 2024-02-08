@@ -12,20 +12,16 @@ use Roave\PsrContainerDoctrine\Exception\InvalidArgumentException;
 use Roave\PsrContainerDoctrine\Exception\OutOfBoundsException;
 
 use function array_key_exists;
+use function assert;
 use function class_exists;
 use function is_array;
 use function is_string;
 use function is_subclass_of;
 
-/** @method MappingDriver __invoke(ContainerInterface $container) */
+/** @extends AbstractFactory<MappingDriver> */
 final class DriverFactory extends AbstractFactory
 {
-    private static bool $isAnnotationLoaderRegistered = false;
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function createWithConfig(ContainerInterface $container, string $configKey)
+    protected function createWithConfig(ContainerInterface $container, string $configKey): MappingDriver
     {
         $config = $this->retrieveConfig($container, $configKey, 'driver');
 
@@ -44,11 +40,11 @@ final class DriverFactory extends AbstractFactory
         if ($config['extension'] !== null && is_subclass_of($config['class'], FileDriver::class)) {
             /** @psalm-suppress UnsafeInstantiation */
             $driver = new $config['class']($config['paths'], $config['extension']);
-        }
-
-        if (! isset($driver)) {
+        } else {
             $driver = new $config['class']($config['paths']);
         }
+
+        assert($driver instanceof MappingDriver);
 
         if (array_key_exists('global_basename', $config) && $driver instanceof FileDriver) {
             $driver->setGlobalBasename($config['global_basename']);

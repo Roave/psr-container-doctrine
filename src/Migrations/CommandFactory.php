@@ -13,7 +13,8 @@ use Roave\PsrContainerDoctrine\Exception\DomainException;
 use function assert;
 use function is_a;
 
-class CommandFactory extends AbstractFactory
+/** @extends AbstractFactory<DoctrineCommand> */
+final class CommandFactory extends AbstractFactory
 {
     /** @psalm-var class-string<DoctrineCommand>|'' */
     private string $requestedName = '';

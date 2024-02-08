@@ -6,7 +6,7 @@ namespace RoaveTest\PsrContainerDoctrine\TestAsset;
 
 use Doctrine\ORM\Event\OnFlushEventArgs;
 
-class StubEventListener
+final class StubEventListener
 {
     public function onFlush(OnFlushEventArgs $args): void
     {

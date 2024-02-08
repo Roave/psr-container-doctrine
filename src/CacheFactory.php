@@ -12,13 +12,10 @@ use Roave\PsrContainerDoctrine\Exception\OutOfBoundsException;
 
 use function array_key_exists;
 
-/** @method CacheItemPoolInterface __invoke(ContainerInterface $container) */
+/** @extends AbstractFactory<CacheItemPoolInterface> */
 final class CacheFactory extends AbstractFactory
 {
-    /**
-     * {@inheritDoc}
-     */
-    protected function createWithConfig(ContainerInterface $container, string $configKey)
+    protected function createWithConfig(ContainerInterface $container, string $configKey): CacheItemPoolInterface
     {
         $config = $this->retrieveConfig($container, $configKey, 'cache');
 
