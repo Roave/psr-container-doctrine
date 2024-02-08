@@ -30,6 +30,12 @@ final class EntityManagerFactory extends AbstractFactory
                 'configuration',
                 ConfigurationFactory::class,
             ),
+            $this->retrieveDependency(
+                $container,
+                $config['event_manager'],
+                'event_manager',
+                EventManagerFactory::class,
+            ),
         );
     }
 
@@ -41,6 +47,7 @@ final class EntityManagerFactory extends AbstractFactory
         return [
             'connection' => $configKey,
             'configuration' => $configKey,
+            'event_manager' => $configKey,
         ];
     }
 }

@@ -71,6 +71,12 @@ return [
             'orm_default' => [
                 'connection' => 'orm_default', // Actually defaults to the entity manager config key, not hard-coded
                 'configuration' => 'orm_default', // Actually defaults to the entity manager config key, not hard-coded
+                'event_manager' => 'orm_default', // Actually defaults to the connection config key, not hard-coded
+            ],
+        ],
+        'event_manager' => [
+            'orm_default' => [
+                'subscribers' => [],
             ],
         ],
         'driver' => [

@@ -19,6 +19,7 @@
         "php": "~8.2.0 || ~8.3.0",
         "doctrine/common": "^3.4.3",
         "doctrine/dbal": "^4.0",
+        "doctrine/event-manager": "^2",
         "doctrine/migrations": "^3.7.2",
         "doctrine/orm": "^3.0",
         "doctrine/persistence": "^3.2",
