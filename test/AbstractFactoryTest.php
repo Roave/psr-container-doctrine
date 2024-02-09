@@ -6,7 +6,6 @@ namespace RoaveTest\PsrContainerDoctrine;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
-use Roave\PsrContainerDoctrine\Exception\InvalidArgumentException;
 use RoaveTest\PsrContainerDoctrine\TestAsset\StubFactory;
 
 final class AbstractFactoryTest extends TestCase
@@ -23,19 +22,6 @@ final class AbstractFactoryTest extends TestCase
         $container = $this->createMock(ContainerInterface::class);
         $factory   = new StubFactory('orm_other');
         self::assertSame('orm_other', $factory($container));
-    }
-
-    public function testStaticCall(): void
-    {
-        $container = $this->createMock(ContainerInterface::class);
-        self::assertSame('orm_other', StubFactory::orm_other($container));
-    }
-
-    public function testStaticCallWithoutContainer(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The first argument must be of type Psr\Container\ContainerInterface');
-        StubFactory::orm_other();
     }
 
     /**

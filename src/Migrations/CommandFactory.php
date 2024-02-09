@@ -31,6 +31,7 @@ final class CommandFactory extends AbstractFactory
         return parent::__invoke($container);
     }
 
+    /** @param non-empty-string $configKey */
     protected function createWithConfig(ContainerInterface $container, string $configKey): DoctrineCommand
     {
         if ($container->has(DependencyFactory::class)) {
