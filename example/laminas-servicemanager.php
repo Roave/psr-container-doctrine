@@ -24,7 +24,7 @@ if (is_object($object)) {
 // Custom config keys
 $customKeyConfig                                                     = require __DIR__ . '/minimal-config-custom-key.php';
 $dependencies                                                        = [];
-$dependencies['factories']['doctrine.entity_manager.orm_custom_key'] = [EntityManagerFactory::class, 'orm_custom_key'];
+$dependencies['factories']['doctrine.entity_manager.orm_custom_key'] = new EntityManagerFactory('orm_custom_key');
 $dependencies['services']['config']                                  = $customKeyConfig;
 $container                                                           = new ServiceManager($dependencies);
 

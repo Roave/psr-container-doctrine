@@ -17,7 +17,7 @@ use function sprintf;
  */
 abstract class AbstractFactory
 {
-    /** @internal */
+    /** @param non-empty-string $configKey */
     final public function __construct(private string $configKey = 'orm_default')
     {
     }
@@ -29,37 +29,9 @@ abstract class AbstractFactory
     }
 
     /**
-     * Creates a new instance from a specified config, specifically meant to be used as static factory.
-     *
-     * In case you want to use another config key than "orm_default", you can add the following factory to your config:
-     *
-     * <code>
-     * <?php
-     * return [
-     *     'doctrine.SECTION.orm_other' => [SpecificFactory::class, 'orm_other'],
-     * ];
-     * </code>
-     *
-     * @param mixed[] $arguments
-     *
-     * @return T
-     *
-     * @throws Exception\InvalidArgumentException
-     */
-    final public static function __callStatic(string $name, array $arguments): mixed
-    {
-        if (! array_key_exists(0, $arguments) || ! $arguments[0] instanceof ContainerInterface) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                'The first argument must be of type %s',
-                ContainerInterface::class,
-            ));
-        }
-
-        return (new static($name))->__invoke($arguments[0]);
-    }
-
-    /**
      * Creates a new instance from a specified config.
+     *
+     * @param non-empty-string $configKey
      *
      * @return T
      */
