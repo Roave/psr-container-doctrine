@@ -39,7 +39,7 @@ variants of the factories:
 return [
     'dependencies' => [
         'factories' => [
-            'doctrine.entity_manager.orm_other' => fn () => new \Roave\PsrContainerDoctrine\EntityManagerFactory('orm_other'),
+            'doctrine.entity_manager.orm_other' => static fn (ContainerInterface $container) => (new EntityManagerFactory('orm_custom_key'))($container),
         ],
     ],
 ];
