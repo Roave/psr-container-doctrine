@@ -32,7 +32,6 @@
             <errorLevel type="suppress">
                 <referencedClass name="Doctrine\Common\Annotations\CachedReader"/>
                 <referencedClass name="Doctrine\ORM\Mapping\Driver\AnnotationDriver"/>
-                <referencedClass name="Doctrine\ORM\Mapping\Driver\SimplifiedYamlDriver"/>
                 <referencedClass name="Doctrine\Persistence\Mapping\Driver\AnnotationDriver"/>
             </errorLevel>
         </DeprecatedClass>

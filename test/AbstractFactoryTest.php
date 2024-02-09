@@ -55,7 +55,7 @@ final class AbstractFactoryTest extends TestCase
             $container->expects($this->once())->method('get')->with('config')->willReturn($config);
         }
 
-        $actualResult = (new StubFactory())->retrieveConfig($container, $configKey, $section);
+        $actualResult = (new StubFactory())->publicRetrieveConfig($container, $configKey, $section);
 
         self::assertSame($expectedResult, $actualResult);
     }

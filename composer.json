@@ -17,14 +17,12 @@
     "homepage": "https://github.com/Roave/psr-container-doctrine",
     "require": {
         "php": "~8.2.0 || ~8.3.0",
-        "doctrine/annotations": "^1.14.3 || ^2.0.1",
-        "doctrine/cache": "^2.2",
         "doctrine/common": "^3.4.3",
-        "doctrine/dbal": "^3.8.1",
-        "doctrine/event-manager": "^1.2.0 || ^2.0",
+        "doctrine/dbal": "^4.0",
+        "doctrine/event-manager": "^2",
         "doctrine/migrations": "^3.7.2",
-        "doctrine/orm": "^2.18.0",
-        "doctrine/persistence": "^2.5.7 || ^3.2",
+        "doctrine/orm": "^3.0",
+        "doctrine/persistence": "^3.2",
         "psr/cache": "^2.0.0 || ^3.0.0",
         "psr/container": "^1.1.2 || ^2.0.2"
     },

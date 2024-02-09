@@ -10,7 +10,11 @@ use function array_key_exists;
 use function array_replace_recursive;
 use function sprintf;
 
-/** @internal */
+/**
+ * @internal
+ *
+ * @template T
+ */
 abstract class AbstractFactory
 {
     /** @internal */
@@ -18,9 +22,8 @@ abstract class AbstractFactory
     {
     }
 
-    /** @return mixed */
-    // phpcs:ignore SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
-    public function __invoke(ContainerInterface $container)
+    /** @return T */
+    public function __invoke(ContainerInterface $container): mixed
     {
         return $this->createWithConfig($container, $this->configKey);
     }
@@ -39,12 +42,11 @@ abstract class AbstractFactory
      *
      * @param mixed[] $arguments
      *
-     * @return mixed
+     * @return T
      *
      * @throws Exception\InvalidArgumentException
      */
-    // phpcs:ignore SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
-    public static function __callStatic(string $name, array $arguments)
+    final public static function __callStatic(string $name, array $arguments): mixed
     {
         if (! array_key_exists(0, $arguments) || ! $arguments[0] instanceof ContainerInterface) {
             throw new Exception\InvalidArgumentException(sprintf(
@@ -59,24 +61,23 @@ abstract class AbstractFactory
     /**
      * Creates a new instance from a specified config.
      *
-     * @return mixed
+     * @return T
      */
-    // phpcs:ignore SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
-    abstract protected function createWithConfig(ContainerInterface $container, string $configKey);
+    abstract protected function createWithConfig(ContainerInterface $container, string $configKey): mixed;
 
     /**
      * Returns the default config.
      *
-     * @return array<string, mixed>
+     * @return array<non-empty-string, mixed>
      */
     abstract protected function getDefaultConfig(string $configKey): array;
 
     /**
      * Retrieves the config for a specific section.
      *
-     * @return array<string, mixed>
+     * @return array<non-empty-string, mixed>
      */
-    protected function retrieveConfig(ContainerInterface $container, string $configKey, string $section): array
+    final protected function retrieveConfig(ContainerInterface $container, string $configKey, string $section): array
     {
         $applicationConfig = $container->has('config') ? $container->get('config') : [];
         $sectionConfig     = $applicationConfig['doctrine'][$section] ?? [];
@@ -95,11 +96,8 @@ abstract class AbstractFactory
      * registering factories which they are not going to access themselves at all, and thus minimized configuration.
      *
      * @psalm-param class-string<AbstractFactory> $factoryClassName
-     *
-     * @return mixed
      */
-    // phpcs:ignore SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
-    protected function retrieveDependency(ContainerInterface $container, string $configKey, string $section, string $factoryClassName)
+    final protected function retrieveDependency(ContainerInterface $container, string $configKey, string $section, string $factoryClassName): mixed
     {
         $containerKey = sprintf('doctrine.%s.%s', $section, $configKey);
 

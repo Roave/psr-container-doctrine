@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace RoaveTest\PsrContainerDoctrine;
 
-use Doctrine\Common\Cache\Cache;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
@@ -103,7 +102,7 @@ final class CacheFactoryTest extends TestCase
 
     public function testCanInstantiateCacheItemPoolFromClassName(): void
     {
-        $mock      = $this->createMock(Cache::class);
+        $mock      = $this->createMock(CacheItemPoolInterface::class);
         $className = $mock::class;
 
         $container = $this->createMock(ContainerInterface::class);

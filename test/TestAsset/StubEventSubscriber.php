@@ -6,7 +6,7 @@ namespace RoaveTest\PsrContainerDoctrine\TestAsset;
 
 use Doctrine\Common\EventSubscriber;
 
-class StubEventSubscriber implements EventSubscriber
+final class StubEventSubscriber implements EventSubscriber
 {
     /**
      * {@inheritDoc}

@@ -211,7 +211,7 @@ final class ConfigurationFactoryTest extends TestCase
             );
 
         $this->expectException(TypeError::class);
-        $this->expectExceptionMessage('Doctrine\DBAL\Configuration::setSchemaAssetsFilter(): Argument #1 ($callable) must be of type ?callable, array given');
+        $this->expectExceptionMessage('Doctrine\DBAL\Configuration::setSchemaAssetsFilter(): Argument #1 ($schemaAssetsFilter) must be of type callable, array given');
 
         (new ConfigurationFactory())($container);
     }

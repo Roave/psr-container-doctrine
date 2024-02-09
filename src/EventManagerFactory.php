@@ -17,13 +17,10 @@ use function is_object;
 use function is_string;
 use function method_exists;
 
-/** @method EventManager __invoke(ContainerInterface $container) */
+/** @extends AbstractFactory<EventManager> */
 final class EventManagerFactory extends AbstractFactory
 {
-    /**
-     * {@inheritDoc}
-     */
-    protected function createWithConfig(ContainerInterface $container, string $configKey)
+    protected function createWithConfig(ContainerInterface $container, string $configKey): EventManager
     {
         $config       = $this->retrieveConfig($container, $configKey, 'event_manager');
         $eventManager = new EventManager();

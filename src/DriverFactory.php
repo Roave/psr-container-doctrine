@@ -4,38 +4,24 @@ declare(strict_types=1);
 
 namespace Roave\PsrContainerDoctrine;
 
-use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
-use Doctrine\Common\Annotations\PsrCachedReader;
-use Doctrine\Common\Annotations\Reader;
-use Doctrine\Common\Cache\Cache;
-use Doctrine\Common\Cache\Psr6\CacheAdapter;
-use Doctrine\ORM\Mapping\Driver\AttributeDriver;
-use Doctrine\ORM\Mapping\Driver\CompatibilityAnnotationDriver;
 use Doctrine\Persistence\Mapping\Driver\FileDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
-use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\Exception\InvalidArgumentException;
 use Roave\PsrContainerDoctrine\Exception\OutOfBoundsException;
 
 use function array_key_exists;
+use function assert;
 use function class_exists;
 use function is_array;
 use function is_string;
 use function is_subclass_of;
-use function method_exists;
 
-/** @method MappingDriver __invoke(ContainerInterface $container) */
+/** @extends AbstractFactory<MappingDriver> */
 final class DriverFactory extends AbstractFactory
 {
-    private static bool $isAnnotationLoaderRegistered = false;
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function createWithConfig(ContainerInterface $container, string $configKey)
+    protected function createWithConfig(ContainerInterface $container, string $configKey): MappingDriver
     {
         $config = $this->retrieveConfig($container, $configKey, 'driver');
 
@@ -51,26 +37,14 @@ final class DriverFactory extends AbstractFactory
             $config['paths'] = [$config['paths']];
         }
 
-        if (
-            $config['class'] !== AttributeDriver::class
-            && ! is_subclass_of($config['class'], AttributeDriver::class)
-            && is_subclass_of($config['class'], CompatibilityAnnotationDriver::class)
-        ) {
-            $this->registerAnnotationLoader();
-
-            /** @psalm-suppress UnsafeInstantiation */
-            $driver = new $config['class'](
-                $this->createCachedReader($container, $config, new AnnotationReader()),
-                $config['paths']
-            );
-        } elseif ($config['extension'] !== null && is_subclass_of($config['class'], FileDriver::class)) {
+        if ($config['extension'] !== null && is_subclass_of($config['class'], FileDriver::class)) {
             /** @psalm-suppress UnsafeInstantiation */
             $driver = new $config['class']($config['paths'], $config['extension']);
-        }
-
-        if (! isset($driver)) {
+        } else {
             $driver = new $config['class']($config['paths']);
         }
+
+        assert($driver instanceof MappingDriver);
 
         if (array_key_exists('global_basename', $config) && $driver instanceof FileDriver) {
             $driver->setGlobalBasename($config['global_basename']);
@@ -104,44 +78,5 @@ final class DriverFactory extends AbstractFactory
             'drivers' => [],
             'default_driver' => null,
         ];
-    }
-
-    /**
-     * Registers the annotation loader
-     */
-    private function registerAnnotationLoader(): void
-    {
-        if (self::$isAnnotationLoaderRegistered) {
-            return;
-        }
-
-        if (method_exists(AnnotationRegistry::class, 'registerLoader')) {
-            AnnotationRegistry::registerLoader('class_exists');
-        }
-
-        self::$isAnnotationLoaderRegistered = true;
-    }
-
-    /** @param array<string, mixed> $config */
-    private function createCachedReader(ContainerInterface $container, array $config, Reader $reader): PsrCachedReader
-    {
-        $cache = $this->retrieveDependency(
-            $container,
-            $config['cache'],
-            'cache',
-            CacheFactory::class,
-        );
-
-        if ($cache instanceof Cache) {
-            $cache = CacheAdapter::wrap($cache);
-        }
-
-        if ($cache instanceof CacheItemPoolInterface) {
-            return new PsrCachedReader($reader, $cache);
-        }
-
-        throw InvalidArgumentException::fromUnsupportedCache(
-            $cache,
-        );
     }
 }

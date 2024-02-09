@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Doctrine\DBAL\Driver\SQLite3\Driver;
 use Doctrine\ORM\Mapping\Driver\AttributeDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
 
@@ -9,6 +10,7 @@ return [
     'doctrine' => [
         'connection' => [
             'orm_default' => [
+                'driver_class' => Driver::class,
                 'params' => ['url' => 'sqlite::memory:'],
             ],
         ],

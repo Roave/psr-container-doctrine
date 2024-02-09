@@ -7,27 +7,21 @@ namespace RoaveTest\PsrContainerDoctrine\TestAsset;
 use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\AbstractFactory;
 
-class StubFactory extends AbstractFactory
+/** @extends AbstractFactory<string> */
+final class StubFactory extends AbstractFactory
 {
-    /**
-     * {@inheritDoc}
-     */
-    protected function createWithConfig(ContainerInterface $container, string $configKey)
+    protected function createWithConfig(ContainerInterface $container, string $configKey): string
     {
         return $configKey;
     }
 
-    // phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod.Found
-
     /**
      * {@inheritDoc}
      */
-    public function retrieveConfig(ContainerInterface $container, string $configKey, string $section): array
+    public function publicRetrieveConfig(ContainerInterface $container, string $configKey, string $section): array
     {
         return parent::retrieveConfig($container, $configKey, $section);
     }
-
-    // phpcs:enable
 
     /**
      * {@inheritDoc}
