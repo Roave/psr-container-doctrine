@@ -14,7 +14,6 @@ use SensitiveParameter;
 
 use function array_map;
 use function array_merge;
-use function is_string;
 
 /** @extends AbstractFactory<Connection> */
 final class ConnectionFactory extends AbstractFactory
@@ -29,7 +28,6 @@ final class ConnectionFactory extends AbstractFactory
         $params = $this->parseDatabaseUrl($config['params'] + [
             'driverClass' => $config['driver_class'],
             'wrapperClass' => $config['wrapper_class'],
-            'pdo' => is_string($config['pdo']) ? $container->get($config['pdo']) : $config['pdo'],
         ]);
 
         if (isset($params['primary'])) {
@@ -69,7 +67,6 @@ final class ConnectionFactory extends AbstractFactory
         return [
             'driver_class' => PdoMysqlDriver::class,
             'wrapper_class' => null,
-            'pdo' => null,
             'configuration' => $configKey,
             'params' => [],
             'doctrine_mapping_types' => [],

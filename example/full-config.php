@@ -61,7 +61,6 @@ return [
             'orm_default' => [
                 'driver_class' => Driver::class,
 //                'wrapper_class' => null,
-                'pdo' => null,
                 'configuration' => 'orm_default', // Actually defaults to the connection config key, not hard-coded
                 'params' => ['serverVersion' => 'mariadb-11.0'],
                 'doctrine_type_mappings' => [],

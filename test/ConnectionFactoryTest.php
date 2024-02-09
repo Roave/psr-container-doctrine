@@ -88,7 +88,6 @@ final class ConnectionFactoryTest extends TestCase
         self::assertSame([
             'driverClass' => PDOSqliteDriver::class,
             'wrapperClass' => null,
-            'pdo' => null,
         ], $connection->getParams());
     }
 
@@ -119,7 +118,6 @@ final class ConnectionFactoryTest extends TestCase
             'username' => 'foo',
             'driverClass' => PDOSqliteDriver::class,
             'wrapperClass' => null,
-            'pdo' => null,
         ], $connection->getParams());
     }
 
@@ -158,7 +156,6 @@ final class ConnectionFactoryTest extends TestCase
                 ],
             ],
             'wrapperClass' => null,
-            'pdo' => null,
             'driver' => 'sqlite3',
             'host' => 'localhost',
             'memory' => true,
