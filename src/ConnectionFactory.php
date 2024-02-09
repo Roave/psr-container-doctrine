@@ -7,9 +7,13 @@ namespace Roave\PsrContainerDoctrine;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\PDO\MySQL\Driver as PdoMysqlDriver;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Tools\DsnParser;
 use Doctrine\DBAL\Types\Type;
 use Psr\Container\ContainerInterface;
+use SensitiveParameter;
 
+use function array_map;
+use function array_merge;
 use function is_string;
 
 /** @extends AbstractFactory<Connection> */
@@ -22,11 +26,22 @@ final class ConnectionFactory extends AbstractFactory
         $this->registerTypes($container);
 
         $config = $this->retrieveConfig($container, $configKey, 'connection');
-        $params = $config['params'] + [
+        $params = $this->parseDatabaseUrl($config['params'] + [
             'driverClass' => $config['driver_class'],
             'wrapperClass' => $config['wrapper_class'],
             'pdo' => is_string($config['pdo']) ? $container->get($config['pdo']) : $config['pdo'],
-        ];
+        ]);
+
+        if (isset($params['primary'])) {
+            $params['primary'] = $this->parseDatabaseUrl($params['primary']);
+        }
+
+        if (isset($params['replica'])) {
+            $params['replica'] = array_map(
+                fn (array $params): array => $this->parseDatabaseUrl($params),
+                $params['replica'],
+            );
+        }
 
         $connection = DriverManager::getConnection(
             $params,
@@ -82,5 +97,32 @@ final class ConnectionFactory extends AbstractFactory
 
             Type::addType($name, $className);
         }
+    }
+
+    /**
+     * @param array<array-key, mixed> $params
+     *
+     * @return array<array-key, mixed>
+     */
+    private function parseDatabaseUrl(
+        #[SensitiveParameter]
+        array $params,
+    ): array {
+        if (! isset($params['url'])) {
+            return $params;
+        }
+
+        $parser = new DsnParser();
+
+        $parsedParams = $parser->parse($params['url']);
+        unset($params['url']);
+
+        $result = array_merge($params, $parsedParams);
+
+        if (isset($result['driver']) && isset($result['driverClass'])) {
+            unset($result['driverClass']);
+        }
+
+        return $result;
     }
 }

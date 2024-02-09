@@ -123,6 +123,48 @@ final class ConnectionFactoryTest extends TestCase
         ], $connection->getParams());
     }
 
+    public function testUrlParam(): void
+    {
+        $factory    = new ConnectionFactory();
+        $connection = $factory($this->buildContainer('orm_default', 'orm_default', [
+            'params' => [
+                'url' => 'sqlite3:///:memory:',
+                'primary' => ['url' => 'pdo-mysql://localhost:4486/foo?charset=utf8mb4'],
+                'replica' => [
+                    ['url' => '//replica1:4486/foo'],
+                    ['url' => '//replica2:4486/foo'],
+                ],
+            ],
+        ]));
+
+        self::assertSame([
+            'primary' => [
+                'driver' => 'pdo_mysql',
+                'host' => 'localhost',
+                'port' => 4486,
+                'dbname' => 'foo',
+                'charset' => 'utf8mb4',
+            ],
+            'replica' => [
+                [
+                    'host' => 'replica1',
+                    'port' => 4486,
+                    'dbname' => 'foo',
+                ],
+                [
+                    'host' => 'replica2',
+                    'port' => 4486,
+                    'dbname' => 'foo',
+                ],
+            ],
+            'wrapperClass' => null,
+            'pdo' => null,
+            'driver' => 'sqlite3',
+            'host' => 'localhost',
+            'memory' => true,
+        ], $connection->getParams());
+    }
+
     public function testDoctrineMappingTypesInjection(): void
     {
         $factory    = new ConnectionFactory();
