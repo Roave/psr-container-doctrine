@@ -30,6 +30,10 @@ final class ConnectionFactory extends AbstractFactory
             'wrapperClass' => $config['wrapper_class'],
         ]);
 
+        if (isset($params['driver'])) {
+            unset($params['driverClass']);
+        }
+
         if (isset($params['primary'])) {
             $params['primary'] = $this->parseDatabaseUrl($params['primary']);
         }

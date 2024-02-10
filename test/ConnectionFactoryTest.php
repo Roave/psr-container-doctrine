@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace RoaveTest\PsrContainerDoctrine;
 
+use Doctrine\DBAL\Connections\PrimaryReadReplicaConnection;
 use Doctrine\DBAL\Driver\AbstractMySQLDriver;
 use Doctrine\DBAL\Driver\API\MySQL\ExceptionConverter;
 use Doctrine\DBAL\Driver\PDO\MySQL\Driver as PDOMySQLDriver;
@@ -125,40 +126,58 @@ final class ConnectionFactoryTest extends TestCase
     {
         $factory    = new ConnectionFactory();
         $connection = $factory($this->buildContainer('orm_default', 'orm_default', [
-            'params' => [
-                'url' => 'sqlite3:///:memory:',
-                'primary' => ['url' => 'pdo-mysql://localhost:4486/foo?charset=utf8mb4'],
-                'replica' => [
-                    ['url' => '//replica1:4486/foo'],
-                    ['url' => '//replica2:4486/foo'],
-                ],
-            ],
+            'params' => ['url' => 'sqlite3:///:memory:'],
         ]));
 
         self::assertSame([
-            'primary' => [
-                'driver' => 'pdo_mysql',
-                'host' => 'localhost',
-                'port' => 4486,
-                'dbname' => 'foo',
-                'charset' => 'utf8mb4',
-            ],
-            'replica' => [
-                [
-                    'host' => 'replica1',
-                    'port' => 4486,
-                    'dbname' => 'foo',
-                ],
-                [
-                    'host' => 'replica2',
-                    'port' => 4486,
-                    'dbname' => 'foo',
-                ],
-            ],
             'wrapperClass' => null,
             'driver' => 'sqlite3',
             'host' => 'localhost',
             'memory' => true,
+        ], $connection->getParams());
+    }
+
+    public function testPrimaryReplicaParams(): void
+    {
+        $factory    = new ConnectionFactory();
+        $connection = $factory($this->buildContainer('orm_default', 'orm_default', [
+            'params' => [
+                'driver' => 'pdo_mysql',
+                'serverVersion' => '8.0.29',
+                'primary' => ['url' => '//localhost:4486/foo?charset=utf8mb4'],
+                'replica' => [
+                    ['url' => '//replica1:3306/foo'],
+                    ['url' => '//replica2:3306/foo'],
+                ],
+            ],
+            'wrapper_class' => PrimaryReadReplicaConnection::class,
+        ]));
+
+        self::assertSame([
+            'driver' => 'pdo_mysql',
+            'serverVersion' => '8.0.29',
+            'primary' => [
+                'host' => 'localhost',
+                'port' => 4486,
+                'dbname' => 'foo',
+                'charset' => 'utf8mb4',
+                'driver' => 'pdo_mysql',
+            ],
+            'replica' => [
+                [
+                    'host' => 'replica1',
+                    'port' => 3306,
+                    'dbname' => 'foo',
+                    'driver' => 'pdo_mysql',
+                ],
+                [
+                    'host' => 'replica2',
+                    'port' => 3306,
+                    'dbname' => 'foo',
+                    'driver' => 'pdo_mysql',
+                ],
+            ],
+            'wrapperClass' => PrimaryReadReplicaConnection::class,
         ], $connection->getParams());
     }
 
