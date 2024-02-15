@@ -43,3 +43,13 @@ $object = $container->get(EntityManagerInterface::class);
 if (is_object($object)) {
     echo $object::class . "\n"; // Doctrine\ORM\EntityManager
 }
+
+$object = $container->get('doctrine.entity_manager.orm_default_with_url');
+if (is_object($object)) {
+    echo $object::class . "\n"; // Doctrine\ORM\EntityManager
+}
+
+$object = $container->get('doctrine.entity_manager.orm_default_with_array');
+if (is_object($object)) {
+    echo $object::class . "\n"; // Doctrine\ORM\EntityManager
+}

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Doctrine\DBAL\Connections\PrimaryReadReplicaConnection;
 use Doctrine\DBAL\Driver as DbalDriver;
 use Doctrine\DBAL\Driver\Middleware;
 use Doctrine\DBAL\Driver\SQLite3\Driver;
@@ -13,6 +14,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadataFactory;
 use Doctrine\ORM\Mapping\Driver\AttributeDriver;
+use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\EntityManagerFactory;
 use Roave\PsrContainerDoctrine\Migrations\CommandFactory;
 use Roave\PsrContainerDoctrine\Migrations\ConfigurationLoaderFactory;
@@ -60,15 +62,64 @@ return [
         'connection' => [
             'orm_default' => [
                 'driver_class' => Driver::class,
-//                'wrapper_class' => null,
-                'configuration' => 'orm_default', // Actually defaults to the connection config key, not hard-coded
                 'params' => ['serverVersion' => 'mariadb-11.0'],
                 'doctrine_type_mappings' => [],
+            ],
+            'orm_default_with_url' => [
+                'configuration' => 'orm_default',
+                'driver_class' => Driver::class,
+                'wrapper_class' => PrimaryReadReplicaConnection::class,
+                'params' => [
+                    'primary' => ['url' => '//app:secr3t@primary.cluster:3306/foo?charset=utf8mb4'],
+                    'replica' => [
+                        ['url' => '//replica1.cluster:3306/foo?charset=utf8mb4'],
+                        ['url' => '//replica2.cluster:3306/foo?charset=utf8mb4'],
+                    ],
+                ],
+            ],
+            'orm_default_with_array' => [
+                'configuration' => 'orm_default',
+                'driver_class' => Driver::class,
+                'wrapper_class' => PrimaryReadReplicaConnection::class,
+                'params' => [
+                    'primary' => [
+                        'user' => 'app',
+                        'password' => 'secr3t',
+                        'host' => 'primary.cluster',
+                        'port' => 3306,
+                        'dbname' => 'foo',
+                        'charset' => 'utf8mb4',
+                    ],
+                    'replica' => [
+                        [
+                            'host' => 'replica1.cluster',
+                            'port' => 3306,
+                            'dbname' => 'foo',
+                            'charset' => 'utf8mb4',
+                        ],
+                        [
+                            'host' => 'replica2.cluster',
+                            'port' => 3306,
+                            'dbname' => 'foo',
+                            'charset' => 'utf8mb4',
+                        ],
+                    ],
+                ],
             ],
         ],
         'entity_manager' => [
             'orm_default' => [
                 'connection' => 'orm_default', // Actually defaults to the entity manager config key, not hard-coded
+                'configuration' => 'orm_default', // Actually defaults to the entity manager config key, not hard-coded
+                'event_manager' => 'orm_default', // Actually defaults to the connection config key, not hard-coded
+            ],
+            'orm_default_with_url' => [
+                'connection' => 'orm_default_with_url',
+                'configuration' => 'orm_default', // Actually defaults to the entity manager config key, not hard-coded
+                'event_manager' => 'orm_default', // Actually defaults to the connection config key, not hard-coded
+            ],
+            'orm_default_with_array' => [
+                'connection' => 'orm_default_with_array',
                 'configuration' => 'orm_default', // Actually defaults to the entity manager config key, not hard-coded
                 'event_manager' => 'orm_default', // Actually defaults to the connection config key, not hard-coded
             ],
@@ -135,6 +186,13 @@ return [
             EntityManagerInterface::class => EntityManagerFactory::class,
             DependencyFactory::class => DependencyFactoryFactory::class,
             ConfigurationLoader::class => ConfigurationLoaderFactory::class,
+
+            'doctrine.entity_manager.orm_default_with_url' => static function (ContainerInterface $container): EntityManagerInterface {
+                return (new EntityManagerFactory('orm_default_with_url'))->__invoke($container);
+            },
+            'doctrine.entity_manager.orm_default_with_array' => static function (ContainerInterface $container): EntityManagerInterface {
+                return (new EntityManagerFactory('orm_default_with_url'))->__invoke($container);
+            },
 
             'my_schema_assets_filter' => static function (): callable {
                 /**
