@@ -2,27 +2,28 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 5.1.0 - TBD
+## 5.1.0 - 2024-02-15
 
-### Added
 
-- Nothing.
+-----
 
-### Changed
+### Release Notes for [5.1.0](https://github.com/Roave/psr-container-doctrine/milestone/39)
 
-- Nothing.
+Feature release (minor)
 
-### Deprecated
+### 5.1.0
 
-- Nothing.
+- Total issues resolved: **0**
+- Total pull requests resolved: **2**
+- Total contributors: **2**
 
-### Removed
+#### enhancement
 
-- Nothing.
+ - [124: Restore support for connecting using DSN string](https://github.com/Roave/psr-container-doctrine/pull/124) thanks to @yethee
 
-### Fixed
+#### documentation
 
-- Nothing.
+ - [123: Update example for a second connection](https://github.com/Roave/psr-container-doctrine/pull/123) thanks to @bcremer
 
 ## 4.2.0 - TBD
 
