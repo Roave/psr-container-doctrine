@@ -11,7 +11,7 @@ return [
         'connection' => [
             'orm_custom_key' => [
                 'driver_class' => Driver::class,
-                'params' => ['url' => 'sqlite::memory:'],
+                'params' => ['url' => 'sqlite3:///:memory:'],
             ],
         ],
         'driver' => [
