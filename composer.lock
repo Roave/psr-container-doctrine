@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5e77a90a3f4961c102180fc727699222",
+    "content-hash": "a4a43ad415f05fa0e5192ab9dfcfe1b6",
     "packages": [
         {
             "name": "doctrine/collections",
@@ -859,16 +859,16 @@
         },
         {
             "name": "doctrine/persistence",
-            "version": "3.3.0",
+            "version": "3.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/persistence.git",
-                "reference": "f75d11b1bcd0a9b75a9e1cabd80ffe3bc0164bcc"
+                "reference": "b6fd1f126b13c1f7e7321f7338b14a19116b5de4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/persistence/zipball/f75d11b1bcd0a9b75a9e1cabd80ffe3bc0164bcc",
-                "reference": "f75d11b1bcd0a9b75a9e1cabd80ffe3bc0164bcc",
+                "url": "https://api.github.com/repos/doctrine/persistence/zipball/b6fd1f126b13c1f7e7321f7338b14a19116b5de4",
+                "reference": "b6fd1f126b13c1f7e7321f7338b14a19116b5de4",
                 "shasum": ""
             },
             "require": {
@@ -937,7 +937,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/persistence/issues",
-                "source": "https://github.com/doctrine/persistence/tree/3.3.0"
+                "source": "https://github.com/doctrine/persistence/tree/3.3.1"
             },
             "funding": [
                 {
@@ -953,7 +953,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-03-01T10:11:31+00:00"
+            "time": "2024-03-01T19:53:13+00:00"
         },
         {
             "name": "psr/cache",
