@@ -17,7 +17,7 @@
     "homepage": "https://github.com/Roave/psr-container-doctrine",
     "require": {
         "php": "~8.2.0 || ~8.3.0",
-        "doctrine/common": "^3.4.3",
+        "doctrine/common": "^3.4.4",
         "doctrine/dbal": "^4.0.1",
         "doctrine/event-manager": "^2",
         "doctrine/migrations": "^3.7.4",
