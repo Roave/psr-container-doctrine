@@ -1,4 +1,8 @@
-DOCKER_PHP_EXEC := docker compose run php
+ifdef CI
+	DOCKER_PHP_EXEC :=
+else
+	DOCKER_PHP_EXEC := docker compose run php
+endif
 
 SRCS := $(shell find ./src ./test -type f)
 
