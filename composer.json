@@ -19,16 +19,16 @@
         "php": "~8.2.0 || ~8.3.0",
         "doctrine/common": "^3.4.4",
         "doctrine/dbal": "^4.0.4",
-        "doctrine/event-manager": "^2",
+        "doctrine/event-manager": "^2.0.1",
         "doctrine/migrations": "^3.7.4",
         "doctrine/orm": "^3.2.0",
-        "doctrine/persistence": "^3.3.2",
+        "doctrine/persistence": "^3.3.3",
         "psr/cache": "^2.0.0 || ^3.0.0",
         "psr/container": "^1.1.2 || ^2.0.2"
     },
     "require-dev": {
         "doctrine/coding-standard": "^12.0.0",
-        "phpunit/phpunit": "^10.5.22",
+        "phpunit/phpunit": "^10.5.24",
         "psalm/plugin-phpunit": "^0.19.0",
         "symfony/yaml": "^7.1.1",
         "vimeo/psalm": "^5.25.0"
