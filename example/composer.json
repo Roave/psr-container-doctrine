@@ -3,7 +3,7 @@
     "require": {
         "php": "~8.2.0 || ~8.3.0",
         "illuminate/container": "^11.14.0",
-        "laminas/laminas-servicemanager": "^4.1.0",
+        "laminas/laminas-servicemanager": "^4.2.0",
         "symfony/cache": "^7.1.2"
     },
     "config": {
