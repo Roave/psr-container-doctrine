@@ -184,6 +184,7 @@ final class ConfigurationFactory extends AbstractFactory
             'filters' => [],
             'custom_hydration_modes' => [],
             'naming_strategy' => null,
+            'typed_field_mapper' => null,
             'quote_strategy' => null,
             'default_repository_class_name' => null,
             'repository_factory' => null,
