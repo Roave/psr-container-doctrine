@@ -2,27 +2,30 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 5.2.0 - TBD
+## 5.2.0 - 2024-07-10
 
-### Added
 
-- Nothing.
+-----
 
-### Changed
+### Release Notes for [5.2.0](https://github.com/Roave/psr-container-doctrine/milestone/42)
 
-- Nothing.
+Feature release (minor)
 
-### Deprecated
+### 5.2.0
 
-- Nothing.
+- Total issues resolved: **0**
+- Total pull requests resolved: **4**
+- Total contributors: **3**
 
-### Removed
+#### enhancement
 
-- Nothing.
+ - [131: Add support for typed&#95;field&#95;mapper](https://github.com/Roave/psr-container-doctrine/pull/131) thanks to @PowerKiKi
+ - [130: Local build: require `docker compose` only](https://github.com/Roave/psr-container-doctrine/pull/130) thanks to @Slamdunk
 
-### Fixed
+#### documentation,renovate
 
-- Nothing.
+ - [127: Update dependency illuminate/container to v11](https://github.com/Roave/psr-container-doctrine/pull/127) thanks to @renovate[bot]
+ - [126: Update dependency laminas/laminas-servicemanager to v4](https://github.com/Roave/psr-container-doctrine/pull/126) thanks to @renovate[bot]
 
 ## 5.1.0 - 2024-02-15
 
