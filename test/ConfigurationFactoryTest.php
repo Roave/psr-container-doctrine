@@ -76,7 +76,7 @@ final class ConfigurationFactoryTest extends TestCase
         self::assertInstanceOf(CacheConfiguration::class, $secondLevelCacheConfiguration);
         $secondLevelCacheFactory = $secondLevelCacheConfiguration->getCacheFactory();
         self::assertInstanceOf(DefaultCacheFactory::class, $secondLevelCacheFactory);
-        self::assertSame($resultCache, $this->exctractPropertyValue($secondLevelCacheFactory, 'cacheItemPool'));
+        self::assertSame($resultCache, $this->extractPropertyValue($secondLevelCacheFactory, 'cacheItemPool'));
     }
 
     public function testWillSetMiddlewares(): void
@@ -217,7 +217,7 @@ final class ConfigurationFactoryTest extends TestCase
     }
 
     /** @param non-empty-string $propertyName */
-    private function exctractPropertyValue(object $object, string $propertyName): mixed
+    private function extractPropertyValue(object $object, string $propertyName): mixed
     {
         return (new ReflectionProperty($object, $propertyName))->getValue($object);
     }
