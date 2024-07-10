@@ -88,6 +88,12 @@ final class ConfigurationFactory extends AbstractFactory
             $configuration->setNamingStrategy($config['naming_strategy']);
         }
 
+        if (is_string($config['typed_field_mapper'])) {
+            $configuration->setTypedFieldMapper($container->get($config['typed_field_mapper']));
+        } elseif ($config['typed_field_mapper'] !== null) {
+            $configuration->setTypedFieldMapper($config['typed_field_mapper']);
+        }
+
         if (is_string($config['quote_strategy'])) {
             $configuration->setQuoteStrategy($container->get($config['quote_strategy']));
         } elseif ($config['quote_strategy'] !== null) {
