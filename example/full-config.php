@@ -42,6 +42,7 @@ return [
                 'custom_hydration_modes' => [],
                 'naming_strategy' => null,
                 'quote_strategy' => null,
+                'typed_field_mapper' => null,
                 'default_repository_class_name' => EntityRepository::class,
                 'repository_factory' => null,
                 'class_metadata_factory_name' => ClassMetadataFactory::class,
