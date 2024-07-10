@@ -18,7 +18,7 @@
     "require": {
         "php": "~8.2.0 || ~8.3.0",
         "doctrine/common": "^3.4.4",
-        "doctrine/dbal": "^4.0.4",
+        "doctrine/dbal": "^3.8.2 || ^4",
         "doctrine/event-manager": "^2.0.1",
         "doctrine/migrations": "^3.8.0",
         "doctrine/orm": "^3.2.1",

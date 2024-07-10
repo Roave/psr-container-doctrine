@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace RoaveTest\PsrContainerDoctrine;
 
+use Composer\InstalledVersions;
+use Composer\Semver\VersionParser;
 use Doctrine\DBAL\Driver\Middleware;
 use Doctrine\ORM\Cache\CacheConfiguration;
 use Doctrine\ORM\Cache\DefaultCacheFactory;
@@ -211,7 +213,11 @@ final class ConfigurationFactoryTest extends TestCase
             );
 
         $this->expectException(TypeError::class);
-        $this->expectExceptionMessage('Doctrine\DBAL\Configuration::setSchemaAssetsFilter(): Argument #1 ($schemaAssetsFilter) must be of type callable, array given');
+        if (InstalledVersions::satisfies(new VersionParser(), 'doctrine/dbal', '^3.8')) {
+            $this->expectExceptionMessage('Doctrine\DBAL\Configuration::setSchemaAssetsFilter(): Argument #1 ($callable) must be of type ?callable, array given,');
+        } else {
+            $this->expectExceptionMessage('Doctrine\DBAL\Configuration::setSchemaAssetsFilter(): Argument #1 ($schemaAssetsFilter) must be of type callable, array given');
+        }
 
         (new ConfigurationFactory())($container);
     }
