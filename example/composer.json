@@ -2,9 +2,9 @@
     "type": "project",
     "require": {
         "php": "~8.2.0 || ~8.3.0",
-        "illuminate/container": "^11.18.0",
+        "illuminate/container": "^11.18.1",
         "laminas/laminas-servicemanager": "^4.2.0",
-        "symfony/cache": "^7.1.2"
+        "symfony/cache": "^7.1.3"
     },
     "config": {
         "platform": {
