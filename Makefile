@@ -1,7 +1,7 @@
 ifdef CI
 	DOCKER_PHP_EXEC :=
 else
-	DOCKER_PHP_EXEC := docker compose run php
+	DOCKER_PHP_EXEC := docker compose run --rm php
 endif
 
 SRCS := $(shell find ./src ./test -type f)

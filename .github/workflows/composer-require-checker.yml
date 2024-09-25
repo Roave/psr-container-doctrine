@@ -10,7 +10,7 @@ jobs:
       - name: Setup PHP with composer require checker
         uses: shivammathur/setup-php@2.31.1
         with:
-          php-version: 8.2
+          php-version: 8.3
           tools: composer-require-checker
 
       - name: Cache composer dependencies
