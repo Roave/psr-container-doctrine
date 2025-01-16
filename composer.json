@@ -22,7 +22,7 @@
         "doctrine/event-manager": "^2.0.1",
         "doctrine/migrations": "^3.8.2",
         "doctrine/orm": "^3.3.1",
-        "doctrine/persistence": "^3.4.0",
+        "doctrine/persistence": "^4.0.0",
         "psr/cache": "^2.0.0 || ^3.0.0",
         "psr/container": "^1.1.2 || ^2.0.2"
     },
