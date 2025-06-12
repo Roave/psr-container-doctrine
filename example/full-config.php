@@ -31,7 +31,7 @@ return [
                 'query_cache' => 'array',
                 'hydration_cache' => 'array',
                 'driver' => 'orm_default', // Actually defaults to the configuration config key, not hard-coded
-                'generate_proxies' => true,
+                'auto_generate_proxy_classes' => true,
                 'proxy_dir' => 'data/cache/DoctrineEntityProxy',
                 'proxy_namespace' => 'DoctrineEntityProxy',
                 'entity_namespaces' => [],
