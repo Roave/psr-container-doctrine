@@ -20,15 +20,15 @@
         "doctrine/common": "^3.5.0",
         "doctrine/dbal": "^4.2.4",
         "doctrine/event-manager": "^2.0.1",
-        "doctrine/migrations": "^3.9.0",
-        "doctrine/orm": "^3.4.2",
+        "doctrine/migrations": "^3.9.1",
+        "doctrine/orm": "^3.4.3",
         "doctrine/persistence": "^3.4.0 || ^4.0.0",
         "psr/cache": "^2.0.0 || ^3.0.0",
         "psr/container": "^1.1.2 || ^2.0.2"
     },
     "require-dev": {
         "doctrine/coding-standard": "^13.0.1",
-        "phpunit/phpunit": "^12.2.4",
+        "phpunit/phpunit": "^12.2.5",
         "psalm/plugin-phpunit": "^0.19.5",
         "symfony/yaml": "^7.3.0",
         "vimeo/psalm": "^6.12.0"
