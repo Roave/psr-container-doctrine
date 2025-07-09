@@ -15,6 +15,8 @@ use Roave\PsrContainerDoctrine\EntityManagerFactory;
 
 use function sys_get_temp_dir;
 
+use const PHP_VERSION_ID;
+
 final class EntityManagerFactoryTest extends TestCase
 {
     public function testExtendsAbstractFactory(): void
@@ -132,8 +134,13 @@ final class EntityManagerFactoryTest extends TestCase
     {
         $configuration = new Configuration();
         $configuration->setMetadataDriverImpl(new MappingDriverChain());
-        $configuration->setProxyDir(sys_get_temp_dir());
-        $configuration->setProxyNamespace('EntityManagerFactoryTest');
+
+        if (PHP_VERSION_ID >= 80400) {
+            $configuration->enableNativeLazyObjects(true);
+        } else {
+            $configuration->setProxyDir(sys_get_temp_dir());
+            $configuration->setProxyNamespace('EntityManagerFactoryTest');
+        }
 
         return $configuration;
     }
