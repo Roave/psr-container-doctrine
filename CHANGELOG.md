@@ -2,27 +2,28 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 5.8.0 - TBD
+## 5.8.0 - 2025-07-09
 
-### Added
 
-- Nothing.
+-----
 
-### Changed
+### Release Notes for [5.8.0](https://github.com/Roave/psr-container-doctrine/milestone/56)
 
-- Nothing.
+Feature release (minor)
 
-### Deprecated
+### 5.8.0
 
-- Nothing.
+- Total issues resolved: **0**
+- Total pull requests resolved: **2**
+- Total contributors: **2**
 
-### Removed
+#### enhancement
 
-- Nothing.
+ - [157: Add native lazy objects support](https://github.com/Roave/psr-container-doctrine/pull/157) thanks to @Slamdunk
 
-### Fixed
+#### documentation
 
-- Nothing.
+ - [155: `auto&#95;generate&#95;proxy&#95;classes` instead of incorrect `generate&#95;proxies`](https://github.com/Roave/psr-container-doctrine/pull/155) thanks to @PowerKiKi
 
 ## 5.7.0 - 2025-01-28
 
