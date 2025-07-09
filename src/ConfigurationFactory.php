@@ -15,6 +15,8 @@ use function array_key_exists;
 use function assert;
 use function is_string;
 
+use const PHP_VERSION_ID;
+
 /** @extends AbstractFactory<Configuration> */
 final class ConfigurationFactory extends AbstractFactory
 {
@@ -23,9 +25,15 @@ final class ConfigurationFactory extends AbstractFactory
         $config = $this->retrieveConfig($container, $configKey, 'configuration');
 
         $configuration = new Configuration();
-        $configuration->setProxyDir($config['proxy_dir']);
-        $configuration->setProxyNamespace($config['proxy_namespace']);
-        $configuration->setAutoGenerateProxyClasses($config['auto_generate_proxy_classes']);
+
+        if ($config['enable_native_lazy_objects'] === true) {
+            $configuration->enableNativeLazyObjects(true);
+        } else {
+            $configuration->setProxyDir($config['proxy_dir']);
+            $configuration->setProxyNamespace($config['proxy_namespace']);
+            $configuration->setAutoGenerateProxyClasses($config['auto_generate_proxy_classes']);
+        }
+
         $configuration->setEntityNamespaces($config['entity_namespaces']);
         $configuration->setCustomDatetimeFunctions($config['datetime_functions']);
         $configuration->setCustomStringFunctions($config['string_functions']);
@@ -174,6 +182,7 @@ final class ConfigurationFactory extends AbstractFactory
             'result_cache' => NullCache::class,
             'hydration_cache' => NullCache::class,
             'driver' => $configKey,
+            'enable_native_lazy_objects' => PHP_VERSION_ID >= 80400,
             'auto_generate_proxy_classes' => true,
             'proxy_dir' => 'data/cache/DoctrineEntityProxy',
             'proxy_namespace' => 'DoctrineEntityProxy',
