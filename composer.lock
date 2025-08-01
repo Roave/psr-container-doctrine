@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bb251c2c2b2b6d1995dcf085ff5855f7",
+    "content-hash": "b1a99e86e06e419435a8c1bcde3e0151",
     "packages": [
         {
             "name": "doctrine/collections",
@@ -4498,16 +4498,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "12.2.9",
+            "version": "12.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "442c06d0a952a5dbffba181cff969b91fdc9bada"
+                "reference": "264da860d6fe0d00582355a6ecbbf7ae57b44895"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/442c06d0a952a5dbffba181cff969b91fdc9bada",
-                "reference": "442c06d0a952a5dbffba181cff969b91fdc9bada",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/264da860d6fe0d00582355a6ecbbf7ae57b44895",
+                "reference": "264da860d6fe0d00582355a6ecbbf7ae57b44895",
                 "shasum": ""
             },
             "require": {
@@ -4543,7 +4543,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "12.2-dev"
+                    "dev-main": "12.3-dev"
                 }
             },
             "autoload": {
@@ -4575,7 +4575,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.2.9"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.3.0"
             },
             "funding": [
                 {
@@ -4599,7 +4599,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-07-31T07:12:16+00:00"
+            "time": "2025-08-01T05:14:47+00:00"
         },
         {
             "name": "psalm/plugin-phpunit",
