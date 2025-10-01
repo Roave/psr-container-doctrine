@@ -8,7 +8,7 @@ use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\AbstractFactory;
 
 /** @extends AbstractFactory<string> */
-final class StubFactory extends AbstractFactory
+final readonly class StubFactory extends AbstractFactory
 {
     protected function createWithConfig(ContainerInterface $container, string $configKey): string
     {

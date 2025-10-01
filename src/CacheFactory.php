@@ -13,7 +13,7 @@ use Roave\PsrContainerDoctrine\Exception\OutOfBoundsException;
 use function array_key_exists;
 
 /** @extends AbstractFactory<CacheItemPoolInterface> */
-final class CacheFactory extends AbstractFactory
+final readonly class CacheFactory extends AbstractFactory
 {
     protected function createWithConfig(ContainerInterface $container, string $configKey): CacheItemPoolInterface
     {

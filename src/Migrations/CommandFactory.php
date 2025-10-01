@@ -14,11 +14,8 @@ use function assert;
 use function is_a;
 
 /** @extends AbstractFactory<DoctrineCommand> */
-final class CommandFactory extends AbstractFactory
+final readonly class CommandFactory extends AbstractFactory
 {
-    /** @psalm-var class-string<DoctrineCommand>|'' */
-    private string $requestedName = '';
-
     /** @psalm-param class-string<DoctrineCommand>|'' $requestedName */
     public function __invoke(ContainerInterface $container, string $requestedName = ''): DoctrineCommand
     {
@@ -26,13 +23,14 @@ final class CommandFactory extends AbstractFactory
             throw DomainException::forInvalidMigrationsCommand($requestedName);
         }
 
-        $this->requestedName = $requestedName;
-
-        return parent::__invoke($container);
+        return $this->createWithConfig($container, $this->configKey, $requestedName);
     }
 
-    /** @param non-empty-string $configKey */
-    protected function createWithConfig(ContainerInterface $container, string $configKey): DoctrineCommand
+    /**
+     * @param non-empty-string                 $configKey
+     * @param class-string<DoctrineCommand>|'' $requestedName
+     */
+    protected function createWithConfig(ContainerInterface $container, string $configKey, string $requestedName = ''): DoctrineCommand
     {
         if ($container->has(DependencyFactory::class)) {
             $dependencyFactory = $container->get(DependencyFactory::class);
@@ -40,10 +38,10 @@ final class CommandFactory extends AbstractFactory
             $dependencyFactory = (new DependencyFactoryFactory($configKey))($container);
         }
 
-        assert($this->requestedName !== '');
+        assert($requestedName !== '');
 
         /** @psalm-suppress UnsafeInstantiation */
-        return new $this->requestedName($dependencyFactory);
+        return new $requestedName($dependencyFactory);
     }
 
     /**

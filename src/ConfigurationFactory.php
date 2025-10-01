@@ -18,7 +18,7 @@ use function is_string;
 use const PHP_VERSION_ID;
 
 /** @extends AbstractFactory<Configuration> */
-final class ConfigurationFactory extends AbstractFactory
+final readonly class ConfigurationFactory extends AbstractFactory
 {
     protected function createWithConfig(ContainerInterface $container, string $configKey): Configuration
     {

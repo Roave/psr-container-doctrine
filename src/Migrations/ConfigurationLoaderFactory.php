@@ -10,7 +10,7 @@ use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\AbstractFactory;
 
 /** @extends AbstractFactory<ConfigurationLoader> */
-final class ConfigurationLoaderFactory extends AbstractFactory
+final readonly class ConfigurationLoaderFactory extends AbstractFactory
 {
     protected function createWithConfig(ContainerInterface $container, string $configKey): ConfigurationLoader
     {

@@ -8,7 +8,7 @@ use DateInterval;
 use DateTimeInterface;
 use Psr\Cache\CacheItemInterface;
 
-final class NullCacheItem implements CacheItemInterface
+final readonly class NullCacheItem implements CacheItemInterface
 {
     public function __construct(
         private readonly string $key,

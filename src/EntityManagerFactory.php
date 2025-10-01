@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityManager;
 use Psr\Container\ContainerInterface;
 
 /** @extends AbstractFactory<EntityManager> */
-final class EntityManagerFactory extends AbstractFactory
+final readonly class EntityManagerFactory extends AbstractFactory
 {
     protected function createWithConfig(ContainerInterface $container, string $configKey): EntityManager
     {

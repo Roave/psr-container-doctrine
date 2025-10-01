@@ -19,7 +19,7 @@ use function is_string;
 use function is_subclass_of;
 
 /** @extends AbstractFactory<MappingDriver> */
-final class DriverFactory extends AbstractFactory
+final readonly class DriverFactory extends AbstractFactory
 {
     protected function createWithConfig(ContainerInterface $container, string $configKey): MappingDriver
     {

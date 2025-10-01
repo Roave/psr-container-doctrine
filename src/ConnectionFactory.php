@@ -16,10 +16,8 @@ use function array_map;
 use function array_merge;
 
 /** @extends AbstractFactory<Connection> */
-final class ConnectionFactory extends AbstractFactory
+final readonly class ConnectionFactory extends AbstractFactory
 {
-    private static bool $areTypesRegistered = false;
-
     protected function createWithConfig(ContainerInterface $container, string $configKey): Connection
     {
         $this->registerTypes($container);
@@ -82,13 +80,8 @@ final class ConnectionFactory extends AbstractFactory
      */
     private function registerTypes(ContainerInterface $container): void
     {
-        if (self::$areTypesRegistered) {
-            return;
-        }
-
-        $applicationConfig        = $container->has('config') ? $container->get('config') : [];
-        $typesConfig              = $applicationConfig['doctrine']['types'] ?? [];
-        self::$areTypesRegistered = true;
+        $applicationConfig = $container->has('config') ? $container->get('config') : [];
+        $typesConfig       = $applicationConfig['doctrine']['types'] ?? [];
 
         foreach ($typesConfig as $name => $className) {
             if (Type::hasType($name)) {

@@ -12,7 +12,7 @@ use Roave\PsrContainerDoctrine\AbstractFactory;
 use Roave\PsrContainerDoctrine\EntityManagerFactory;
 
 /** @extends AbstractFactory<DependencyFactory> */
-final class DependencyFactoryFactory extends AbstractFactory
+final readonly class DependencyFactoryFactory extends AbstractFactory
 {
     protected function createWithConfig(ContainerInterface $container, string $configKey): DependencyFactory
     {
