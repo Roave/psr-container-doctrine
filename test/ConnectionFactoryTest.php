@@ -14,7 +14,6 @@ use Doctrine\DBAL\Types\BooleanType;
 use Doctrine\ORM\Configuration;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
-use ReflectionObject;
 use Roave\PsrContainerDoctrine\ConnectionFactory;
 
 use function defined;
@@ -193,9 +192,7 @@ final class ConnectionFactoryTest extends TestCase
 
     public function testCustomTypeDoctrineMappingTypesInjection(): void
     {
-        $factory  = new ConnectionFactory();
-        $property = (new ReflectionObject($factory))->getProperty('areTypesRegistered');
-        $property->setValue($factory, false);
+        $factory = new ConnectionFactory();
 
         $connection = $factory($this->buildContainer('orm_default', 'orm_default', [
             'doctrine_mapping_types' => ['foo' => 'custom_type'],

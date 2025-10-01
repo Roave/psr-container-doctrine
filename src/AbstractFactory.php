@@ -11,10 +11,10 @@ use function array_replace_recursive;
 use function sprintf;
 
 /** @template T */
-abstract class AbstractFactory
+abstract readonly class AbstractFactory
 {
     /** @param non-empty-string $configKey */
-    final public function __construct(private string $configKey = 'orm_default')
+    final public function __construct(protected string $configKey = 'orm_default')
     {
     }
 

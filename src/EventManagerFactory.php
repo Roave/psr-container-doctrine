@@ -18,7 +18,7 @@ use function is_string;
 use function method_exists;
 
 /** @extends AbstractFactory<EventManager> */
-final class EventManagerFactory extends AbstractFactory
+final readonly class EventManagerFactory extends AbstractFactory
 {
     protected function createWithConfig(ContainerInterface $container, string $configKey): EventManager
     {

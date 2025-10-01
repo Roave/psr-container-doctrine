@@ -7,7 +7,7 @@ namespace Roave\PsrContainerDoctrine\Cache;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 
-final class NullCache implements CacheItemPoolInterface
+final readonly class NullCache implements CacheItemPoolInterface
 {
     public function getItem(string $key): CacheItemInterface
     {
