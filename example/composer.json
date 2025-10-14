@@ -2,8 +2,8 @@
     "type": "project",
     "require": {
         "php": "~8.2.0 || ~8.3.0 || ~8.4.0",
-        "illuminate/container": "^12.33.0",
-        "laminas/laminas-servicemanager": "^4.4.0",
+        "illuminate/container": "^12.34.0",
+        "laminas/laminas-servicemanager": "^4.5.0",
         "symfony/cache": "^7.3.4"
     },
     "config": {
