@@ -9,9 +9,11 @@ jobs:
           - '8.4'
           - '8.5'
         dependencies:
-          - 'locked'
           - 'latest'
           - 'lowest'
+        include:
+          - php-version: '8.4'
+            dependencies: 'locked'
 
     steps:
       - name: Checkout
