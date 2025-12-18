@@ -38,7 +38,6 @@ static-analysis: vendor ## verify that no static analysis issues were introduced
 
 .PHONY: check-example
 check-example: vendor ## run tests on examples
-	$(DOCKER_PHP_EXEC) composer update --working-dir=example
 	$(DOCKER_PHP_EXEC) test/example/check-example.sh
 
 .PHONY: bc-check
