@@ -32,8 +32,8 @@
         "laminas/laminas-servicemanager": "^4.5.0",
         "phpunit/phpunit": "^12.5.4",
         "psalm/plugin-phpunit": "^0.19.5",
-        "symfony/cache": "^8",
-        "symfony/yaml": "^8",
+        "symfony/cache": "^8.0.1",
+        "symfony/yaml": "^8.0.1",
         "vimeo/psalm": "^6.14.2"
     },
     "autoload": {
