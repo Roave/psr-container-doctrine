@@ -7,7 +7,6 @@ use Illuminate\Container\Container;
 use Roave\PsrContainerDoctrine\EntityManagerFactory;
 
 require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/../vendor/autoload.php';
 
 // Standard config keys
 $minimalConfig = require __DIR__ . '/minimal-config.php';
