@@ -28,7 +28,7 @@
     },
     "require-dev": {
         "doctrine/coding-standard": "^14.0.0",
-        "illuminate/container": "^12.44.0",
+        "illuminate/container": "^12.45.0",
         "laminas/laminas-servicemanager": "^4.5.0",
         "phpunit/phpunit": "^12.5.4",
         "psalm/plugin-phpunit": "^0.19.5",
