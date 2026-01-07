@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7e59f613b2a3443d52e6d04aa96ce7cc",
+    "content-hash": "acc9ff67d7f3c1246adf6f22ddc60541",
     "packages": [
         {
             "name": "doctrine/collections",
@@ -3586,7 +3586,7 @@
         },
         {
             "name": "illuminate/container",
-            "version": "v12.45.1",
+            "version": "v12.45.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/container.git",
