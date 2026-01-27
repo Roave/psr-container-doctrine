@@ -7,6 +7,7 @@ namespace RoaveTest\PsrContainerDoctrine\TestAsset;
 use Doctrine\Persistence\Mapping\ClassMetadata;
 use Doctrine\Persistence\Mapping\Driver\FileDriver;
 
+/** @extends FileDriver<null> */
 class StubFileDriver extends FileDriver
 {
     /**

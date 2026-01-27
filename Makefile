@@ -22,7 +22,7 @@ check-example:
 bc-check: ## check for backwards compatibility breaks
 	mkdir -p /tmp/bc-check
 	composer require --no-plugins -d/tmp/bc-check roave/backward-compatibility-check 
-	/tmp/bc-check/vendor/bin/roave-backward-compatibility-check
+	/tmp/bc-check/vendor/bin/roave-backward-compatibility-check --from=4.1.0
 	rm -Rf /tmp/bc-check
 
 coverage: ## generate code coverage reports
