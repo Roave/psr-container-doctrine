@@ -30,7 +30,7 @@
         "doctrine/coding-standard": "^14.0.0",
         "illuminate/container": "^12.48.1",
         "laminas/laminas-servicemanager": "^4.5.0",
-        "phpunit/phpunit": "^12.5.7",
+        "phpunit/phpunit": "^12.5.8",
         "psalm/plugin-phpunit": "^0.19.5",
         "symfony/cache": "^7.4.4",
         "symfony/yaml": "^7.4.1",
