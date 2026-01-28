@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f4f788b836acf947f53f4321a8f998c1",
+    "content-hash": "c88fb5deea40aa1a13e20dff50feeeea",
     "packages": [
         {
             "name": "doctrine/collections",
@@ -3586,7 +3586,7 @@
         },
         {
             "name": "illuminate/container",
-            "version": "v12.48.1",
+            "version": "v12.49.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/container.git",
@@ -6576,16 +6576,16 @@
         },
         {
             "name": "symfony/cache",
-            "version": "v7.4.4",
+            "version": "v7.4.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/cache.git",
-                "reference": "67ca35eaa52dd9c1f07a42d459b5a2544dd29b34"
+                "reference": "8dde98d5a4123b53877aca493f9be57b333f14bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/cache/zipball/67ca35eaa52dd9c1f07a42d459b5a2544dd29b34",
-                "reference": "67ca35eaa52dd9c1f07a42d459b5a2544dd29b34",
+                "url": "https://api.github.com/repos/symfony/cache/zipball/8dde98d5a4123b53877aca493f9be57b333f14bd",
+                "reference": "8dde98d5a4123b53877aca493f9be57b333f14bd",
                 "shasum": ""
             },
             "require": {
@@ -6656,7 +6656,7 @@
                 "psr6"
             ],
             "support": {
-                "source": "https://github.com/symfony/cache/tree/v7.4.4"
+                "source": "https://github.com/symfony/cache/tree/v7.4.5"
             },
             "funding": [
                 {
@@ -6676,7 +6676,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-01-23T12:59:19+00:00"
+            "time": "2026-01-27T16:16:02+00:00"
         },
         {
             "name": "symfony/cache-contracts",
