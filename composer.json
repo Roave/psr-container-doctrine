@@ -34,7 +34,7 @@
         "psalm/plugin-phpunit": "^0.19.5",
         "symfony/cache": "^7.4.5",
         "symfony/yaml": "^7.4.1",
-        "vimeo/psalm": "^6.14.3"
+        "vimeo/psalm": "^6.15.0"
     },
     "autoload": {
         "psr-4": {
