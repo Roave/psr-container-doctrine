@@ -18,7 +18,7 @@
     "require": {
         "php": "~8.4.0 || ~8.5.0",
         "doctrine/common": "^3.5.0",
-        "doctrine/dbal": "^4.4.1",
+        "doctrine/dbal": "^4.4.2",
         "doctrine/event-manager": "^2.1.1",
         "doctrine/migrations": "^3.9.6",
         "doctrine/orm": "^3.6.2",
@@ -32,8 +32,8 @@
         "laminas/laminas-servicemanager": "^4.5.0",
         "phpunit/phpunit": "^12.5.14",
         "psalm/plugin-phpunit": "^0.19.5",
-        "symfony/cache": "^7.4.5",
-        "symfony/yaml": "^7.4.1",
+        "symfony/cache": "^7.4.6",
+        "symfony/yaml": "^7.4.6",
         "vimeo/psalm": "^6.15.1"
     },
     "autoload": {
