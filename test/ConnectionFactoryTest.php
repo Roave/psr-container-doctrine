@@ -26,7 +26,7 @@ final class ConnectionFactoryTest extends TestCase
 
     public function setUp(): void
     {
-        $this->configuration = $this->createMock(Configuration::class);
+        $this->configuration = $this->createStub(Configuration::class);
     }
 
     public function testDefaultsThroughException(): void
@@ -36,7 +36,7 @@ final class ConnectionFactoryTest extends TestCase
         }
 
         $factory   = new ConnectionFactory();
-        $container = $this->createMock(ContainerInterface::class);
+        $container = $this->createStub(ContainerInterface::class);
         $container->method('has')->willReturnCallback(
             static function (string $id): bool {
                 // Return false for config, true for anything else
@@ -207,7 +207,7 @@ final class ConnectionFactoryTest extends TestCase
         string $configurationKey = 'orm_default',
         array $config = [],
     ): ContainerInterface {
-        $container = $this->createMock(ContainerInterface::class);
+        $container = $this->createStub(ContainerInterface::class);
         $container->method('has')->willReturn(true);
         $mockConfig = [
             'doctrine' => [

@@ -20,7 +20,7 @@ final class DriverFactoryTest extends TestCase
 {
     public function testMissingClassKeyWillReturnOutOfBoundException(): void
     {
-        $container = $this->createMock(ContainerInterface::class);
+        $container = $this->createStub(ContainerInterface::class);
         $factory   = new DriverFactory();
 
         $this->expectException(OutOfBoundsException::class);
@@ -175,9 +175,9 @@ final class DriverFactoryTest extends TestCase
                     ],
                 ],
             ],
-            'doctrine.cache.default' => $this->createMock(CacheItemPoolInterface::class),
+            'doctrine.cache.default' => $this->createStub(CacheItemPoolInterface::class),
         ];
-        $container = $this->createMock(ContainerInterface::class);
+        $container = $this->createStub(ContainerInterface::class);
         $container->method('has')->willReturnCallback(
             static function (string $id) use ($services): bool {
                 return isset($services[$id]);

@@ -17,7 +17,7 @@ final class DependencyFactoryFactoryTest extends TestCase
 {
     public function testCanCreateDependencyFactory(): void
     {
-        $container = $this->createMock(ContainerInterface::class);
+        $container = $this->createStub(ContainerInterface::class);
         $container->method('has')
             ->willReturnMap(
                 [
@@ -26,7 +26,7 @@ final class DependencyFactoryFactoryTest extends TestCase
                 ],
             );
 
-        $entityManager = $this->createMock(EntityManagerInterface::class);
+        $entityManager = $this->createStub(EntityManagerInterface::class);
         $container->method('get')
             ->willReturnMap(
                 [
@@ -44,7 +44,7 @@ final class DependencyFactoryFactoryTest extends TestCase
 
     public function testInstantiatesConfigurationLoaderFactoryWhenNotInContainer(): void
     {
-        $container = $this->createMock(ContainerInterface::class);
+        $container = $this->createStub(ContainerInterface::class);
         $config    = [
             'doctrine' => [
                 'configuration' => [
@@ -68,7 +68,7 @@ final class DependencyFactoryFactoryTest extends TestCase
                 ],
             );
 
-        $entityManager = $this->createMock(EntityManagerInterface::class);
+        $entityManager = $this->createStub(EntityManagerInterface::class);
         $container->method('get')
             ->willReturnMap(
                 [
