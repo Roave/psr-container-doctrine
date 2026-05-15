@@ -53,7 +53,7 @@ final class CacheFactoryTest extends TestCase
     {
         $containerId = 'ContainerId';
 
-        $container = $this->createMock(ContainerInterface::class);
+        $container = $this->createStub(ContainerInterface::class);
         $container
             ->method('has')
             ->willReturnMap([
@@ -61,7 +61,7 @@ final class CacheFactoryTest extends TestCase
                 [$containerId, true],
             ]);
 
-        $cacheItemPool = $this->createMock(CacheItemPoolInterface::class);
+        $cacheItemPool = $this->createStub(CacheItemPoolInterface::class);
         $container
             ->method('get')
             ->willReturnMap([
@@ -77,7 +77,7 @@ final class CacheFactoryTest extends TestCase
     {
         $containerId = 'ContainerId';
 
-        $container = $this->createMock(ContainerInterface::class);
+        $container = $this->createStub(ContainerInterface::class);
         $container
             ->method('has')
             ->willReturnMap([
@@ -85,7 +85,7 @@ final class CacheFactoryTest extends TestCase
                 [$containerId, true],
             ]);
 
-        $unsupportedReturnType = $this->createMock(stdClass::class);
+        $unsupportedReturnType = $this->createStub(stdClass::class);
         $container
             ->method('get')
             ->willReturnMap([
@@ -101,10 +101,10 @@ final class CacheFactoryTest extends TestCase
 
     public function testCanInstantiateCacheItemPoolFromClassName(): void
     {
-        $mock      = $this->createMock(CacheItemPoolInterface::class);
+        $mock      = $this->createStub(CacheItemPoolInterface::class);
         $className = $mock::class;
 
-        $container = $this->createMock(ContainerInterface::class);
+        $container = $this->createStub(ContainerInterface::class);
         $container
             ->method('has')
             ->willReturnMap([
@@ -114,10 +114,9 @@ final class CacheFactoryTest extends TestCase
 
         $container
             ->method('get')
-            ->with('config')
-            ->willReturn(
-                ['doctrine' => ['cache' => ['foo' => ['class' => $className]]]],
-            );
+            ->willReturnMap([
+                ['config', ['doctrine' => ['cache' => ['foo' => ['class' => $className]]]]],
+            ]);
 
         $factory = new CacheFactory('foo');
         self::assertInstanceOf($className, $factory($container));
@@ -125,10 +124,10 @@ final class CacheFactoryTest extends TestCase
 
     public function testThrowsWhenInstantiateUnexpectedReturnType(): void
     {
-        $mock      = $this->createMock(stdClass::class);
+        $mock      = $this->createStub(stdClass::class);
         $className = $mock::class;
 
-        $container = $this->createMock(ContainerInterface::class);
+        $container = $this->createStub(ContainerInterface::class);
         $container
             ->method('has')
             ->willReturnMap([
@@ -138,10 +137,9 @@ final class CacheFactoryTest extends TestCase
 
         $container
             ->method('get')
-            ->with('config')
-            ->willReturn(
-                ['doctrine' => ['cache' => ['foo' => ['class' => $className]]]],
-            );
+            ->willReturnMap([
+                ['config', ['doctrine' => ['cache' => ['foo' => ['class' => $className]]]]],
+            ]);
 
         self::expectExceptionObject(InvalidArgumentException::fromUnsupportedCache($mock));
 
@@ -153,7 +151,7 @@ final class CacheFactoryTest extends TestCase
     {
         $bundledClassName = NullCache::class;
 
-        $container = $this->createMock(ContainerInterface::class);
+        $container = $this->createStub(ContainerInterface::class);
         $container
             ->method('has')
             ->willReturnMap([
@@ -163,8 +161,7 @@ final class CacheFactoryTest extends TestCase
 
         $container
             ->method('get')
-            ->with('config')
-            ->willReturn([]);
+            ->willReturnMap([['config', []]]);
 
         $factory = new CacheFactory($bundledClassName);
         self::assertInstanceOf($bundledClassName, $factory($container));

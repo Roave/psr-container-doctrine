@@ -33,7 +33,7 @@ final class CommandFactoryTest extends TestCase
             ->method('get')
             ->willReturnMap(
                 [
-                    [DependencyFactory::class, $this->createMock(DependencyFactory::class)],
+                    [DependencyFactory::class, $this->createStub(DependencyFactory::class)],
                 ],
             );
 
@@ -46,7 +46,7 @@ final class CommandFactoryTest extends TestCase
     #[DataProvider('commandClassProvider')]
     public function testReturnsCommandWhenContainerHasNoDependencyFactory(string $commandClass): void
     {
-        $container = $this->createMock(ContainerInterface::class);
+        $container = $this->createStub(ContainerInterface::class);
         $config    = [
             'doctrine' => [
                 'configuration' => [
@@ -74,9 +74,9 @@ final class CommandFactoryTest extends TestCase
             ->willReturnMap(
                 [
                     ['config', $config],
-                    [DependencyFactory::class, $this->createMock(DependencyFactory::class)],
-                    [ConfigurationLoader::class, $this->createMock(ConfigurationLoader::class)],
-                    ['doctrine.entity_manager.orm_default', $this->createMock(EntityManagerInterface::class)],
+                    [DependencyFactory::class, $this->createStub(DependencyFactory::class)],
+                    [ConfigurationLoader::class, $this->createStub(ConfigurationLoader::class)],
+                    ['doctrine.entity_manager.orm_default', $this->createStub(EntityManagerInterface::class)],
                 ],
             );
 
@@ -107,7 +107,7 @@ final class CommandFactoryTest extends TestCase
 
     public function testFactoryThrowsForInvalidCommand(): void
     {
-        $container = $this->createMock(ContainerInterface::class);
+        $container = $this->createStub(ContainerInterface::class);
         $factory   = new CommandFactory();
         $this->expectException(DomainException::class);
         /** @psalm-suppress InvalidArgument */

@@ -22,7 +22,7 @@ final class EventManagerFactoryTest extends TestCase
     public function testDefaults(): void
     {
         $factory      = new EventManagerFactory();
-        $container    = $this->createMock(ContainerInterface::class);
+        $container    = $this->createStub(ContainerInterface::class);
         $eventManager = $factory($container);
 
         self::assertCount(0, $eventManager->getAllListeners());
@@ -87,8 +87,7 @@ final class EventManagerFactoryTest extends TestCase
                 [StubEventSubscriber::class, false],
             ]);
         $container->method('get')
-            ->with('config')
-            ->willReturn($this->getConfigForSubscriber(StubEventSubscriber::class));
+            ->willReturnMap([['config', $this->getConfigForSubscriber(StubEventSubscriber::class)]]);
 
         $factory      = new EventManagerFactory();
         $eventManager = $factory($container);
@@ -140,8 +139,7 @@ final class EventManagerFactoryTest extends TestCase
                 ['NonExistentClass', false],
             ]);
         $container->method('get')
-            ->with('config')
-            ->willReturn($this->getConfigForListener(['listener' => 'NonExistentClass']));
+            ->willReturnMap([['config', $this->getConfigForListener(['listener' => 'NonExistentClass'])]]);
 
         $factory = new EventManagerFactory();
         $this->expectException(DomainException::class);
@@ -186,15 +184,17 @@ final class EventManagerFactoryTest extends TestCase
                 [StubEventListener::class, false],
             ]);
         $container->method('get')
-            ->with('config')
-            ->willReturn(
-                $this->getConfigForListener(
-                    [
-                        'events' => Events::onFlush,
-                        'listener' => StubEventListener::class,
-                    ],
-                ),
-            );
+            ->willReturnMap([
+                [
+                    'config',
+                    $this->getConfigForListener(
+                        [
+                            'events' => Events::onFlush,
+                            'listener' => StubEventListener::class,
+                        ],
+                    ),
+                ],
+            ]);
 
         $factory      = new EventManagerFactory();
         $eventManager = $factory($container);
@@ -237,28 +237,32 @@ final class EventManagerFactoryTest extends TestCase
 
     private function buildContainer(mixed $subscriber): ContainerInterface
     {
-        $container = $this->createMock(ContainerInterface::class);
-        $container->method('has')->with('config')->willReturn(true);
-        $container->method('get')->with('config')->willReturn(
+        $container = $this->createStub(ContainerInterface::class);
+        $container->method('has')->willReturnMap([['config', true]]);
+        $container->method('get')->willReturnMap([
             [
-                'doctrine' => [
-                    'event_manager' => [
-                        'orm_default' => [
-                            'subscribers' => [$subscriber],
+                'config',
+                [
+                    'doctrine' => [
+                        'event_manager' => [
+                            'orm_default' => [
+                                'subscribers' => [$subscriber],
+                            ],
                         ],
                     ],
                 ],
             ],
-        );
+        ]);
 
         return $container;
     }
 
     private function buildContainerWithListener(mixed $listener): ContainerInterface
     {
-        $container = $this->createMock(ContainerInterface::class);
-        $container->method('has')->with('config')->willReturn(true);
-        $container->method('get')->with('config')->willReturn($this->getConfigForListener($listener));
+        $container = $this->createStub(ContainerInterface::class);
+        
+        $container->method('has')->willReturnMap([['config', true]]);
+        $container->method('get')->willReturnMap([['config', $this->getConfigForListener($listener)]]);
 
         return $container;
     }

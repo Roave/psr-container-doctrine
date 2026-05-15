@@ -13,14 +13,14 @@ final class AbstractFactoryTest extends TestCase
 {
     public function testDefaultConfigKey(): void
     {
-        $container = $this->createMock(ContainerInterface::class);
+        $container = $this->createStub(ContainerInterface::class);
         $factory   = new StubFactory();
         self::assertSame('orm_default', $factory($container));
     }
 
     public function testCustomConfigKey(): void
     {
-        $container = $this->createMock(ContainerInterface::class);
+        $container = $this->createStub(ContainerInterface::class);
         $factory   = new StubFactory('orm_other');
         self::assertSame('orm_other', $factory($container));
     }

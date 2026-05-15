@@ -26,9 +26,9 @@ final class EntityManagerFactoryTest extends TestCase
 
     public function testDefaults(): void
     {
-        $connection    = $this->createMock(Connection::class);
+        $connection    = $this->createStub(Connection::class);
         $configuration = $this->buildConfiguration();
-        $eventManager  = $this->createMock(EventManager::class);
+        $eventManager  = $this->createStub(EventManager::class);
 
         $container = $this->createMock(ContainerInterface::class);
         $container->expects($this->exactly(4))
@@ -58,9 +58,9 @@ final class EntityManagerFactoryTest extends TestCase
 
     public function testConfigKeyTakenFromSelf(): void
     {
-        $connection    = $this->createMock(Connection::class);
+        $connection    = $this->createStub(Connection::class);
         $configuration = $this->buildConfiguration();
-        $eventManager  = $this->createMock(EventManager::class);
+        $eventManager  = $this->createStub(EventManager::class);
 
         $container = $this->createMock(ContainerInterface::class);
         $container->expects($this->exactly(4))
@@ -89,9 +89,9 @@ final class EntityManagerFactoryTest extends TestCase
 
     public function testConfigKeyTakenFromConfig(): void
     {
-        $connection    = $this->createMock(Connection::class);
+        $connection    = $this->createStub(Connection::class);
         $configuration = $this->buildConfiguration();
-        $eventManager  = $this->createMock(EventManager::class);
+        $eventManager  = $this->createStub(EventManager::class);
         $config        = [
             'doctrine' => [
                 'entity_manager' => [

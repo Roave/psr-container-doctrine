@@ -21,12 +21,12 @@ final class ConfigurationFactoryTest extends TestCase
 {
     public function testWillSetCacheItemPoolCaches(): void
     {
-        $resultCache    = $this->createMock(CacheItemPoolInterface::class);
-        $queryCache     = $this->createMock(CacheItemPoolInterface::class);
-        $metadataCache  = $this->createMock(CacheItemPoolInterface::class);
-        $hydrationCache = $this->createMock(CacheItemPoolInterface::class);
+        $resultCache    = $this->createStub(CacheItemPoolInterface::class);
+        $queryCache     = $this->createStub(CacheItemPoolInterface::class);
+        $metadataCache  = $this->createStub(CacheItemPoolInterface::class);
+        $hydrationCache = $this->createStub(CacheItemPoolInterface::class);
 
-        $container = $this->createMock(ContainerInterface::class);
+        $container = $this->createStub(ContainerInterface::class);
         $config    = [
             'doctrine' => [
                 'configuration' => [
@@ -41,7 +41,7 @@ final class ConfigurationFactoryTest extends TestCase
             ],
         ];
 
-        $mappingDriver = $this->createMock(MappingDriver::class);
+        $mappingDriver = $this->createStub(MappingDriver::class);
 
         $container
             ->method('has')
