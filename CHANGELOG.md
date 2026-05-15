@@ -2,27 +2,40 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 6.2.0 - TBD
+## 6.2.0 - 2026-05-15
 
-### Added
 
-- Nothing.
+-----
 
-### Changed
+### Release Notes for [6.2.0](https://github.com/Roave/psr-container-doctrine/milestone/63)
 
-- Nothing.
+Feature release (minor)
 
-### Deprecated
+### 6.2.0
 
-- Nothing.
+- Total issues resolved: **0**
+- Total pull requests resolved: **8**
+- Total contributors: **3**
 
-### Removed
+#### dependencies,enhancement,renovate
 
-- Nothing.
+ - [176: Update dependency illuminate/container to v13](https://github.com/Roave/psr-container-doctrine/pull/176) thanks to @renovate[bot]
+ - [174: Update dependency phpunit/phpunit to v13](https://github.com/Roave/psr-container-doctrine/pull/174) thanks to @renovate[bot]
+ - [165: Update dependency symfony/yaml to v8](https://github.com/Roave/psr-container-doctrine/pull/165) thanks to @renovate[bot]
+ - [164: Update dependency symfony/cache to v8](https://github.com/Roave/psr-container-doctrine/pull/164) thanks to @renovate[bot]
 
-### Fixed
+#### dependencies,renovate
 
-- Nothing.
+ - [175: Lock file maintenance](https://github.com/Roave/psr-container-doctrine/pull/175) thanks to @renovate[bot]
+
+#### enhancement
+
+ - [170: Unify dev-deps into the root `composer.json`](https://github.com/Roave/psr-container-doctrine/pull/170) thanks to @Slamdunk
+ - [169: Upgraded `example/` to use a local composer reference](https://github.com/Roave/psr-container-doctrine/pull/169) thanks to @Ocramius
+
+#### duplicate,enhancement
+
+ - [166: Add Symfony 8 support](https://github.com/Roave/psr-container-doctrine/pull/166) thanks to @Slamdunk
 
 ## 6.1.0 - 2025-10-23
 
