@@ -18,23 +18,23 @@
     "require": {
         "php": "~8.4.0 || ~8.5.0",
         "doctrine/common": "^3.5.0",
-        "doctrine/dbal": "^4.4.2",
+        "doctrine/dbal": "^4.4.4",
         "doctrine/event-manager": "^2.1.1",
-        "doctrine/migrations": "^3.9.6",
-        "doctrine/orm": "^3.6.2",
+        "doctrine/migrations": "^3.9.7",
+        "doctrine/orm": "^3.6.8",
         "doctrine/persistence": "^3.4.0 || ^4.1.1",
         "psr/cache": "^2.0.0 || ^3.0.0",
         "psr/container": "^1.1.2 || ^2.0.2"
     },
     "require-dev": {
         "doctrine/coding-standard": "^14.0.0",
-        "illuminate/container": "^13.9.0",
-        "laminas/laminas-servicemanager": "^4.5.0",
-        "phpunit/phpunit": "^13.1.10",
-        "psalm/plugin-phpunit": "^0.19.5",
-        "symfony/cache": "^8.0.10",
-        "symfony/yaml": "^8.0.11",
-        "vimeo/psalm": "^6.15.1"
+        "illuminate/container": "^13.30.1",
+        "laminas/laminas-servicemanager": "^4.5.1",
+        "phpunit/phpunit": "^13.3.2",
+        "psalm/plugin-phpunit": "^0.20.2",
+        "symfony/cache": "^8.1.6",
+        "symfony/yaml": "^8.1.6",
+        "vimeo/psalm": "^6.16.1"
     },
     "autoload": {
         "psr-4": {
