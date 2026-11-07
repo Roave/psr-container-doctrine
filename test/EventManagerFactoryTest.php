@@ -33,7 +33,7 @@ final class EventManagerFactoryTest extends TestCase
         $factory = new EventManagerFactory();
 
         $this->expectException(DomainException::class);
-        $this->expectExceptionMessage('Invalid event subscriber "stdClass" given');
+        $this->expectExceptionMessageIsOrContains('Invalid event subscriber "stdClass" given');
 
         $factory($this->buildContainer(new stdClass()));
     }
@@ -43,7 +43,7 @@ final class EventManagerFactoryTest extends TestCase
         $factory = new EventManagerFactory();
 
         $this->expectException(DomainException::class);
-        $this->expectExceptionMessage('Invalid event subscriber "integer" given');
+        $this->expectExceptionMessageIsOrContains('Invalid event subscriber "integer" given');
 
         $factory($this->buildContainer(1));
     }
@@ -64,7 +64,7 @@ final class EventManagerFactoryTest extends TestCase
         $factory = new EventManagerFactory();
 
         $this->expectException(DomainException::class);
-        $this->expectExceptionMessage('Invalid event subscriber "NonExistentClass" given');
+        $this->expectExceptionMessageIsOrContains('Invalid event subscriber "NonExistentClass" given');
 
         $factory($container);
     }
@@ -125,7 +125,7 @@ final class EventManagerFactoryTest extends TestCase
     {
         $factory = new EventManagerFactory();
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid event listener config: must be an array');
+        $this->expectExceptionMessageIsOrContains('Invalid event listener config: must be an array');
         $factory($this->buildContainerWithListener(1));
     }
 
@@ -143,7 +143,7 @@ final class EventManagerFactoryTest extends TestCase
 
         $factory = new EventManagerFactory();
         $this->expectException(DomainException::class);
-        $this->expectExceptionMessage('Invalid event listener "NonExistentClass" given');
+        $this->expectExceptionMessageIsOrContains('Invalid event listener "NonExistentClass" given');
         $factory($container);
     }
 
@@ -156,7 +156,7 @@ final class EventManagerFactoryTest extends TestCase
 
         $factory = new EventManagerFactory();
         $this->expectException(DomainException::class);
-        $this->expectExceptionMessage(sprintf(
+        $this->expectExceptionMessageIs(sprintf(
             'Invalid event listener "%s" given: must have a "foo" method',
             StubEventListener::class,
         ));
