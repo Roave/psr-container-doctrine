@@ -24,7 +24,7 @@ final class DriverFactoryTest extends TestCase
         $factory   = new DriverFactory();
 
         $this->expectException(OutOfBoundsException::class);
-        $this->expectExceptionMessage('Missing "doctrine.driver.orm_default.class" config key');
+        $this->expectExceptionMessageIsOrContains('Missing "doctrine.driver.orm_default.class" config key');
 
         $factory($container);
     }
@@ -43,7 +43,7 @@ final class DriverFactoryTest extends TestCase
         $factory   = new DriverFactory();
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Configured class "not_a_class" on key "doctrine.driver.orm_default.class" does not exists');
+        $this->expectExceptionMessageIsOrContains('Configured class "not_a_class" on key "doctrine.driver.orm_default.class" does not exists');
 
         $factory($container);
     }

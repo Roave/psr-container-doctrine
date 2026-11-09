@@ -29,7 +29,7 @@
         "doctrine/coding-standard": "^14.0.0",
         "illuminate/container": "^13.9.0",
         "laminas/laminas-servicemanager": "^4.5.0",
-        "phpunit/phpunit": "^13.1.10",
+        "phpunit/phpunit": "^13.4.6",
         "psalm/plugin-phpunit": "^0.19.5",
         "symfony/cache": "^8.0.10",
         "symfony/yaml": "^8.0.11",
