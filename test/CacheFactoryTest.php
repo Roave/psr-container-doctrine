@@ -35,7 +35,7 @@ final class CacheFactoryTest extends TestCase
 
         $factory = new CacheFactory('foo');
         $this->expectException(OutOfBoundsException::class);
-        $this->expectExceptionMessageIsOrContains('Missing "doctrine.cache.foo.class" config key');
+        $this->expectExceptionMessageIs('Missing "doctrine.cache.foo.class" config key');
         $factory($container);
     }
 

@@ -156,7 +156,7 @@ final class EventManagerFactoryTest extends TestCase
 
         $factory = new EventManagerFactory();
         $this->expectException(DomainException::class);
-        $this->expectExceptionMessageIsOrContains(sprintf(
+        $this->expectExceptionMessageIs(sprintf(
             'Invalid event listener "%s" given: must have a "foo" method',
             StubEventListener::class,
         ));
