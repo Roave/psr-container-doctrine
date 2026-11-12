@@ -30,7 +30,7 @@
         "illuminate/container": "^13.42.0",
         "laminas/laminas-servicemanager": "^4.5.1",
         "phpunit/phpunit": "^13.4.6",
-        "psalm/plugin-phpunit": "^0.22.2",
+        "psalm/plugin-phpunit": "^1.1.0",
         "symfony/cache": "^8.1.11",
         "symfony/yaml": "^8.1.11",
         "vimeo/psalm": "^6.20.11"
