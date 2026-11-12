@@ -2,27 +2,46 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 6.3.0 - TBD
+## 6.3.0 - 2026-11-12
 
-### Added
 
-- Nothing.
+-----
 
-### Changed
+### Release Notes for [6.3.0](https://github.com/Roave/psr-container-doctrine/milestone/67)
 
-- Nothing.
+Feature release (minor)
 
-### Deprecated
+### 6.3.0
 
-- Nothing.
+- Total issues resolved: **1**
+- Total pull requests resolved: **7**
+- Total contributors: **3**
 
-### Removed
+#### dependencies,enhancement
 
-- Nothing.
+ - [191: Remove unused doctrine/common dependency](https://github.com/Roave/psr-container-doctrine/pull/191) thanks to @mostafasy
+ - [190: Drop the doctrine/common requirement ?](https://github.com/Roave/psr-container-doctrine/issues/190) thanks to @mostafasy
 
-### Fixed
+#### dependencies,renovate
 
-- Nothing.
+ - [185: Update laminas/automatic-releases digest to ef53802](https://github.com/Roave/psr-container-doctrine/pull/185) thanks to @renovate[bot]
+
+#### dependencies,github_actions,renovate
+
+ - [184: Pin dependencies](https://github.com/Roave/psr-container-doctrine/pull/184) thanks to @renovate[bot]
+ - [182: Update actions/checkout action to v7](https://github.com/Roave/psr-container-doctrine/pull/182) thanks to @renovate[bot]
+
+#### renovate
+
+ - [183: Update actions/cache action to v6](https://github.com/Roave/psr-container-doctrine/pull/183) thanks to @renovate[bot]
+
+#### dependencies,github_actions,security
+
+ - [181: Update shivammathur/setup-php action to v2.37.1 &#91;SECURITY&#93; - autoclosed](https://github.com/Roave/psr-container-doctrine/pull/181) thanks to @renovate[bot]
+
+#### dependencies,github_actions
+
+ - [180: Bump shivammathur/setup-php from 2.37.0 to 2.37.1 in /.github/workflows](https://github.com/Roave/psr-container-doctrine/pull/180) thanks to @dependabot[bot]
 
 ## 6.2.0 - 2026-05-15
 
