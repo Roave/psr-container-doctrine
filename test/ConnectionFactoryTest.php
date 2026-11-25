@@ -11,10 +11,12 @@ use Doctrine\DBAL\Driver\PDO\MySQL\Driver as PDOMySQLDriver;
 use Doctrine\DBAL\Driver\PDO\SQLite\Driver as PDOSqliteDriver;
 use Doctrine\DBAL\Exception\ConnectionException;
 use Doctrine\DBAL\Types\BooleanType;
+use Doctrine\DBAL\Types\TypeProvider;
 use Doctrine\ORM\Configuration;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Roave\PsrContainerDoctrine\ConnectionFactory;
+use Roave\PsrContainerDoctrine\Exception\DomainException;
 
 use function defined;
 use function in_array;
@@ -26,7 +28,7 @@ final class ConnectionFactoryTest extends TestCase
 
     public function setUp(): void
     {
-        $this->configuration = $this->createStub(Configuration::class);
+        $this->configuration = new Configuration();
     }
 
     public function testDefaultsThroughException(): void
@@ -140,7 +142,7 @@ final class ConnectionFactoryTest extends TestCase
         $connection = $factory($this->buildContainer('orm_default', 'orm_default', [
             'params' => [
                 'driver' => 'pdo_mysql',
-                'serverVersion' => '8.0.29',
+                'serverVersion' => '8.4.0',
                 'primary' => ['url' => '//localhost:4486/foo?charset=utf8mb4'],
                 'replica' => [
                     ['url' => '//replica1:3306/foo'],
@@ -152,7 +154,7 @@ final class ConnectionFactoryTest extends TestCase
 
         self::assertSame([
             'driver' => 'pdo_mysql',
-            'serverVersion' => '8.0.29',
+            'serverVersion' => '8.4.0',
             'primary' => [
                 'host' => 'localhost',
                 'port' => 4486,
@@ -199,6 +201,18 @@ final class ConnectionFactoryTest extends TestCase
         ]));
 
         self::assertTrue($connection->getDatabasePlatform()->hasDoctrineTypeMappingFor('foo'));
+    }
+
+    public function testCustomTypesRequireATypeRegistry(): void
+    {
+        $this->configuration->setTypeProvider($this->createStub(TypeProvider::class));
+
+        $factory = new ConnectionFactory();
+
+        $this->expectException(DomainException::class);
+        $this->expectExceptionMessageIsOrContains('type provider must be an instance of');
+
+        $factory($this->buildContainer());
     }
 
     /** @param array<string, mixed> $config */

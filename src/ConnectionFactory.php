@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Roave\PsrContainerDoctrine;
 
+use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\PDO\MySQL\Driver as PdoMysqlDriver;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Tools\DsnParser;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\TypeRegistry;
 use Psr\Container\ContainerInterface;
+use Roave\PsrContainerDoctrine\Exception\DomainException;
 use SensitiveParameter;
 
 use function array_map;
@@ -20,8 +22,6 @@ final readonly class ConnectionFactory extends AbstractFactory
 {
     protected function createWithConfig(ContainerInterface $container, string $configKey): Connection
     {
-        $this->registerTypes($container);
-
         $config = $this->retrieveConfig($container, $configKey, 'connection');
         $params = $this->parseDatabaseUrl($config['params'] + [
             'driverClass' => $config['driver_class'],
@@ -43,15 +43,15 @@ final readonly class ConnectionFactory extends AbstractFactory
             );
         }
 
-        $connection = DriverManager::getConnection(
-            $params,
-            $this->retrieveDependency(
-                $container,
-                $config['configuration'],
-                'configuration',
-                ConfigurationFactory::class,
-            ),
+        $configuration = $this->retrieveDependency(
+            $container,
+            $config['configuration'],
+            'configuration',
+            ConfigurationFactory::class,
         );
+        $this->registerTypes($container, $configuration);
+
+        $connection = DriverManager::getConnection($params, $configuration);
         $platform   = $connection->getDatabasePlatform();
 
         foreach ($config['doctrine_mapping_types'] as $dbType => $doctrineType) {
@@ -78,18 +78,27 @@ final readonly class ConnectionFactory extends AbstractFactory
     /**
      * Registers all declared typed, if not already done.
      */
-    private function registerTypes(ContainerInterface $container): void
+    private function registerTypes(ContainerInterface $container, Configuration $configuration): void
     {
         $applicationConfig = $container->has('config') ? $container->get('config') : [];
         $typesConfig       = $applicationConfig['doctrine']['types'] ?? [];
 
+        if ($typesConfig === []) {
+            return;
+        }
+
+        $typeProvider = $configuration->getTypeProvider();
+        if (! $typeProvider instanceof TypeRegistry) {
+            throw DomainException::forNonRegistryTypeProvider($typeProvider);
+        }
+
         foreach ($typesConfig as $name => $className) {
-            if (Type::hasType($name)) {
-                Type::overrideType($name, $className);
+            if ($typeProvider->has($name)) {
+                $typeProvider->override($name, $className);
                 continue;
             }
 
-            Type::addType($name, $className);
+            $typeProvider->register($name, $className);
         }
     }
 
