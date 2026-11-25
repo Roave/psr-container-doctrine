@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace Roave\PsrContainerDoctrine\Exception;
 
 use Doctrine\Common\EventSubscriber;
+use Doctrine\DBAL\Types\TypeProvider;
+use Doctrine\DBAL\Types\TypeRegistry;
 
+use function get_debug_type;
 use function sprintf;
 
 final class DomainException extends \DomainException implements ExceptionInterface
@@ -48,6 +51,17 @@ final class DomainException extends \DomainException implements ExceptionInterfa
             sprintf(
                 'Requested class "%s" is not a valid doctrine migrations command',
                 $command,
+            ),
+        );
+    }
+
+    public static function forNonRegistryTypeProvider(TypeProvider $typeProvider): self
+    {
+        return new self(
+            sprintf(
+                'Cannot register the "doctrine.types" config: the connection configuration type provider must be an instance of %s, %s given',
+                TypeRegistry::class,
+                get_debug_type($typeProvider),
             ),
         );
     }
